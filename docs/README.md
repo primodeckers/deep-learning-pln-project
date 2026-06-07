@@ -9,7 +9,7 @@
 | [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md) | Requisitos oficiais da disciplina |
 | [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) | Guia vivo do projeto (preencher em conjunto) |
 | [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md) | Decisões de coleta de dados (CAPTCHA, HTML vs PDF, etc.) |
-| [`PROPOSTAS.D.md`](PROPOSTAS.D.md) | Brainstorm de temas/tarefas de PLN para o projeto |
+| [`PROPOSALS.md`](PROPOSALS.md) | Brainstorm de temas/tarefas de PLN para o projeto |
 
 ## Materiais de referência
 

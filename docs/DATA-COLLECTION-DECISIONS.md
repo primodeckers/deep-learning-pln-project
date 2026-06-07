@@ -251,7 +251,7 @@ Detalhes operacionais: [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARN
 | 4 | Filtros no CSV (situação, modalidade, órgão)? | Tamanho e qualidade do corpus |
 | 5 | Expandir corpus para 2021–2024? | **Adiado** na fase 1 (decisão 2026-06-06); retomar se precisar robustez temporal ou classes raras |
 
-Ver brainstorm de temas: [`PROPOSTAS.D.md`](PROPOSTAS.D.md)
+Ver brainstorm de temas: [`PROPOSALS.md`](PROPOSALS.md)
 
 ---
 

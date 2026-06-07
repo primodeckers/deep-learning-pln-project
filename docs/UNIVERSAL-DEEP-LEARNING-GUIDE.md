@@ -3,7 +3,7 @@
 Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema à apresentação.
 
 > Requisitos da disciplina: [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md)  
-> Brainstorm de temas: [`PROPOSTAS.D.md`](PROPOSTAS.D.md)  
+> Brainstorm de temas: [`PROPOSALS.md`](PROPOSALS.md)  
 > Coleta de dados: [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md)  
 > Material de aula (referência): [`aula03-04.pdf`](aula03-04.pdf)
 

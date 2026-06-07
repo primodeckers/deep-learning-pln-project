@@ -15,7 +15,7 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 | [`docs/PROJECT-REQUIREMENTS.md`](docs/PROJECT-REQUIREMENTS.md) | Requisitos oficiais da disciplina |
 | [`docs/UNIVERSAL-DEEP-LEARNING-GUIDE.md`](docs/UNIVERSAL-DEEP-LEARNING-GUIDE.md) | Guia vivo do projeto — escopo, cronograma, decisões |
 | [`docs/DATA-COLLECTION-DECISIONS.md`](docs/DATA-COLLECTION-DECISIONS.md) | Decisões de coleta (CAPTCHA, HTML vs PDF, pipeline) |
-| [`docs/PROPOSTAS.D.md`](docs/PROPOSTAS.D.md) | Propostas de tema/tarefa de PLN (brainstorm do grupo) |
+| [`docs/PROPOSALS.md`](docs/PROPOSALS.md) | Propostas de tema/tarefa de PLN (brainstorm do grupo) |
 | [`docs/README.md`](docs/README.md) | Índice de todos os arquivos em `docs/` |
 | [`data/raw/README.md`](data/raw/README.md) | Dados brutos — CSV, HTMLs coletados, como reproduzir a coleta |
 
