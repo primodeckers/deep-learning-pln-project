@@ -1,0 +1,8 @@
+# Configurações de experimento — preencher após definir tema e modelos
+
+# Exemplo:
+# model_name: bert-base-portuguese-cased
+# max_length: 512
+# batch_size: 16
+# learning_rate: 2e-5
+# epochs: 3

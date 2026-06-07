@@ -1,0 +1,15 @@
+# Dependências do projeto — atualizar conforme definirmos tema e stack
+# pip install -r requirements.txt
+
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# numpy
+# pandas
+# scikit-learn
+# torch
+# transformers
+# datasets
+# matplotlib
+# seaborn
+# jupyter

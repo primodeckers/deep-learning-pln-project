@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dados (reproduzir via scripts de coleta)
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/README.md
+!data/raw/licitacoes2025.csv
+data/raw/editais/*
+!data/raw/editais/.gitkeep
+data/raw/detalhes/*
+!data/raw/detalhes/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+!data/interim/text/.gitkeep
+!data/interim/records/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+!data/processed/preprocess_manifest.json
+!data/processed/licitacoes_corpus.jsonl
+
+# Modelos e checkpoints
+models/*
+!models/.gitkeep
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.onnx
+
+# Experimentos (manter estrutura, ignorar logs pesados)
+experiments/**/logs/
+experiments/**/checkpoints/
+
+# SO / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
