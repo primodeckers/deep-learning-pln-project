@@ -16,7 +16,7 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Título provisório** | Classificação de editais por área de gasto + resumos em linguagem cidadã (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | Coleta e pré-processamento concluídos — fase de modelagem |
+| **Status** | EDA + baseline de classificação (F1 macro ≈ 0,74) + baseline extrativo de sumarização concluídos — próximos: BERTimbau (Fase 2) e sumarização abstrativa (Fase 3) |
 | **Última atualização** | 2026-06-06 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)
@@ -256,16 +256,20 @@ Práticas comuns em produção de PLN em 2024–2025, mapeadas para o nosso esco
 
 ### 6.1 Taxonomia de labels
 
-| Macroárea | Regra (palavras-chave em `orgao_csv`) | ~N |
-|---|---|---|
-| Saúde | SAÚDE | 106 |
-| Saneamento | CAESB, SANEAMENTO | 49 |
-| Segurança | POLÍCIA, BOMBEIRO, SEGURANÇA | 33 |
-| Educação | EDUCAÇÃO, EDUCACAO | 17 |
-| Infraestrutura / Obras | ESTRADAS, RODAGEM, OBRAS | 24 |
-| Administração / Outros | demais | 194 |
+Implementado em [`src/preprocess/labels.py`](../src/preprocess/labels.py) — palavras-chave casadas sobre `orgao_csv` normalizado (maiúsculas, sem acento), na ordem da tabela (primeira que casar vence). Contagens **reais** sobre os 423 registros:
 
-O modelo **não** recebe o órgão como feature — só o texto. O órgão gera o label inicial (limitação a declarar no relatório).
+| Macroárea | Palavras-chave (normalizadas) | N |
+|---|---|---|
+| Saúde | SAUDE, HEMOCENTRO | 112 |
+| Saneamento | CAESB, SANEAMENTO | 49 |
+| Segurança | POLICIA, BOMBEIRO, SEGURANCA, PENITENCI | 58 |
+| Educação | EDUCACAO | 17 |
+| Infraestrutura / Obras | ESTRADAS, RODAGEM, OBRAS, INFRAESTRUTURA | 24 |
+| Administração / Outros | demais | 163 |
+
+O modelo **não** recebe o órgão como feature — só o texto. O órgão gera o label inicial (limitação "label proxy" a declarar no relatório).
+
+> ⚠️ **Vazamento de label no campo `texto`.** O HTML completo (`texto`) repete o nome do órgão (ex.: "Secretaria de Estado de Saúde…"), que é a própria fonte do label. Medido empiricamente: o baseline atinge **F1 macro ≈ 0,88 (teste) usando `texto`**, mas cai para **≈ 0,74 usando `objeto_html`** (descrição do que é comprado, sem o cabeçalho do órgão). Para uma avaliação honesta, usar `objeto_html` como entrada (padrão recomendado) **ou** remover o cabeçalho identificador de `texto`. Os ~0,88 de `texto` devem ser tratados como teto otimista contaminado por vazamento.
 
 ### 6.2 Métricas
 
@@ -300,6 +304,14 @@ Parágrafo de 3–5 frases respondendo:
 2. Quem pode participar?
 3. Qual o prazo para propostas?
 4. Valor estimado (se constar no texto)?
+
+> ✅ **Baseline extrativo implementado** — [`src/summarize/extractive.py`](../src/summarize/extractive.py).
+> Extrai os 4 campos por regras/regex (objeto, ME/EPP, data de entrega, valor homologado)
+> e monta o parágrafo. É **determinístico → não alucina** prazo/valor (vantagem sobre o LLM).
+> Rodar: `python scripts/run_train.py --task summarization --model extractive`.
+> Saídas: amostra estratificada de 18 editais, exemplos antes/depois em
+> [`reports/slides/resumos_exemplos.md`](../reports/slides/resumos_exemplos.md).
+> Cobertura medida: prazo 15/18, valor 18/18 (dispensas costumam não ter "Entrega da Proposta").
 
 ### 7.2 Pipeline recomendado
 
@@ -460,6 +472,10 @@ _Ajustar datas conforme calendário real da disciplina._
 | 2026-06-06 | **Ideia 1 principal + Ideia 4 complemento** | Métricas sólidas + impacto na apresentação |
 | 2026-06-06 | Labels via mapeamento órgão → macroárea | Viável no prazo; validação amostral |
 | 2026-06-06 | Volume 423 (2025) suficiente; sem coleta 2021–2024 na fase 1 | Prazo + limitações documentadas |
+| 2026-06-08 | Fase 1 implementada: labels (6 áreas) + split estratificado 70/15/15 (seed 42) + baseline TF-IDF/LogReg | Pipeline `run_train.py` funcional; métricas reais |
+| 2026-06-08 | Entrada honesta = `objeto_html` (não `texto`) | `texto` repete o nome do órgão → vazamento de label (§6.1) |
+| 2026-06-08 | EDA em `notebooks/01_eda.ipynb` | Vazamento quantificado: órgão em 97% dos `texto` vs 49% dos `objeto_html` |
+| 2026-06-08 | Baseline de sumarização = extrativo por regras (não TextRank puro) | Determinístico, não alucina; cobre objeto/quem/prazo/valor (§7) |
 
 ---
 

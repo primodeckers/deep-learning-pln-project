@@ -1,0 +1,29 @@
+# Hiperparâmetros da tarefa de classificação por macroárea de gasto.
+# Usado por: scripts/run_train.py --task classification
+
+task: classification
+model: baseline            # baseline | bertimbau
+text_field: objeto_html    # entrada honesta (texto repete o nome do órgão → vazamento; ver guia §6.1)
+seed: 42
+
+# Proporções do split estratificado (treino = 1 - val - test)
+val_size: 0.15
+test_size: 0.15
+
+# Hiperparâmetros por modelo. O run_train passa o bloco inteiro como `params`.
+params:
+  # --- baseline (TF-IDF + LogReg) ---
+  ngram_max: 2
+  min_df: 2
+  max_features: 20000
+  C: 1.0
+  max_iter: 1000
+  class_weight: balanced
+
+  # --- bertimbau (Fase 2 — referência) ---
+  model_name: neuralmind/bert-base-portuguese-cased
+  max_length: 512
+  batch_size: 16
+  learning_rate: 2.0e-5
+  epochs: 4
+  early_stopping_patience: 2

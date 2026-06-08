@@ -101,7 +101,19 @@ Detalhes completos: seção acima ou pergunte no grupo.
 |---|---|---|
 | Coleta HTML | `data/raw/detalhes/` (423 arquivos) | Concluído |
 | Pré-processamento | `data/processed/licitacoes_corpus.jsonl` | Concluído |
-| Modelo PLN | `scripts/run_train.py` | Pendente |
+| Classificação — baseline TF-IDF + LogReg | `experiments/classification_baseline_*.json` | Concluído (F1 macro ≈ 0,74 com `objeto_html`) |
+| Classificação — BERTimbau | `src/models/bert_classifier.py` | Pendente (Fase 2) |
+| EDA | `notebooks/01_eda.ipynb` | Concluído |
+| Sumarização cidadão — baseline extrativo | `reports/slides/resumos_exemplos.md` | Concluído |
+| Sumarização — abstrativo (mT5/LLM) | — | Pendente (Fase 3) |
+
+Rodar:
+
+```bash
+python scripts/run_train.py --task classification --model baseline
+python scripts/run_train.py --task summarization --model extractive
+jupyter notebook notebooks/01_eda.ipynb     # análise exploratória
+```
 
 ---
 
@@ -110,7 +122,7 @@ Detalhes completos: seção acima ou pergunte no grupo.
 | Nome | GitHub |
 |---|---|
 | Elisangela Osorio | [ElisangelaOsorio](https://github.com/ElisangelaOsorio) |
-| _a definir_ | [pontealexandre](https://github.com/pontealexandre) |
+| Alexandre Ferreira Ponte | [pontealexandre](https://github.com/pontealexandre) |
 | Renê Estevam Deckers | [primodeckers](https://github.com/primodeckers) |
 | _a definir_ | [xnetto2](https://github.com/xnetto2) |
 
