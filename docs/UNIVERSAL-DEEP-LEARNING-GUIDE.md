@@ -17,7 +17,7 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
 | **Status** | EDA + baseline de classificação (F1 macro ≈ 0,74) + baseline extrativo de sumarização concluídos — próximos: BERTimbau (Fase 2) e sumarização abstrativa (Fase 3) |
-| **Última atualização** | 2026-06-06 |
+| **Última atualização** | 2026-06-08 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)
 
