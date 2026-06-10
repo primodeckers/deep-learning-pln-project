@@ -26,6 +26,38 @@ from src.preprocess.labels import AREAS
 # Raiz do repositório, para gravar caminhos relativos (portáveis entre máquinas).
 ROOT = Path(__file__).resolve().parents[2]
 
+# Hiperparâmetros relevantes por modelo. O config junta baseline + bert no mesmo
+# bloco `params`; ao registrar o experimento, guardamos só os do modelo que rodou
+# para o JSON não misturar parâmetros não usados.
+_MODEL_PARAM_KEYS = {
+    "baseline": (
+        "ngram_max",
+        "min_df",
+        "max_features",
+        "C",
+        "max_iter",
+        "class_weight",
+        "seed",
+    ),
+    "bertimbau": (
+        "model_name",
+        "max_length",
+        "batch_size",
+        "learning_rate",
+        "epochs",
+        "early_stopping_patience",
+        "seed",
+    ),
+}
+
+
+def _relevant_params(model_name: str, params: dict) -> dict:
+    """Filtra `params` para as chaves usadas pelo modelo (fallback: tudo)."""
+    keys = _MODEL_PARAM_KEYS.get(model_name)
+    if keys is None:
+        return dict(params)
+    return {k: params[k] for k in keys if k in params}
+
 
 def _rel(path: Path) -> str:
     """Caminho relativo à raiz do repo, em formato POSIX (estável no Git)."""
@@ -131,7 +163,7 @@ def train_classification(
         "created_at": datetime.now(timezone.utc).isoformat(),
         "text_field": text_field,
         "seed": seed,
-        "params": params,
+        "params": _relevant_params(model_name, params),
         "labels": AREAS,
         "class_distribution": _class_distribution(dataset),
         "splits": {

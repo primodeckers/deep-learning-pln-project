@@ -12,12 +12,6 @@
     "C": 1.0,
     "max_iter": 1000,
     "class_weight": "balanced",
-    "model_name": "neuralmind/bert-base-portuguese-cased",
-    "max_length": 512,
-    "batch_size": 16,
-    "learning_rate": 2e-05,
-    "epochs": 4,
-    "early_stopping_patience": 2,
     "seed": 42
   },
   "labels": [
