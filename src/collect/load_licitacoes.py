@@ -43,10 +43,7 @@ def load_licitacoes(csv_path: Path) -> list[LicitacaoRecord]:
 
     # Linha 1 costuma ser título ("Licitacoes2025", às vezes com BOM); linha 2 é o cabeçalho.
     first_line = lines[0].strip().lstrip("\ufeff").lower() if lines else ""
-    if first_line == "licitacoes2025":
-        content = "\n".join(lines[1:])
-    else:
-        content = raw
+    content = "\n".join(lines[1:]) if first_line == "licitacoes2025" else raw
 
     reader = csv.DictReader(io.StringIO(content), delimiter=";")
     records: list[LicitacaoRecord] = []
@@ -62,7 +59,9 @@ def load_licitacoes(csv_path: Path) -> list[LicitacaoRecord]:
                 modalidade=(row.get("Modalidade") or "").strip().strip('"'),
                 situacao=(row.get("Situação") or "").strip().strip('"'),
                 orgao=(row.get("Órgão") or "").strip().strip('"'),
-                codigo_comprasnet=(row.get("Código COMPRASNET") or "").strip().strip('"'),
+                codigo_comprasnet=(row.get("Código COMPRASNET") or "")
+                .strip()
+                .strip('"'),
                 tipo=(row.get("Tipo") or "").strip().strip('"'),
                 objeto=(row.get("Objeto") or "").strip().strip('"'),
                 edital_url=url,

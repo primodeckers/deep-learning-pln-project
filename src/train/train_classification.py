@@ -1,8 +1,9 @@
-"""Orquestra o treino e a avaliação da classificação por macroárea.
+"""Orquestra treino e avaliação da classificação por macroárea (Fase 1).
 
-Fluxo: carrega corpus → split estratificado → treina o modelo escolhido →
-avalia em validação e teste → salva o modelo e um registro de experimento JSON
-em ``experiments/`` (guia Fase 1/2 e §4).
+Fluxo: corpus → split → ``fit`` no treino → métricas em val/test → artefatos
+(modelo joblib, JSON em ``experiments/``, matriz PNG, MLflow opcional).
+
+Padrões de registro e mapa de módulos: ``docs/FASE1-CLASSIFICACAO.md`` §2 e §6.
 """
 
 from __future__ import annotations
@@ -22,6 +23,11 @@ from src.evaluate.metrics_classification import (
 from src.models.baseline_tfidf import build_baseline
 from src.preprocess.dataset import Dataset, make_dataset
 from src.preprocess.labels import AREAS
+from src.utils.experiment_tracking import (
+    corpus_fingerprint,
+    git_commit_short,
+    mlflow_run,
+)
 
 # Raiz do repositório, para gravar caminhos relativos (portáveis entre máquinas).
 ROOT = Path(__file__).resolve().parents[2]
@@ -143,6 +149,8 @@ def train_classification(
 
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
     run_id = f"classification_{model_name}_{timestamp}"
+    dataset_info = corpus_fingerprint(corpus_path)
+    git_commit = git_commit_short()
 
     # Salva o modelo treinado.
     models_dir.mkdir(parents=True, exist_ok=True)
@@ -163,6 +171,8 @@ def train_classification(
         "created_at": datetime.now(timezone.utc).isoformat(),
         "text_field": text_field,
         "seed": seed,
+        "dataset": dataset_info,
+        "git_commit": git_commit,
         "params": _relevant_params(model_name, params),
         "labels": AREAS,
         "class_distribution": _class_distribution(dataset),
@@ -184,6 +194,34 @@ def train_classification(
         json.dumps(experiment, ensure_ascii=False, indent=2), encoding="utf-8"
     )
 
+    mlflow_tags = {
+        "corpus_sha256": dataset_info["sha256"],
+        "corpus_path": dataset_info["path"],
+        "corpus_n_records": str(dataset_info["n_records"]),
+        "text_field": text_field,
+    }
+    if git_commit:
+        mlflow_tags["git_commit"] = git_commit
+
+    with mlflow_run(
+        experiments_dir=experiments_dir,
+        run_name=run_id,
+        task="classification",
+        model=model_name,
+        params={
+            "text_field": text_field,
+            "seed": seed,
+            **experiment["params"],
+        },
+        metrics=experiment["metrics"],
+        tags=mlflow_tags,
+        artifacts=[model_path, fig_path, exp_path],
+    ) as mlflow_run_id:
+        if mlflow_run_id:
+            experiment["mlflow_run_id"] = mlflow_run_id
+
     print(f"\nModelo salvo em: {model_path}")
     print(f"Experimento salvo em: {exp_path}")
+    if experiment.get("mlflow_run_id"):
+        print(f"MLflow run: {experiment['mlflow_run_id']}")
     return experiment

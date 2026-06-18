@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Extracao de texto e campos dos HTMLs de detalhe do ComprasNet."""
 
 from __future__ import annotations
@@ -113,7 +112,7 @@ def extract_all_html(
     records_dir.mkdir(parents=True, exist_ok=True)
 
     html_files = sorted(input_dir.glob("*.html"))
-    results = []
+    results: list[dict[str, str | int]] = []
 
     for html_path in html_files:
         text_path = text_dir / f"{html_path.stem}.txt"

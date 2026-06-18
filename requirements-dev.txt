@@ -1,0 +1,3 @@
+# Ferramentas de desenvolvimento — pip install -r requirements-dev.txt
+
+-e .[dev]

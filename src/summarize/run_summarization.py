@@ -16,6 +16,11 @@ from pathlib import Path
 from src.preprocess.dataset import load_records
 from src.preprocess.labels import AREAS
 from src.summarize.extractive import summarize_record
+from src.utils.experiment_tracking import (
+    corpus_fingerprint,
+    git_commit_short,
+    mlflow_run,
+)
 
 # Raiz do repositório, para gravar caminhos relativos (portáveis entre máquinas).
 ROOT = Path(__file__).resolve().parents[2]
@@ -97,9 +102,11 @@ def run_summarization(
 
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
     run_id = f"summarization_extractive_{timestamp}"
+    dataset_info = corpus_fingerprint(corpus_path)
+    git_commit = git_commit_short()
 
     processed_dir.mkdir(parents=True, exist_ok=True)
-    jsonl_path = processed_dir / f"resumos_extrativos.jsonl"
+    jsonl_path = processed_dir / "resumos_extrativos.jsonl"
     with jsonl_path.open("w", encoding="utf-8") as f:
         for item in resumos:
             f.write(json.dumps(item, ensure_ascii=False) + "\n")
@@ -115,6 +122,8 @@ def run_summarization(
         "model": "extractive",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "seed": seed,
+        "dataset": dataset_info,
+        "git_commit": git_commit,
         "sample_size": len(resumos),
         "coverage": cobertura,
         "sample_ids": [x["id"] for x in resumos],
@@ -125,6 +134,30 @@ def run_summarization(
         json.dumps(experiment, ensure_ascii=False, indent=2), encoding="utf-8"
     )
 
+    mlflow_tags = {
+        "corpus_sha256": dataset_info["sha256"],
+        "corpus_path": dataset_info["path"],
+        "corpus_n_records": str(dataset_info["n_records"]),
+    }
+    if git_commit:
+        mlflow_tags["git_commit"] = git_commit
+
+    with mlflow_run(
+        experiments_dir=experiments_dir,
+        run_name=run_id,
+        task="summarization",
+        model="extractive",
+        params={"seed": seed, "sample_size": len(resumos)},
+        metrics={
+            "coverage_prazo": cobertura["com_prazo"] / max(cobertura["total"], 1),
+            "coverage_valor": cobertura["com_valor"] / max(cobertura["total"], 1),
+        },
+        tags=mlflow_tags,
+        artifacts=[jsonl_path, md_path, exp_path],
+    ) as mlflow_run_id:
+        if mlflow_run_id:
+            experiment["mlflow_run_id"] = mlflow_run_id
+
     print(f"Amostra: {len(resumos)} editais")
     print(
         f"Cobertura — prazo: {cobertura['com_prazo']}/{cobertura['total']}  "
@@ -133,4 +166,6 @@ def run_summarization(
     print(f"JSONL:      {jsonl_path}")
     print(f"Exemplos:   {md_path}")
     print(f"Experimento:{exp_path}")
+    if experiment.get("mlflow_run_id"):
+        print(f"MLflow run: {experiment['mlflow_run_id']}")
     return experiment

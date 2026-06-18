@@ -1,21 +1,4 @@
 # Dependências do projeto — pip install -r requirements.txt
+# Lista canônica em pyproject.toml [project.dependencies]
 
-# Coleta e pré-processamento (Fase 0)
-requests>=2.31.0
-beautifulsoup4>=4.12.0
-
-# Classificação — baseline TF-IDF + LogReg (Fase 1)
-scikit-learn>=1.4.0
-numpy>=1.26.0
-scipy>=1.11.0
-joblib>=1.3.0
-pyyaml>=6.0
-matplotlib>=3.8.0   # figuras (matriz de confusão); opcional
-
-# Modelagem Transformer — BERTimbau / mT5 (Fases 2 e 3)
-# Instalar quando for treinar o BERT. Em Python 3.14 verificar disponibilidade
-# de wheels; se faltarem, criar um venv com Python 3.11/3.12.
-# torch
-# transformers
-# datasets
-# pandas
+-e .

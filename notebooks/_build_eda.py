@@ -4,7 +4,7 @@ Manter o notebook em código (e não JSON solto) facilita revisão e regeneraç�
 Rode: python notebooks/_build_eda.py
 """
 
-from __future__ import annotations
+from __future__ import annotations 
 
 from pathlib import Path
 

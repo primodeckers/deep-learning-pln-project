@@ -1,7 +1,10 @@
-"""Métricas de classificação multiclasse (guia §6.2).
+"""Métricas de classificação multiclasse (Fase 1).
 
-Calcula F1 macro (métrica primária de seleção de modelo), F1 por classe,
-accuracy e matriz de confusão. Opcionalmente salva a matriz como figura PNG.
+F1 macro = métrica primária de seleção (classes desbalanceadas). Accuracy e
+F1 weighted são secundárias. ``zero_division=0`` evita erro quando uma classe
+não aparece no conjunto avaliado.
+
+Decisões: ``docs/FASE1-CLASSIFICACAO.md`` §5 e ``docs/metricas_e_decisoes.md``.
 """
 
 from __future__ import annotations
@@ -32,8 +35,12 @@ def compute_metrics(
     cm = confusion_matrix(y_true, y_pred, labels=labels)
     return {
         "accuracy": accuracy_score(y_true, y_pred),
-        "f1_macro": f1_score(y_true, y_pred, labels=labels, average="macro", zero_division=0),
-        "f1_weighted": f1_score(y_true, y_pred, labels=labels, average="weighted", zero_division=0),
+        "f1_macro": f1_score(
+            y_true, y_pred, labels=labels, average="macro", zero_division=0
+        ),
+        "f1_weighted": f1_score(
+            y_true, y_pred, labels=labels, average="weighted", zero_division=0
+        ),
         "per_class": {
             label: {
                 "precision": report[label]["precision"],
@@ -84,8 +91,15 @@ def save_confusion_matrix(metrics: dict, output_path: Path, title: str) -> None:
     ax.set_title(title)
     for i in range(len(labels)):
         for j in range(len(labels)):
-            ax.text(j, i, cm[i][j], ha="center", va="center", fontsize=8,
-                    color="white" if cm[i][j] > (max(map(max, cm)) / 2) else "black")
+            ax.text(
+                j,
+                i,
+                cm[i][j],
+                ha="center",
+                va="center",
+                fontsize=8,
+                color="white" if cm[i][j] > (max(map(max, cm)) / 2) else "black",
+            )
     fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     fig.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)

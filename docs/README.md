@@ -10,6 +10,11 @@
 | [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) | Guia vivo do projeto (preencher em conjunto) |
 | [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md) | Decisões de coleta de dados (CAPTCHA, HTML vs PDF, etc.) |
 | [`PROPOSALS.md`](PROPOSALS.md) | Brainstorm de temas/tarefas de PLN para o projeto |
+| [`model_card.md`](model_card.md) | Model card — performance, dados, limitações |
+| [`metricas_e_decisoes.md`](metricas_e_decisoes.md) | Métricas, anti-leakage e decisões de avaliação |
+| [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) | Fase 1 — decisões, justificativas e mapa do código |
+| [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) | Gabarito, consolidação e status das fichas |
+| [`validacao_labels/ficha_*.md`](validacao_labels/) | Ficha individual (1/4 preenchida — Renê) |
 
 ## Materiais de referência
 
@@ -21,4 +26,18 @@
 
 | Documento | Descrição |
 |---|---|
+| [`README.md`](../README.md) | Setup, pipeline, ferramentas de dev (ruff, mypy, pytest, Makefile) |
 | [`data/raw/README.md`](../data/raw/README.md) | Dados brutos, pipeline de coleta e estrutura do CSV |
+| [`pyproject.toml`](../pyproject.toml) | Dependências, ruff, mypy e pytest (fonte canônica) |
+| [`Makefile`](../Makefile) | Atalhos: `lint`, `test`, `typecheck`, treino, MLflow UI |
+
+## Ferramentas de desenvolvimento
+
+| Ferramenta | Config | Uso |
+|---|---|---|
+| **Ruff** | `[tool.ruff]` em `pyproject.toml` | `ruff check src tests` · `ruff format src tests` |
+| **Mypy** | `[tool.mypy]` em `pyproject.toml` | `mypy` (analisa só `src/`) |
+| **Pytest** | `[tool.pytest.ini_options]` + `tests/` | `pytest` |
+| **MLflow** | `src/utils/experiment_tracking.py` | Ver guia §10 e `make mlflow-ui` |
+
+Instalação: `pip install -r requirements-dev.txt` na raiz do repositório.

@@ -1,8 +1,10 @@
-"""Baseline clássico de classificação: TF-IDF + Regressão Logística.
+"""Baseline clássico de classificação: TF-IDF + Regressão Logística (Fase 1).
 
-Pipeline sklearn (guia §6.3): vetorização TF-IDF (1–2 grams, stopwords PT) +
-LogisticRegression com ``class_weight='balanced'`` para mitigar o
-desbalanceamento entre macroáreas. Serve de referência antes do BERTimbau.
+Pipeline sklearn: vetorização TF-IDF (1-2 grams, stopwords PT mínimas) +
+LogisticRegression com ``class_weight='balanced'``. Referência antes do
+BERTimbau; hiperparâmetros vêm de ``configs/classification.yaml``.
+
+Justificativa de cada escolha: ``docs/FASE1-CLASSIFICACAO.md`` §4.
 """
 
 from __future__ import annotations
@@ -17,10 +19,49 @@ from sklearn.pipeline import Pipeline
 # stopwords precisam estar na mesma forma normalizada (evita o UserWarning do
 # sklearn sobre stopwords inconsistentes com o pré-processamento).
 PORTUGUESE_STOPWORDS = [
-    "a", "ao", "aos", "as", "com", "como", "da", "das", "de", "do",
-    "dos", "e", "em", "entre", "essa", "esse", "esta", "este", "eu", "na", "nas",
-    "no", "nos", "o", "os", "ou", "para", "pela", "pelas", "pelo", "pelos", "por",
-    "que", "se", "sem", "ser", "seu", "sua", "sao", "tambem", "um", "uma", "uns",
+    "a",
+    "ao",
+    "aos",
+    "as",
+    "com",
+    "como",
+    "da",
+    "das",
+    "de",
+    "do",
+    "dos",
+    "e",
+    "em",
+    "entre",
+    "essa",
+    "esse",
+    "esta",
+    "este",
+    "eu",
+    "na",
+    "nas",
+    "no",
+    "nos",
+    "o",
+    "os",
+    "ou",
+    "para",
+    "pela",
+    "pelas",
+    "pelo",
+    "pelos",
+    "por",
+    "que",
+    "se",
+    "sem",
+    "ser",
+    "seu",
+    "sua",
+    "sao",
+    "tambem",
+    "um",
+    "uma",
+    "uns",
     "umas",
 ]
 
@@ -34,7 +75,11 @@ def build_baseline(
     class_weight: str | None = "balanced",
     seed: int = 42,
 ) -> Pipeline:
-    """Monta o pipeline TF-IDF + Regressão Logística (não treinado)."""
+    """Monta o pipeline TF-IDF + LogReg (não treinado).
+
+    ``ngram_max``, ``min_df``, ``max_features``: ver §4.2 do doc da Fase 1.
+    ``class_weight='balanced'``: compensa classes raras sem oversampling.
+    """
     return Pipeline(
         steps=[
             (

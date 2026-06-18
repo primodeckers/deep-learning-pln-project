@@ -39,9 +39,13 @@ models/*
 # Experimentos (manter estrutura, ignorar logs pesados)
 experiments/**/logs/
 experiments/**/checkpoints/
+experiments/mlflow.db
+experiments/mlartifacts/
+experiments/mlruns/
 
 # SO / editor
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+.cursor/

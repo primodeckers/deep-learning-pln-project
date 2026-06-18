@@ -17,7 +17,7 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
 | **Status** | EDA + baseline de classificação (F1 macro ≈ 0,74) + baseline extrativo de sumarização concluídos — próximos: BERTimbau (Fase 2) e sumarização abstrativa (Fase 3) |
-| **Última atualização** | 2026-06-08 |
+| **Última atualização** | 2026-06-18 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)
 
@@ -184,7 +184,7 @@ A aula ensina: comparar **baseline**, **erro de treino** e **erro de validação
 3. Split estratificado treino/val/test (seed fixa para reprodutibilidade)
 4. Implementar baseline **TF-IDF (1–2 grams) + Logistic Regression**
 5. Calcular **F1 macro**, F1 por classe, matriz de confusão
-6. Validar manualmente ~30 editais sorteados (qualidade do label proxy)
+6. Validar manualmente ~30 editais sorteados (qualidade do label proxy) — **em andamento:** gabarito + 4 fichas em `docs/validacao_labels/`; 1/4 concluída (96,2% concordância)
 
 **Script alvo:** `scripts/run_train.py --task classification --model baseline`
 
@@ -219,7 +219,7 @@ A aula ensina: comparar **baseline**, **erro de treino** e **erro de validação
 1. Gráfico: distribuição de valor homologado por área predita
 2. Opcional: resumir os 5 editais **mais mal classificados** (liga tarefa 1 e 4)
 3. Redigir limitações: label proxy, corpus HTML vs PDF, desbalanceamento de classes
-4. Registrar experimentos em `experiments/` (JSON com métricas e hiperparâmetros)
+4. Registrar experimentos em `experiments/` (JSON + MLflow em `experiments/mlflow.db`)
 
 ### Fase 5 — Entrega e apresentação
 
@@ -239,7 +239,7 @@ Práticas comuns em produção de PLN em 2024–2025, mapeadas para o nosso esco
 | Baseline clássico antes de DL | TF-IDF + LogReg / LinearSVM | Sim (Fase 1) |
 | Transformer pré-treinado em PT | BERTimbau, Legal-BERT-PT | Sim — BERTimbau |
 | Fine-tuning com Hugging Face | `transformers` + `Trainer` | Sim |
-| Experiment tracking | MLflow, Weights & Biases | Opcional (`experiments/*.json` mínimo) |
+| Experiment tracking | MLflow (local) + JSON em `experiments/` | Sim — desde Fase 2 |
 | Hiperparâmetros | Grid/random search, Optuna | Manual (suficiente para o prazo) |
 | Classificação desbalanceada | `class_weight`, focal loss | `class_weight` |
 | Sumarização | T5/mT5, BART, GPT com RAG | mT5 ou prompt LLM (amostra) |
@@ -404,8 +404,8 @@ deep-learning-pln-project/
 │   ├── raw/              # CSV + HTML
 │   ├── interim/          # textos e records extraídos
 │   └── processed/        # corpus JSONL + labels
-├── docs/                 # documentação
-├── experiments/          # métricas por run
+├── docs/                 # documentação (+ model_card, métricas)
+├── experiments/          # JSON por run + mlflow.db (tracking local)
 ├── models/               # checkpoints (gitignored)
 ├── notebooks/            # EDA e protótipos
 ├── reports/figures|slides/
@@ -413,14 +413,17 @@ deep-learning-pln-project/
 │   ├── run_collect.py
 │   ├── run_preprocess.py
 │   └── run_train.py
-└── src/                  # collect, preprocess, models, train, evaluate
+├── src/                  # collect, preprocess, models, train, evaluate
+├── tests/                # pytest (+ fixtures/minimal_corpus.jsonl)
+├── pyproject.toml        # deps, ruff, mypy, pytest
+└── Makefile              # atalhos de dev e pipeline
 ```
 
 ### Como executar
 
 ```bash
 python -m venv .venv && source .venv/Scripts/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt   # runtime + pytest, ruff, mypy
 
 python scripts/run_collect.py       # já executado
 python scripts/run_preprocess.py    # já executado
@@ -428,6 +431,59 @@ python scripts/run_train.py --task classification --model baseline
 python scripts/run_train.py --task classification --model bertimbau
 python scripts/run_train.py --task summarization --model extractive
 ```
+
+Atalhos equivalentes: `make train-baseline`, `make train-summarize`, `make mlflow-ui` (requer `make` no PATH).
+
+### Qualidade de código
+
+Antes de commitar alterações em `src/`:
+
+```bash
+ruff check src tests && ruff format --check src tests
+mypy
+pytest
+```
+
+| Ferramenta | Escopo | Config |
+|---|---|---|
+| Ruff | estilo, imports, formatação | `pyproject.toml` → `[tool.ruff]` |
+| Mypy | tipos estáticos | `pyproject.toml` → `[tool.mypy]` |
+| Pytest | regressão rápida | `tests/`; corpus real opcional (`skipif`) |
+
+Documentação de resultados: [`model_card.md`](model_card.md), [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
+
+### Rastreamento de experimentos (MLflow)
+
+Implementado em [`src/utils/experiment_tracking.py`](../src/utils/experiment_tracking.py) e chamado por `train_classification` / `run_summarization`.
+
+**O que cada run registra**
+
+| Campo | JSON (`experiments/*.json`) | MLflow (`experiments/mlflow.db`) |
+|---|---|---|
+| Parâmetros do modelo | `params` | `log_param` |
+| Métricas (val/teste) | `metrics` | `log_metric` |
+| Versão do dataset | `dataset.sha256`, `n_records`, `path` | tags `corpus_*` |
+| Código | `git_commit` | tag `git_commit` |
+| Artefatos | caminhos relativos | modelo, figuras, JSON da run |
+
+**Por que os dois formatos?**
+
+- **JSON** — portátil, legível no Git, suficiente para o relatório e slides.
+- **MLflow** — compara runs lado a lado na UI; essencial na Fase 2 (BERTimbau) com vários hiperparâmetros.
+
+**Comandos**
+
+```bash
+python scripts/run_train.py --task classification --model baseline
+
+# UI local (após pelo menos uma run)
+mlflow ui --backend-store-uri sqlite:///experiments/mlflow.db
+# http://127.0.0.1:5000 — experimento "pln-licitacoes"
+```
+
+`experiments/mlflow.db` e `experiments/mlartifacts/` estão no `.gitignore` (gerados localmente). Os JSONs em `experiments/` podem ser commitados quando forem runs de referência.
+
+**BERTimbau (Fase 2):** ao implementar o fine-tuning, usar o callback `MLflowCallback` do Hugging Face `Trainer` no mesmo tracking URI, para logar `loss` por época automaticamente.
 
 ---
 
@@ -476,6 +532,9 @@ _Ajustar datas conforme calendário real da disciplina._
 | 2026-06-08 | Entrada honesta = `objeto_html` (não `texto`) | `texto` repete o nome do órgão → vazamento de label (§6.1) |
 | 2026-06-08 | EDA em `notebooks/01_eda.ipynb` | Vazamento quantificado: órgão em 97% dos `texto` vs 49% dos `objeto_html` |
 | 2026-06-08 | Baseline de sumarização = extrativo por regras (não TextRank puro) | Determinístico, não alucina; cobre objeto/quem/prazo/valor (§7) |
+| 2026-06-18 | Rastreamento com MLflow local + JSON | Comparar baseline vs BERTimbau; versionar corpus por hash SHA-256 |
+| 2026-06-18 | Dev: ruff + mypy + pytest + Makefile + `pyproject.toml` instalável | Qualidade de código e onboarding do grupo; model card e doc de métricas |
+| 2026-06-18 | Validação manual de labels: gabarito + 4 fichas em `docs/validacao_labels/` | 1/4 concluída (Renê, 96,2%); consolidação parcial no gabarito |
 
 ---
 

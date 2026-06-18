@@ -1,7 +1,10 @@
-"""Carrega o corpus JSONL rotulado e faz o split estratificado treino/val/test.
+"""Carrega o corpus JSONL e faz split estratificado treino/val/test (Fase 1).
 
-Split 70/15/15 estratificado por macroárea, com seed fixa (guia §3.1). As mesmas
-partições são usadas pelo baseline e pelo BERTimbau, garantindo comparabilidade.
+Split 70/15/15 estratificado por ``area``, ``seed`` fixa — mesmas partições
+para baseline e BERTimbau (comparabilidade). O campo de texto padrão em código
+é ``texto``; a config de produção usa ``objeto_html`` (anti-leakage).
+
+Decisões: ``docs/FASE1-CLASSIFICACAO.md`` §3.2 e §3.3.
 """
 
 from __future__ import annotations
@@ -67,14 +70,15 @@ def make_dataset(
     records = load_records(corpus_path)
     labels = [r["area"] for r in records]
 
-    # 1º corte: separa o teste do restante (train+val).
+    # Dois cortes: sklearn não oferece train/val/test numa chamada. Primeiro
+    # reservamos o teste; depois dividimos o restante com val_rel reescalado.
     rest, test = train_test_split(
         records,
         test_size=test_size,
         stratify=labels,
         random_state=seed,
     )
-    # 2º corte: separa val do treino, reescalando a proporção sobre o restante.
+    # val_rel = proporção de val sobre (train+val), não sobre o corpus inteiro.
     rest_labels = [r["area"] for r in rest]
     val_rel = val_size / (1.0 - test_size)
     train, val = train_test_split(

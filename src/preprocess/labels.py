@@ -1,9 +1,10 @@
-"""Mapeamento órgão → macroárea de gasto público.
+"""Mapeamento órgão → macroárea de gasto público (Fase 1).
 
-Taxonomia definida no guia (UNIVERSAL-DEEP-LEARNING-GUIDE.md §6.1). O label é
-derivado do campo ``orgao_csv`` por palavras-chave. O modelo NÃO recebe o órgão
-como feature — apenas o texto do edital; o órgão só gera o label inicial
-(limitação "label proxy" declarada no relatório).
+Taxonomia de 6 classes + fallback ``Administracao/Outros``, definida no guia
+§6.1. O label é derivado de ``orgao_csv`` por palavras-chave — o modelo **não**
+recebe o órgão como feature, apenas o texto do edital.
+
+Decisões e justificativas completas: ``docs/FASE1-CLASSIFICACAO.md`` §3.1.
 """
 
 from __future__ import annotations

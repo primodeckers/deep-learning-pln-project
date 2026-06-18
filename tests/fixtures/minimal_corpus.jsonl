@@ -1,0 +1,30 @@
+{"id": "s1", "orgao_csv": "Secretaria de Estado de Saude", "objeto_html": "Aquisicao de medicamentos hospitalares.", "texto": "Secretaria de Saude - medicamentos."}
+{"id": "s2", "orgao_csv": "Hospital Regional de Saude", "objeto_html": "Contratacao de exames laboratoriais.", "texto": "Hospital de Saude - exames."}
+{"id": "s3", "orgao_csv": "Instituto de Saude Publica", "objeto_html": "Vacinas para campanha de imunizacao.", "texto": "Saude publica - vacinas."}
+{"id": "s4", "orgao_csv": "Centro de Hemocentro", "objeto_html": "Reagentes para banco de sangue.", "texto": "Hemocentro - reagentes."}
+{"id": "s5", "orgao_csv": "Secretaria de Saude do DF", "objeto_html": "Manutencao de equipamentos hospitalares.", "texto": "Saude - equipamentos."}
+{"id": "n1", "orgao_csv": "CAESB", "objeto_html": "Manutencao de redes de agua.", "texto": "CAESB - saneamento."}
+{"id": "n2", "orgao_csv": "Companhia de Saneamento", "objeto_html": "Servicos de esgotamento sanitario.", "texto": "Saneamento basico."}
+{"id": "n3", "orgao_csv": "CAESB Distrito Federal", "objeto_html": "Tubos para rede de distribuicao.", "texto": "CAESB - tubos."}
+{"id": "n4", "orgao_csv": "Autarquia de Saneamento", "objeto_html": "Tratamento de agua potavel.", "texto": "Saneamento - agua."}
+{"id": "n5", "orgao_csv": "CAESB Operacional", "objeto_html": "Inspecao de reservatorios.", "texto": "CAESB - reservatorios."}
+{"id": "g1", "orgao_csv": "Policia Civil do DF", "objeto_html": "Aquisicao de coletes balisticos.", "texto": "Policia - seguranca."}
+{"id": "g2", "orgao_csv": "Corpo de Bombeiros Militar", "objeto_html": "Equipamentos de combate a incendio.", "texto": "Bombeiros - seguranca."}
+{"id": "g3", "orgao_csv": "Secretaria de Seguranca Publica", "objeto_html": "Radios de comunicacao tatica.", "texto": "Seguranca - radios."}
+{"id": "g4", "orgao_csv": "Penitenciaria da Capital", "objeto_html": "Alimentacao para unidade prisional.", "texto": "Penitenciaria - alimentacao."}
+{"id": "g5", "orgao_csv": "Policia Militar", "objeto_html": "Vestuario operacional.", "texto": "Policia - vestuario."}
+{"id": "e1", "orgao_csv": "Secretaria de Educacao", "objeto_html": "Material didatico para escolas.", "texto": "Educacao - material escolar."}
+{"id": "e2", "orgao_csv": "Instituto de Educacao", "objeto_html": "Mobiliario escolar.", "texto": "Educacao - mobiliario."}
+{"id": "e3", "orgao_csv": "Coordenacao de Educacao", "objeto_html": "Livros para biblioteca escolar.", "texto": "Educacao - livros."}
+{"id": "e4", "orgao_csv": "Rede Publica de Educacao", "objeto_html": "Tablets para alunos.", "texto": "Educacao - tablets."}
+{"id": "e5", "orgao_csv": "Secretaria de Educacao Basica", "objeto_html": "Merenda escolar.", "texto": "Educacao - merenda."}
+{"id": "i1", "orgao_csv": "Departamento de Estradas e Rodagem", "objeto_html": "Recapeamento asfaltico de vias.", "texto": "DER - obras viarias."}
+{"id": "i2", "orgao_csv": "Secretaria de Infraestrutura", "objeto_html": "Construcao de ponte.", "texto": "Infraestrutura - ponte."}
+{"id": "i3", "orgao_csv": "Departamento de Obras", "objeto_html": "Drenagem urbana.", "texto": "Obras - drenagem."}
+{"id": "i4", "orgao_csv": "Agencia de Infraestrutura", "objeto_html": "Sinalizacao viaria.", "texto": "Infraestrutura - sinalizacao."}
+{"id": "i5", "orgao_csv": "Estradas e Rodagem DF", "objeto_html": "Manutencao de viadutos.", "texto": "Rodagem - viadutos."}
+{"id": "o1", "orgao_csv": "Gabinete do Governador", "objeto_html": "Servicos de limpeza predial.", "texto": "Administracao - limpeza."}
+{"id": "o2", "orgao_csv": "Controladoria Geral", "objeto_html": "Auditoria de contratos.", "texto": "Administracao - auditoria."}
+{"id": "o3", "orgao_csv": "Secretaria de Administracao", "objeto_html": "Papelaria institucional.", "texto": "Administracao - papelaria."}
+{"id": "o4", "orgao_csv": "Orgao Central Administrativo", "objeto_html": "Locacao de veiculos.", "texto": "Administracao - veiculos."}
+{"id": "o5", "orgao_csv": "Gabinete Administrativo", "objeto_html": "Servicos graficos.", "texto": "Administracao - grafica."}

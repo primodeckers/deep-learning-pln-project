@@ -67,7 +67,7 @@ def extract_participacao(texto: str) -> str:
     return "aberta a empresas que atendam às exigências do edital"
 
 
-def format_valor(total_homologado: str) -> str | None:
+def format_valor(total_homologado: str | None) -> str | None:
     """Formata 'R$ 62.800,00' a partir do campo BR; None se ausente/zero."""
     if not total_homologado:
         return None

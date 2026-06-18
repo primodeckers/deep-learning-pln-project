@@ -12,9 +12,7 @@ import requests
 
 from src.collect.load_licitacoes import LicitacaoRecord, load_licitacoes
 
-DEFAULT_USER_AGENT = (
-    "deep-learning-pln-project/1.0 (+https://github.com/primodeckers/deep-learning-pln-project; uso acadêmico)"
-)
+DEFAULT_USER_AGENT = "deep-learning-pln-project/1.0 (+https://github.com/primodeckers/deep-learning-pln-project; uso acadêmico)"
 
 
 @dataclass
@@ -105,7 +103,9 @@ def download_detalhes_html(
         results.append(result)
 
         tag = result.status.upper()
-        print(f"[{index}/{len(records)}] {tag} {record.numero} -> {result.output_file or result.error}")
+        print(
+            f"[{index}/{len(records)}] {tag} {record.numero} -> {result.output_file or result.error}"
+        )
 
         if index < len(records) and not result.skipped:
             time.sleep(delay_seconds)
