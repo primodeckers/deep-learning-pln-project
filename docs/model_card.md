@@ -36,7 +36,9 @@ Matriz de confusão: `reports/figures/classification_baseline_20260608-190839_co
 
 ### Por que não usar `texto` como entrada?
 
-O campo `texto` (HTML completo) repete o nome do órgão em ~97% dos casos — e o label vem justamente do órgão (`orgao_csv`). Com `texto`, o baseline infla para F1 macro ≈ 0,88 (vazamento de label). Com `objeto_html`, a métrica cai para ≈ 0,74, mas reflete generalização honesta. Ver [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
+O campo `texto` (HTML completo) repete o nome do órgão em ~97% dos casos — e o label vem justamente do órgão (`orgao_csv`). Com `texto`, o baseline infla para F1 macro ≈ 0,88 (vazamento de label). Com `objeto_html`, a métrica cai para ≈ 0,74, mas reflete generalização mais honesta.
+
+**Entrada oficial:** `objeto_html`. **Não há percentual universal** de vazamento aceitável — documentamos Tabela 7 (~49% residual) e explicamos no relatório conforme [`vazamento_de_label.md`](vazamento_de_label.md). Campo experimental: `objeto_html_limpo` (~47% residual). Ver também [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
 
 ## Performance — sumarização extrativa
 
@@ -66,6 +68,7 @@ Avaliação quantitativa (ROUGE) e humana (escala 1–5) estão previstas na Fas
 
 - Corpus pequeno (~400 editais) para deep learning — classes raras (Educação, Infraestrutura) têm poucos exemplos.
 - Label é *proxy* derivado do órgão, não de anotação manual por edital. **Validação humana (parcial):** 30 editais revisados por 1 integrante — 96,2% de concordância com o mapeamento automático; ver [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md).
+- **Vazamento de label:** entrada oficial `objeto_html` reduz pistas do órgão no texto (~49% residual na Tabela 7); não existe limiar universal — ver [`vazamento_de_label.md`](vazamento_de_label.md).
 - Dados de um único estado (DF) e ano (2025) — não generalizam para todo o Brasil.
 
 ## Onde o modelo engana ou fica cego

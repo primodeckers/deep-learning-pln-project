@@ -36,13 +36,15 @@ Medição (423 editais; **260** com keyword de área — exclui 163 em `Administ
 |------------------|------------------------------|------|
 | **`texto`** (HTML completo) | 252 / 260 | **96,9%** |
 | **`objeto_html`** (só objeto) | 128 / 260 | **49,2%** |
+| **`objeto_html_limpo`** (objeto sem boilerplate) | 123 / 260 | **47,3%** |
 
 **Impacto nas métricas (baseline TF-IDF + LogReg, mesmo split):**
 
 | `text_field` | F1 macro (teste, ref.) | Interpretação |
 |--------------|------------------------|---------------|
-| `texto` | ≈ 0,88 | Teto **otimista** — muito vazamento |
-| `objeto_html` | ≈ 0,74 | Avaliação **mais honesta** — entrada oficial do projeto |
+| `texto` | ≈ 0,88 | Teto **otimista** — vazamento grave |
+| `objeto_html` | ≈ 0,74 | Avaliação **oficial** — entrada adotada |
+| `objeto_html_limpo` | _(experimento)_ | Limpeza extra; ganho pequeno na Tabela 7 — ver §6.3 |
 
 Run de referência com `objeto_html`: `experiments/classification_baseline_20260608-190839.json`.
 
@@ -73,6 +75,27 @@ Mesmo sem cabeçalho do órgão, o objeto pode conter:
 Isso **não é bug** — parte é sinal legítimo da compra. O limite é filosófico: o label veio do **órgão**, mas o texto fala do **objeto**.
 
 **Não prometemos** vazamento zero sem mudar a definição do label ou anotar manualmente.
+
+---
+
+## 5.1 Existe um “limiar universal” de vazamento?
+
+**Não.** Não há padrão do tipo “vazamento ≤ 5%” ou “≤ 10%” válido para todo projeto de ML/PLN.
+
+| O que existe na prática | O que **não** existe |
+|-------------------------|----------------------|
+| Evitar usar no input a **mesma fonte** do label | Percentual mágico aceitável em todo domínio |
+| Comparar entrada contaminada vs honesta (`texto` vs `objeto_html`) | Certificação “zero vazamento” |
+| Documentar limitações no relatório | Ignorar vazamento porque F1 ficou alto |
+
+**Para o nosso trabalho:** o critério é **metodológico**, não numérico:
+
+1. Escolhemos a entrada que **não repete o cabeçalho/órgão** (`objeto_html`).
+2. Medimos quanto a keyword da área ainda aparece (Tabela 7).
+3. Reportamos **F1 ≈ 0,74** (teste), não **≈ 0,88**.
+4. Separamos **vazamento** (este doc) de **label proxy** (validação manual).
+
+**~49% residual** em `objeto_html` **não invalida** o experimento: muitas ocorrências são termos legítimos do objeto (“insumo à saúde”, “material da CAESB”). O professor espera **transparência**, não vazamento zero.
 
 ---
 
@@ -164,22 +187,50 @@ Exigiria anotação manual ou modelo auxiliar de alto custo. A validação manua
 | `orgao_csv` | ❌ nunca como feature | ✅ contexto no extrativo |
 | `texto` | ❌ evitar (vazamento) | ✅ texto completo |
 | `objeto_html` | ✅ **entrada oficial** | referência fraca (ROUGE) |
-| Cabeçalho “Pregão Eletrônico” | opcional limpar | irrelevante |
+| `objeto_html_limpo` | ⚗️ experimento (`text_field` alternativo) | mesma limpeza do resumo extrativo |
+| Cabeçalho “Pregão Eletrônico” | removido em `objeto_html_limpo` | `limpar_objeto()` no extrativo |
 
 ---
 
-## 9. Checklist para slides e relatório
+## 9. O que explicar no relatório e nos slides
+
+Use este roteiro (copiar/adaptar):
+
+### 9.1 Problema (1 slide ou parágrafo)
+
+> O label da classificação vem do **órgão comprador** (`orgao_csv` → palavras-chave), não de anotação manual. Se o **texto de entrada** repetir o nome do órgão ou a keyword da área, o modelo pode **colar** no label em vez de aprender o conteúdo da compra — isso é **vazamento de label**.
+
+### 9.2 O que fizemos (evidência)
+
+> Medimos na EDA (Tabela 7, 260 editais com keyword de área): com `texto` completo, **96,9%** ainda expõem a área; com **`objeto_html`**, **49,2%**. Por isso adotamos `objeto_html` como entrada — F1 macro no teste **≈ 0,74**, não **≈ 0,88** (run `classification_baseline_20260608-190839`).
+
+### 9.3 O que **não** prometemos
+
+> Não há limiar universal de “quanto pode vazar”. **~49%** residual é esperado enquanto o label vier do órgão e o objeto citar saúde/saneamento. Implementamos limpeza opcional (`objeto_html_limpo`, **47,3%**) — ganho modesto; **entrada oficial permanece `objeto_html`**.
+
+### 9.4 Label proxy (complemento — outro slide)
+
+> O mapeamento órgão → área é **proxy**. Validamos manualmente 30 editais (1/4 fichas): **96,2%** de concordância. Isso trata a **qualidade do rótulo**, não substitui a discussão de vazamento no texto.
+
+### 9.5 Frase de fechamento sugerida
+
+> *“Reduzimos vazamento grosseiro escolhendo `objeto_html`; reportamos métricas honestas e documentamos limitações residual e de label proxy.”*
+
+---
+
+## 10. Checklist para slides e relatório
 
 - [ ] Explicar diferença vazamento vs label proxy (§1)
-- [ ] Mostrar Tabela 7 ou figura equivalente
-- [ ] Declarar `text_field: objeto_html` como entrada oficial
-- [ ] Citar F1 ≈ 0,74 (teste), não 0,88
+- [ ] Mostrar Tabela 7 (3 linhas: `texto`, `objeto_html`, `objeto_html_limpo`)
+- [ ] Declarar `text_field: objeto_html` como entrada **oficial**
+- [ ] Citar F1 ≈ 0,74 (teste), **não** 0,88
+- [ ] Dizer que **não há limiar universal** de vazamento (§5.1)
 - [ ] Mencionar validação manual do proxy (96,2% parcial)
 - [ ] Limitação: ~49% de keyword residual em `objeto_html`
 
 ---
 
-## 10. Log de discussão do grupo
+## 11. Log de discussão do grupo
 
 _Preencher em reunião — data, quem participou, decisão._
 
@@ -192,7 +243,7 @@ _Preencher em reunião — data, quem participou, decisão._
 
 ---
 
-## 11. Referências no repositório
+## 12. Referências no repositório
 
 | Artefato | Caminho |
 |----------|---------|

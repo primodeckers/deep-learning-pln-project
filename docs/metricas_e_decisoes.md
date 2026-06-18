@@ -26,14 +26,15 @@ Documento de referência para escolhas metodológicas — equivalente ao espíri
 
 ### Decisão crítica — campo de entrada (`text_field`)
 
-| Campo | F1 macro (teste, baseline) | Problema |
-|-------|------------------------------|----------|
-| `texto` | ≈ 0,88 | Nome do órgão aparece em ~97% dos textos → **vazamento de label** |
-| `objeto_html` | ≈ 0,74 | Descrição do que é comprado, sem cabeçalho identificador |
+| Campo | F1 macro (teste, baseline) | Vazamento (Tabela 7) | Papel |
+|-------|------------------------------|----------------------|--------|
+| `texto` | ≈ 0,88 | ~97% | ❌ Contraste — teto inflado |
+| `objeto_html` | ≈ 0,74 | ~49% | ✅ **Entrada oficial** |
+| `objeto_html_limpo` | _(experimento)_ | ~47% | ⚗️ Limpeza extra — ganho pequeno |
 
 **Decisão adotada:** `text_field: objeto_html` em `configs/classification.yaml`.
 
-Documento de discussão do grupo: [`vazamento_de_label.md`](vazamento_de_label.md).
+**Não há limiar universal** de “quanto pode vazar” — o critério é metodológico: não repetir a fonte do label no input e documentar limitações. Ver [`vazamento_de_label.md`](vazamento_de_label.md) §5.1 e §9 (roteiro para relatório/slides).
 
 O modelo **não** recebe `orgao_csv` como feature — o órgão só gera o label inicial (limitação *label proxy* declarada no relatório).
 

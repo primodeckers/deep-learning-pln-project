@@ -77,7 +77,7 @@ licitacoes_corpus.jsonl
 
 **Decisão:** `text_field: objeto_html` em `configs/classification.yaml`.
 
-**Discussão completa (vazamento, opções, checklist):** [`vazamento_de_label.md`](vazamento_de_label.md).
+**Discussão completa (vazamento, opções, roteiro para relatório/slides):** [`vazamento_de_label.md`](vazamento_de_label.md) — inclui §5.1 (não há limiar universal) e §9 (o que explicar na apresentação).
 
 **Evidência:** EDA em `notebooks/01_eda.ipynb` (Tabela 7); números em [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
 

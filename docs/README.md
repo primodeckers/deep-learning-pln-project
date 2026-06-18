@@ -12,7 +12,7 @@
 | [`PROPOSALS.md`](PROPOSALS.md) | Brainstorm de temas/tarefas de PLN para o projeto |
 | [`model_card.md`](model_card.md) | Model card — performance, dados, limitações |
 | [`metricas_e_decisoes.md`](metricas_e_decisoes.md) | Métricas, anti-leakage e decisões de avaliação |
-| [`vazamento_de_label.md`](vazamento_de_label.md) | Vazamento de label — mitigações e discussão do grupo |
+| [`vazamento_de_label.md`](vazamento_de_label.md) | Vazamento de label — mitigações, §9 roteiro para relatório/slides |
 | [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) | Fase 1 — decisões, justificativas e mapa do código |
 | [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) | Gabarito, consolidação e status das fichas |
 | [`validacao_labels/ficha_*.md`](validacao_labels/) | Ficha individual (1/4 preenchida — Renê) |
