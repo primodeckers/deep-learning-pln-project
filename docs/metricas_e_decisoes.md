@@ -33,6 +33,8 @@ Documento de referência para escolhas metodológicas — equivalente ao espíri
 
 **Decisão adotada:** `text_field: objeto_html` em `configs/classification.yaml`.
 
+Documento de discussão do grupo: [`vazamento_de_label.md`](vazamento_de_label.md).
+
 O modelo **não** recebe `orgao_csv` como feature — o órgão só gera o label inicial (limitação *label proxy* declarada no relatório).
 
 ### Validação humana do label proxy

@@ -18,6 +18,7 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 | [`docs/PROPOSALS.md`](docs/PROPOSALS.md) | Propostas de tema/tarefa de PLN (brainstorm do grupo) |
 | [`docs/model_card.md`](docs/model_card.md) | Model card — performance, dados, limitações dos modelos |
 | [`docs/metricas_e_decisoes.md`](docs/metricas_e_decisoes.md) | Métricas, anti-leakage e decisões de avaliação |
+| [`docs/vazamento_de_label.md`](docs/vazamento_de_label.md) | Vazamento de label — mitigações e discussão do grupo |
 | [`docs/FASE1-CLASSIFICACAO.md`](docs/FASE1-CLASSIFICACAO.md) | Fase 1 — decisões técnicas, padrões e justificativas |
 | [`docs/validacao_labels/validacao_labels.md`](docs/validacao_labels/validacao_labels.md) | Gabarito da validação manual de labels |
 | [`docs/validacao_labels/`](docs/validacao_labels/) | Ficha individual de cada integrante |

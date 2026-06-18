@@ -77,7 +77,9 @@ licitacoes_corpus.jsonl
 
 **Decisão:** `text_field: objeto_html` em `configs/classification.yaml`.
 
-**Evidência:** EDA em `notebooks/01_eda.ipynb`; discussão em [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
+**Discussão completa (vazamento, opções, checklist):** [`vazamento_de_label.md`](vazamento_de_label.md).
+
+**Evidência:** EDA em `notebooks/01_eda.ipynb` (Tabela 7); números em [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
 
 **Código:** `src/preprocess/dataset.py` → `make_dataset(..., text_field=...)`
 
