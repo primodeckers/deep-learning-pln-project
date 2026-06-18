@@ -30,14 +30,10 @@ def _strip_accents_lower(text: str) -> str:
 
 
 def clean_objeto(objeto_html: str, max_chars: int = 240) -> str:
-    """Limpa o objeto: remove 'Objeto:' duplicado e corta na 1ª frase/limite."""
-    texto = (objeto_html or "").strip()
-    # O HTML às vezes traz "Objeto: Objeto: ..." e o tipo de pregão como prefixo.
-    texto = re.sub(r"^\s*(Objeto:\s*)+", "", texto, flags=re.IGNORECASE)
-    texto = re.sub(
-        r"^\s*Preg[aã]o Eletr[oô]nico\s*-\s*", "", texto, flags=re.IGNORECASE
-    )
-    texto = texto.strip()
+    """Limpa o objeto para o resumo cidadão (sem boilerplate; trunca se longo)."""
+    from src.preprocess.clean_objeto import limpar_objeto
+
+    texto = limpar_objeto(objeto_html)
     if len(texto) <= max_chars:
         return texto
     # Corta no fim de frase mais próximo antes do limite; senão, corte seco.

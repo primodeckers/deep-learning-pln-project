@@ -15,6 +15,7 @@ from pathlib import Path
 
 from sklearn.model_selection import train_test_split
 
+from src.preprocess.clean_objeto import get_text_for_field
 from src.preprocess.labels import area_for_orgao
 
 
@@ -53,7 +54,7 @@ def load_records(corpus_path: Path) -> list[dict]:
 
 def _to_split(rows: list[dict], text_field: str) -> Split:
     return Split(
-        texts=[r.get(text_field) or "" for r in rows],
+        texts=[get_text_for_field(r, text_field) for r in rows],
         labels=[r["area"] for r in rows],
         ids=[r["id"] for r in rows],
     )

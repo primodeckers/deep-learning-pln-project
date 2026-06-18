@@ -54,6 +54,7 @@ Run de referência com `objeto_html`: `experiments/classification_baseline_20260
 |--------|--------|------|
 | **Não** passar `orgao_csv` ao modelo | ✅ Implementado | `make_dataset()` — label sim, feature não |
 | Entrada = **`objeto_html`**, não `texto` | ✅ Implementado | `configs/classification.yaml` → `text_field: objeto_html` |
+| Limpeza opcional **`objeto_html_limpo`** | ✅ Implementado | `src/preprocess/clean_objeto.py`; vazamento 47,3% vs 49,2% |
 | Documentar vazamento na EDA | ✅ | `notebooks/01_eda.ipynb` §5, Tabela 7 |
 | Baseline e BERTimbau no **mesmo** `text_field` | 📋 Fase 2 | Mesmo YAML / split |
 
@@ -109,19 +110,31 @@ Tabela de 2 linhas no relatório reforça a decisão da §4.
 
 ---
 
-### 6.3 Limpeza leve do texto — **melhoria futura**
+### 6.3 Limpeza leve do texto — **implementado (experimento)**
 
-Criar campo derivado (ex.: `objeto_html_limpo`):
+Campo derivado **`objeto_html_limpo`** via [`src/preprocess/clean_objeto.py`](../src/preprocess/clean_objeto.py) → `limpar_objeto()`:
 
-| Ação | Faz sentido? |
+| Ação | Implementado |
 |------|--------------|
-| Remover prefixo repetido “Objeto: Pregão Eletrônico -” | Sim, ganho pequeno |
-| Mascarar **nome exato** do órgão se copiado no objeto | Talvez — testar impacto |
-| Remover **todas** as keywords de `AREA_KEYWORDS` do input | **Não** como pipeline principal — artificial, facilita demais |
+| Remover prefixo `Objeto:` | ✅ |
+| Remover `Pregão Eletrônico -` / modalidades similares | ✅ |
+| Mascarar nome do órgão se repetido no objeto | ✅ (heurística) |
 
-Implementação sugerida: função em `src/preprocess/` + novo valor de `text_field` no YAML.
+**Medição (Tabela 7, 260 editais com keyword):**
 
-**Voto do grupo:** _[ ] implementar pós-entrega · [ ] descartado_
+| Campo | Taxa de vazamento |
+|-------|-------------------|
+| `objeto_html` | 49,2% (128/260) |
+| `objeto_html_limpo` | **47,3%** (123/260) |
+
+Ganho modesto (~2 p.p.) — termos de domínio legítimos permanecem. Entrada **oficial** do pipeline: `objeto_html`. Para experimentar:
+
+```yaml
+# configs/classification.yaml
+text_field: objeto_html_limpo
+```
+
+**Voto do grupo:** _[ ] adotar como oficial · [x] manter objeto_html · [ ] testar run comparativo_
 
 ---
 
@@ -184,6 +197,7 @@ _Preencher em reunião — data, quem participou, decisão._
 | Artefato | Caminho |
 |----------|---------|
 | Keywords e label | `src/preprocess/labels.py` |
+| Limpeza de objeto | `src/preprocess/clean_objeto.py` |
 | Campo de texto no dataset | `src/preprocess/dataset.py` |
 | Config | `configs/classification.yaml` |
 | EDA Tabela 7 | `notebooks/01_eda.ipynb` |

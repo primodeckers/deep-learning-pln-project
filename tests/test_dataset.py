@@ -51,6 +51,18 @@ def test_make_dataset_same_seed_is_reproducible() -> None:
     assert first.test.ids == second.test.ids
 
 
+def test_make_dataset_objeto_html_limpo() -> None:
+    dataset = make_dataset(
+        FIXTURE_CORPUS,
+        text_field="objeto_html_limpo",
+        seed=42,
+        val_size=0.2,
+        test_size=0.2,
+    )
+    assert len(dataset.train.texts) > 0
+    assert all(isinstance(t, str) for t in dataset.train.texts)
+
+
 @requires_corpus
 def test_real_corpus_has_expected_scale() -> None:
     records = load_records(CORPUS_PATH)

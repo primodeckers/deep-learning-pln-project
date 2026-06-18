@@ -81,7 +81,7 @@ licitacoes_corpus.jsonl
 
 **Evidência:** EDA em `notebooks/01_eda.ipynb` (Tabela 7); números em [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
 
-**Código:** `src/preprocess/dataset.py` → `make_dataset(..., text_field=...)`
+**Código:** `src/preprocess/dataset.py` → `make_dataset(..., text_field=...)` · limpeza opcional em `src/preprocess/clean_objeto.py` (`objeto_html_limpo`).
 
 ### 3.3 Split treino / validação / teste
 
