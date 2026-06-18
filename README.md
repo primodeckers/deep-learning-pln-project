@@ -108,6 +108,15 @@ Opções úteis:
 
 Configuração de classificação: `configs/classification.yaml` (`text_field: objeto_html`, split 70/15/15, `seed: 42`).
 
+> **Corpus completo (423 editais):** o JSONL só inclui licitações cujo HTML está em `data/raw/detalhes/`. Após clonar o repo, se `licitacoes_corpus.jsonl` tiver **menos de 423 linhas**, rode a coleta e o preprocess:
+>
+> ```bash
+> python scripts/run_collect.py          # baixa HTMLs (requer rede)
+> python scripts/run_preprocess.py --overwrite
+> ```
+>
+> Confira em `data/processed/preprocess_manifest.json` (`records_written` e `missing_html`).
+
 ### 4. Qualidade de código e testes
 
 Lista canônica de dependências em `pyproject.toml`. Atalhos via `Makefile` (se `make` estiver instalado) ou comandos diretos:
@@ -156,7 +165,7 @@ deactivate
 | Etapa | Saída | Status |
 |---|---|---|
 | Coleta HTML | `data/raw/detalhes/` (423 arquivos) | Concluído |
-| Pré-processamento | `data/processed/licitacoes_corpus.jsonl` | Concluído |
+| Pré-processamento | `data/processed/licitacoes_corpus.jsonl` (423 registros) | Concluído |
 | Classificação — baseline TF-IDF + LogReg | `experiments/classification_baseline_*.json` | Concluído (F1 macro ≈ 0,74 com `objeto_html`) |
 | Validação manual de labels (proxy) | `docs/validacao_labels/` | Em andamento (1/4 fichas — 96,2% concordância, Renê) |
 | Classificação — BERTimbau | `src/models/bert_classifier.py` | Pendente (Fase 2) |

@@ -1,13 +1,49 @@
 {
-  "generated_at": "2026-06-12T23:10:55.509113+00:00",
+  "generated_at": "2026-06-18T21:40:44.978955+00:00",
   "extract": {
-    "input_dir": "/Users/primodeckers/deep-learning-pln-project/data/raw/detalhes",
-    "text_dir": "/Users/primodeckers/deep-learning-pln-project/data/interim/text",
-    "records_dir": "/Users/primodeckers/deep-learning-pln-project/data/interim/records",
-    "total": 114,
-    "ok": 114,
+    "input_dir": "D:\\deep-learning-pln-project\\data\\raw\\detalhes",
+    "text_dir": "D:\\deep-learning-pln-project\\data\\interim\\text",
+    "records_dir": "D:\\deep-learning-pln-project\\data\\interim\\records",
+    "total": 423,
+    "ok": 423,
     "skipped": 0,
     "items": [
+      {
+        "file_id": "170394_5_900012025",
+        "status": "ok",
+        "num_caracteres": 41291,
+        "num_itens": 94
+      },
+      {
+        "file_id": "170394_5_900032025",
+        "status": "ok",
+        "num_caracteres": 7707,
+        "num_itens": 15
+      },
+      {
+        "file_id": "170394_5_900052025",
+        "status": "ok",
+        "num_caracteres": 8908,
+        "num_itens": 26
+      },
+      {
+        "file_id": "170394_5_900072025",
+        "status": "ok",
+        "num_caracteres": 5307,
+        "num_itens": 9
+      },
+      {
+        "file_id": "170394_5_900182025",
+        "status": "ok",
+        "num_caracteres": 1531,
+        "num_itens": 2
+      },
+      {
+        "file_id": "170394_5_900212025",
+        "status": "ok",
+        "num_caracteres": 4058,
+        "num_itens": 9
+      },
       {
         "file_id": "170394_5_900242025",
         "status": "ok",
@@ -27,10 +63,562 @@
         "num_itens": 1
       },
       {
+        "file_id": "170394_6_900032025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900042025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900052025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900082025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900092025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900112025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900122025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900142025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900162025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900172025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900182025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900192025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900202025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "170394_6_900212025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
         "file_id": "170394_6_900232025",
         "status": "ok",
         "num_caracteres": 149,
         "num_itens": 0
+      },
+      {
+        "file_id": "450107_5_900012025",
+        "status": "ok",
+        "num_caracteres": 3928,
+        "num_itens": 8
+      },
+      {
+        "file_id": "450107_5_900032025",
+        "status": "ok",
+        "num_caracteres": 1325,
+        "num_itens": 1
+      },
+      {
+        "file_id": "450107_5_900042025",
+        "status": "ok",
+        "num_caracteres": 3083,
+        "num_itens": 6
+      },
+      {
+        "file_id": "450107_5_900062025",
+        "status": "ok",
+        "num_caracteres": 2059,
+        "num_itens": 3
+      },
+      {
+        "file_id": "450107_6_900012025",
+        "status": "ok",
+        "num_caracteres": 175,
+        "num_itens": 0
+      },
+      {
+        "file_id": "450107_6_900022025",
+        "status": "ok",
+        "num_caracteres": 175,
+        "num_itens": 0
+      },
+      {
+        "file_id": "450107_6_900032025",
+        "status": "ok",
+        "num_caracteres": 175,
+        "num_itens": 0
+      },
+      {
+        "file_id": "450107_6_900042025",
+        "status": "ok",
+        "num_caracteres": 175,
+        "num_itens": 0
+      },
+      {
+        "file_id": "450107_6_900052025",
+        "status": "ok",
+        "num_caracteres": 175,
+        "num_itens": 0
+      },
+      {
+        "file_id": "450432_3_900022025",
+        "status": "ok",
+        "num_caracteres": 1642,
+        "num_itens": 1
+      },
+      {
+        "file_id": "450432_3_900032025",
+        "status": "ok",
+        "num_caracteres": 1449,
+        "num_itens": 1
+      },
+      {
+        "file_id": "450432_3_900042025",
+        "status": "ok",
+        "num_caracteres": 1658,
+        "num_itens": 1
+      },
+      {
+        "file_id": "450432_3_900072025",
+        "status": "ok",
+        "num_caracteres": 1179,
+        "num_itens": 1
+      },
+      {
+        "file_id": "450432_5_900022025",
+        "status": "ok",
+        "num_caracteres": 15300,
+        "num_itens": 64
+      },
+      {
+        "file_id": "450432_5_900032025",
+        "status": "ok",
+        "num_caracteres": 3460,
+        "num_itens": 8
+      },
+      {
+        "file_id": "450432_5_900042025",
+        "status": "ok",
+        "num_caracteres": 2196,
+        "num_itens": 4
+      },
+      {
+        "file_id": "450432_5_900062025",
+        "status": "ok",
+        "num_caracteres": 1528,
+        "num_itens": 2
+      },
+      {
+        "file_id": "450432_5_900072025",
+        "status": "ok",
+        "num_caracteres": 2053,
+        "num_itens": 4
+      },
+      {
+        "file_id": "450432_5_900082025",
+        "status": "ok",
+        "num_caracteres": 3845,
+        "num_itens": 8
+      },
+      {
+        "file_id": "450432_5_900092025",
+        "status": "ok",
+        "num_caracteres": 3503,
+        "num_itens": 8
+      },
+      {
+        "file_id": "450432_5_900102025",
+        "status": "ok",
+        "num_caracteres": 1220,
+        "num_itens": 1
+      },
+      {
+        "file_id": "450432_5_900122025",
+        "status": "ok",
+        "num_caracteres": 16287,
+        "num_itens": 30
+      },
+      {
+        "file_id": "450432_5_900152025",
+        "status": "ok",
+        "num_caracteres": 3121,
+        "num_itens": 8
+      },
+      {
+        "file_id": "450432_5_900162025",
+        "status": "ok",
+        "num_caracteres": 10428,
+        "num_itens": 25
+      },
+      {
+        "file_id": "450432_5_900182025",
+        "status": "ok",
+        "num_caracteres": 18266,
+        "num_itens": 48
+      },
+      {
+        "file_id": "450432_5_900202025",
+        "status": "ok",
+        "num_caracteres": 3424,
+        "num_itens": 8
+      },
+      {
+        "file_id": "450858_6_900012025",
+        "status": "ok",
+        "num_caracteres": 169,
+        "num_itens": 0
+      },
+      {
+        "file_id": "450858_6_900022025",
+        "status": "ok",
+        "num_caracteres": 169,
+        "num_itens": 0
+      },
+      {
+        "file_id": "450858_6_900042025",
+        "status": "ok",
+        "num_caracteres": 169,
+        "num_itens": 0
+      },
+      {
+        "file_id": "457319_5_900002025",
+        "status": "ok",
+        "num_caracteres": 2106,
+        "num_itens": 5
+      },
+      {
+        "file_id": "925046_5_900012025",
+        "status": "ok",
+        "num_caracteres": 1973,
+        "num_itens": 1
+      },
+      {
+        "file_id": "925046_5_900022025",
+        "status": "ok",
+        "num_caracteres": 1320,
+        "num_itens": 1
+      },
+      {
+        "file_id": "925046_5_900082025",
+        "status": "ok",
+        "num_caracteres": 912,
+        "num_itens": 1
+      },
+      {
+        "file_id": "925992_5_900012025",
+        "status": "ok",
+        "num_caracteres": 1101,
+        "num_itens": 1
+      },
+      {
+        "file_id": "925992_5_900022025",
+        "status": "ok",
+        "num_caracteres": 1268,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926015_5_900012025",
+        "status": "ok",
+        "num_caracteres": 1234,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926015_5_900032025",
+        "status": "ok",
+        "num_caracteres": 1407,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926015_5_900042025",
+        "status": "ok",
+        "num_caracteres": 1740,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926015_5_900062025",
+        "status": "ok",
+        "num_caracteres": 1493,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926015_5_900072025",
+        "status": "ok",
+        "num_caracteres": 1714,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926015_5_900092025",
+        "status": "ok",
+        "num_caracteres": 1293,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926015_6_900012025",
+        "status": "ok",
+        "num_caracteres": 68,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926015_6_900022025",
+        "status": "ok",
+        "num_caracteres": 68,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926015_6_900032025",
+        "status": "ok",
+        "num_caracteres": 68,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926015_6_900042025",
+        "status": "ok",
+        "num_caracteres": 68,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926015_6_900052025",
+        "status": "ok",
+        "num_caracteres": 68,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926016_5_900032025",
+        "status": "ok",
+        "num_caracteres": 1184,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926016_5_900062025",
+        "status": "ok",
+        "num_caracteres": 1100,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926016_5_900072025",
+        "status": "ok",
+        "num_caracteres": 1444,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926016_5_900082025",
+        "status": "ok",
+        "num_caracteres": 1266,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926016_5_900102025",
+        "status": "ok",
+        "num_caracteres": 2924,
+        "num_itens": 5
+      },
+      {
+        "file_id": "926016_5_900172025",
+        "status": "ok",
+        "num_caracteres": 9560,
+        "num_itens": 23
+      },
+      {
+        "file_id": "926016_6_900012025",
+        "status": "ok",
+        "num_caracteres": 104,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926017_6_900012025",
+        "status": "ok",
+        "num_caracteres": 247,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926017_6_900022025",
+        "status": "ok",
+        "num_caracteres": 247,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926017_6_900042025",
+        "status": "ok",
+        "num_caracteres": 247,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926119_5_900002025",
+        "status": "ok",
+        "num_caracteres": 8840,
+        "num_itens": 23
+      },
+      {
+        "file_id": "926119_5_900012025",
+        "status": "ok",
+        "num_caracteres": 4801,
+        "num_itens": 8
+      },
+      {
+        "file_id": "926119_5_900022025",
+        "status": "ok",
+        "num_caracteres": 7159,
+        "num_itens": 14
+      },
+      {
+        "file_id": "926119_5_900032025",
+        "status": "ok",
+        "num_caracteres": 2932,
+        "num_itens": 4
+      },
+      {
+        "file_id": "926119_5_900042025",
+        "status": "ok",
+        "num_caracteres": 6762,
+        "num_itens": 23
+      },
+      {
+        "file_id": "926119_5_900052025",
+        "status": "ok",
+        "num_caracteres": 5804,
+        "num_itens": 13
+      },
+      {
+        "file_id": "926119_5_900062025",
+        "status": "ok",
+        "num_caracteres": 3052,
+        "num_itens": 10
+      },
+      {
+        "file_id": "926119_5_900072025",
+        "status": "ok",
+        "num_caracteres": 7837,
+        "num_itens": 15
+      },
+      {
+        "file_id": "926119_5_900082025",
+        "status": "ok",
+        "num_caracteres": 4024,
+        "num_itens": 6
+      },
+      {
+        "file_id": "926119_5_900092025",
+        "status": "ok",
+        "num_caracteres": 5765,
+        "num_itens": 22
+      },
+      {
+        "file_id": "926119_5_900102025",
+        "status": "ok",
+        "num_caracteres": 14938,
+        "num_itens": 33
+      },
+      {
+        "file_id": "926119_5_900112025",
+        "status": "ok",
+        "num_caracteres": 1977,
+        "num_itens": 3
+      },
+      {
+        "file_id": "926119_5_900122025",
+        "status": "ok",
+        "num_caracteres": 7604,
+        "num_itens": 17
+      },
+      {
+        "file_id": "926119_5_900132025",
+        "status": "ok",
+        "num_caracteres": 8031,
+        "num_itens": 30
+      },
+      {
+        "file_id": "926119_5_900142025",
+        "status": "ok",
+        "num_caracteres": 3670,
+        "num_itens": 6
+      },
+      {
+        "file_id": "926119_5_900152025",
+        "status": "ok",
+        "num_caracteres": 3428,
+        "num_itens": 11
+      },
+      {
+        "file_id": "926119_5_900162025",
+        "status": "ok",
+        "num_caracteres": 5337,
+        "num_itens": 10
+      },
+      {
+        "file_id": "926119_5_900172025",
+        "status": "ok",
+        "num_caracteres": 2873,
+        "num_itens": 9
+      },
+      {
+        "file_id": "926119_5_900192025",
+        "status": "ok",
+        "num_caracteres": 10233,
+        "num_itens": 41
+      },
+      {
+        "file_id": "926119_5_900212025",
+        "status": "ok",
+        "num_caracteres": 2545,
+        "num_itens": 4
+      },
+      {
+        "file_id": "926119_5_900222025",
+        "status": "ok",
+        "num_caracteres": 6970,
+        "num_itens": 14
+      },
+      {
+        "file_id": "926119_5_900232025",
+        "status": "ok",
+        "num_caracteres": 3383,
+        "num_itens": 7
       },
       {
         "file_id": "926119_5_900242025",
@@ -447,6 +1035,30 @@
         "num_itens": 5
       },
       {
+        "file_id": "926119_6_900012025",
+        "status": "ok",
+        "num_caracteres": 152,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926119_6_900062025",
+        "status": "ok",
+        "num_caracteres": 152,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926119_6_900162025",
+        "status": "ok",
+        "num_caracteres": 152,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926119_6_900222025",
+        "status": "ok",
+        "num_caracteres": 152,
+        "num_itens": 0
+      },
+      {
         "file_id": "926119_6_900292025",
         "status": "ok",
         "num_caracteres": 152,
@@ -468,6 +1080,810 @@
         "file_id": "926119_6_900562025",
         "status": "ok",
         "num_caracteres": 152,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926120_3_900022025",
+        "status": "ok",
+        "num_caracteres": 1362,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926120_3_900052025",
+        "status": "ok",
+        "num_caracteres": 1684,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926120_3_900092025",
+        "status": "ok",
+        "num_caracteres": 1632,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926120_5_900012025",
+        "status": "ok",
+        "num_caracteres": 1599,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926120_5_900032025",
+        "status": "ok",
+        "num_caracteres": 2894,
+        "num_itens": 4
+      },
+      {
+        "file_id": "926120_5_900042025",
+        "status": "ok",
+        "num_caracteres": 1803,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926120_5_900052025",
+        "status": "ok",
+        "num_caracteres": 1280,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926120_5_900072025",
+        "status": "ok",
+        "num_caracteres": 1650,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926120_5_900092025",
+        "status": "ok",
+        "num_caracteres": 3991,
+        "num_itens": 9
+      },
+      {
+        "file_id": "926120_5_900102025",
+        "status": "ok",
+        "num_caracteres": 2048,
+        "num_itens": 3
+      },
+      {
+        "file_id": "926120_5_900112025",
+        "status": "ok",
+        "num_caracteres": 1488,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926120_5_900122025",
+        "status": "ok",
+        "num_caracteres": 1251,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926120_5_900132025",
+        "status": "ok",
+        "num_caracteres": 3049,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926120_5_900152025",
+        "status": "ok",
+        "num_caracteres": 13631,
+        "num_itens": 42
+      },
+      {
+        "file_id": "926120_5_900162025",
+        "status": "ok",
+        "num_caracteres": 2212,
+        "num_itens": 4
+      },
+      {
+        "file_id": "926120_5_900192025",
+        "status": "ok",
+        "num_caracteres": 1604,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926120_6_900012025",
+        "status": "ok",
+        "num_caracteres": 158,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926120_6_900022025",
+        "status": "ok",
+        "num_caracteres": 158,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926120_6_900032025",
+        "status": "ok",
+        "num_caracteres": 158,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926142_5_900022025",
+        "status": "ok",
+        "num_caracteres": 1990,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926167_5_900062025",
+        "status": "ok",
+        "num_caracteres": 2622,
+        "num_itens": 6
+      },
+      {
+        "file_id": "926167_5_900072025",
+        "status": "ok",
+        "num_caracteres": 1335,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926209_6_900012025",
+        "status": "ok",
+        "num_caracteres": 161,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926210_5_900032025",
+        "status": "ok",
+        "num_caracteres": 9264,
+        "num_itens": 24
+      },
+      {
+        "file_id": "926210_5_900052025",
+        "status": "ok",
+        "num_caracteres": 1455,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926210_5_900062025",
+        "status": "ok",
+        "num_caracteres": 2617,
+        "num_itens": 5
+      },
+      {
+        "file_id": "926210_5_900072025",
+        "status": "ok",
+        "num_caracteres": 1521,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926210_5_900082025",
+        "status": "ok",
+        "num_caracteres": 1354,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926210_5_900092025",
+        "status": "ok",
+        "num_caracteres": 3347,
+        "num_itens": 7
+      },
+      {
+        "file_id": "926210_5_900122025",
+        "status": "ok",
+        "num_caracteres": 1554,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926210_6_900012025",
+        "status": "ok",
+        "num_caracteres": 155,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926210_6_900022025",
+        "status": "ok",
+        "num_caracteres": 155,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926210_6_900032025",
+        "status": "ok",
+        "num_caracteres": 155,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926241_5_900022025",
+        "status": "ok",
+        "num_caracteres": 1248,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926241_5_900032025",
+        "status": "ok",
+        "num_caracteres": 5847,
+        "num_itens": 13
+      },
+      {
+        "file_id": "926241_5_900052025",
+        "status": "ok",
+        "num_caracteres": 1971,
+        "num_itens": 3
+      },
+      {
+        "file_id": "926241_5_900072025",
+        "status": "ok",
+        "num_caracteres": 1963,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926241_5_900092025",
+        "status": "ok",
+        "num_caracteres": 15311,
+        "num_itens": 17
+      },
+      {
+        "file_id": "926245_5_900012025",
+        "status": "ok",
+        "num_caracteres": 8402,
+        "num_itens": 16
+      },
+      {
+        "file_id": "926245_5_900022025",
+        "status": "ok",
+        "num_caracteres": 1679,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926246_5_900012025",
+        "status": "ok",
+        "num_caracteres": 1239,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926246_5_900022025",
+        "status": "ok",
+        "num_caracteres": 1579,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926254_6_900012025",
+        "status": "ok",
+        "num_caracteres": 128,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926254_6_900022025",
+        "status": "ok",
+        "num_caracteres": 128,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926254_6_900032025",
+        "status": "ok",
+        "num_caracteres": 128,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926254_6_900042025",
+        "status": "ok",
+        "num_caracteres": 128,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926267_5_900012025",
+        "status": "ok",
+        "num_caracteres": 1703,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926314_5_900012025",
+        "status": "ok",
+        "num_caracteres": 2503,
+        "num_itens": 3
+      },
+      {
+        "file_id": "926314_5_900032025",
+        "status": "ok",
+        "num_caracteres": 12447,
+        "num_itens": 30
+      },
+      {
+        "file_id": "926314_5_900052025",
+        "status": "ok",
+        "num_caracteres": 1289,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926314_5_900062025",
+        "status": "ok",
+        "num_caracteres": 1701,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926314_5_900072025",
+        "status": "ok",
+        "num_caracteres": 1529,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926314_6_900022025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926334_5_900012025",
+        "status": "ok",
+        "num_caracteres": 32663,
+        "num_itens": 84
+      },
+      {
+        "file_id": "926334_5_900022025",
+        "status": "ok",
+        "num_caracteres": 1554,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926334_5_900032025",
+        "status": "ok",
+        "num_caracteres": 8498,
+        "num_itens": 17
+      },
+      {
+        "file_id": "926334_5_900042025",
+        "status": "ok",
+        "num_caracteres": 5899,
+        "num_itens": 14
+      },
+      {
+        "file_id": "926334_5_900052025",
+        "status": "ok",
+        "num_caracteres": 2157,
+        "num_itens": 3
+      },
+      {
+        "file_id": "926334_5_900072025",
+        "status": "ok",
+        "num_caracteres": 3157,
+        "num_itens": 5
+      },
+      {
+        "file_id": "926339_6_900102025",
+        "status": "ok",
+        "num_caracteres": 199,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926339_6_900112025",
+        "status": "ok",
+        "num_caracteres": 199,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926354_6_900012025",
+        "status": "ok",
+        "num_caracteres": 162,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926354_6_900022025",
+        "status": "ok",
+        "num_caracteres": 162,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926514_6_900012025",
+        "status": "ok",
+        "num_caracteres": 149,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926523_3_900012025",
+        "status": "ok",
+        "num_caracteres": 1272,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926523_5_900012025",
+        "status": "ok",
+        "num_caracteres": 15950,
+        "num_itens": 34
+      },
+      {
+        "file_id": "926523_5_900022025",
+        "status": "ok",
+        "num_caracteres": 4027,
+        "num_itens": 7
+      },
+      {
+        "file_id": "926523_5_900032025",
+        "status": "ok",
+        "num_caracteres": 1342,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926523_5_900042025",
+        "status": "ok",
+        "num_caracteres": 1500,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926523_5_900052025",
+        "status": "ok",
+        "num_caracteres": 2308,
+        "num_itens": 2
+      },
+      {
+        "file_id": "926523_6_900012025",
+        "status": "ok",
+        "num_caracteres": 163,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926523_6_900022025",
+        "status": "ok",
+        "num_caracteres": 163,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926523_6_900042025",
+        "status": "ok",
+        "num_caracteres": 163,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926523_6_900052025",
+        "status": "ok",
+        "num_caracteres": 163,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926523_6_900062025",
+        "status": "ok",
+        "num_caracteres": 163,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926554_6_900012025",
+        "status": "ok",
+        "num_caracteres": 141,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926670_5_900012025",
+        "status": "ok",
+        "num_caracteres": 36508,
+        "num_itens": 87
+      },
+      {
+        "file_id": "926670_6_900012025",
+        "status": "ok",
+        "num_caracteres": 191,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926670_6_900022025",
+        "status": "ok",
+        "num_caracteres": 191,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926759_5_900012025",
+        "status": "ok",
+        "num_caracteres": 1643,
+        "num_itens": 1
+      },
+      {
+        "file_id": "926759_6_900022025",
+        "status": "ok",
+        "num_caracteres": 100,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926759_6_900032025",
+        "status": "ok",
+        "num_caracteres": 100,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926759_6_900042025",
+        "status": "ok",
+        "num_caracteres": 100,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926936_6_900022025",
+        "status": "ok",
+        "num_caracteres": 128,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926936_6_900032025",
+        "status": "ok",
+        "num_caracteres": 128,
+        "num_itens": 0
+      },
+      {
+        "file_id": "926939_6_900012025",
+        "status": "ok",
+        "num_caracteres": 143,
+        "num_itens": 0
+      },
+      {
+        "file_id": "927206_6_900012025",
+        "status": "ok",
+        "num_caracteres": 111,
+        "num_itens": 0
+      },
+      {
+        "file_id": "927448_6_900012025",
+        "status": "ok",
+        "num_caracteres": 189,
+        "num_itens": 0
+      },
+      {
+        "file_id": "927448_6_900022025",
+        "status": "ok",
+        "num_caracteres": 189,
+        "num_itens": 0
+      },
+      {
+        "file_id": "927721_5_900012025",
+        "status": "ok",
+        "num_caracteres": 13256,
+        "num_itens": 18
+      },
+      {
+        "file_id": "927721_5_900022025",
+        "status": "ok",
+        "num_caracteres": 4504,
+        "num_itens": 6
+      },
+      {
+        "file_id": "927721_5_900032025",
+        "status": "ok",
+        "num_caracteres": 1900,
+        "num_itens": 1
+      },
+      {
+        "file_id": "927721_5_900042025",
+        "status": "ok",
+        "num_caracteres": 1925,
+        "num_itens": 3
+      },
+      {
+        "file_id": "927721_5_900052025",
+        "status": "ok",
+        "num_caracteres": 1938,
+        "num_itens": 3
+      },
+      {
+        "file_id": "927721_5_900062025",
+        "status": "ok",
+        "num_caracteres": 1094,
+        "num_itens": 1
+      },
+      {
+        "file_id": "927721_6_900022025",
+        "status": "ok",
+        "num_caracteres": 99,
+        "num_itens": 0
+      },
+      {
+        "file_id": "928075_6_900012025",
+        "status": "ok",
+        "num_caracteres": 119,
+        "num_itens": 0
+      },
+      {
+        "file_id": "928082_5_900042025",
+        "status": "ok",
+        "num_caracteres": 19941,
+        "num_itens": 53
+      },
+      {
+        "file_id": "928082_5_900052025",
+        "status": "ok",
+        "num_caracteres": 1461,
+        "num_itens": 2
+      },
+      {
+        "file_id": "928082_5_900062025",
+        "status": "ok",
+        "num_caracteres": 2922,
+        "num_itens": 5
+      },
+      {
+        "file_id": "928082_5_900072025",
+        "status": "ok",
+        "num_caracteres": 12840,
+        "num_itens": 37
+      },
+      {
+        "file_id": "928082_6_900012025",
+        "status": "ok",
+        "num_caracteres": 140,
+        "num_itens": 0
+      },
+      {
+        "file_id": "928082_6_900022025",
+        "status": "ok",
+        "num_caracteres": 140,
+        "num_itens": 0
+      },
+      {
+        "file_id": "928082_6_900032025",
+        "status": "ok",
+        "num_caracteres": 140,
+        "num_itens": 0
+      },
+      {
+        "file_id": "928311_6_900012025",
+        "status": "ok",
+        "num_caracteres": 99,
+        "num_itens": 0
+      },
+      {
+        "file_id": "928311_6_900022025",
+        "status": "ok",
+        "num_caracteres": 99,
+        "num_itens": 0
+      },
+      {
+        "file_id": "929053_5_900012025",
+        "status": "ok",
+        "num_caracteres": 2011,
+        "num_itens": 1
+      },
+      {
+        "file_id": "929053_5_900022025",
+        "status": "ok",
+        "num_caracteres": 1519,
+        "num_itens": 1
+      },
+      {
+        "file_id": "929053_6_900012025",
+        "status": "ok",
+        "num_caracteres": 135,
+        "num_itens": 0
+      },
+      {
+        "file_id": "929053_6_900022025",
+        "status": "ok",
+        "num_caracteres": 135,
+        "num_itens": 0
+      },
+      {
+        "file_id": "929053_6_900032025",
+        "status": "ok",
+        "num_caracteres": 135,
+        "num_itens": 0
+      },
+      {
+        "file_id": "929534_6_900032025",
+        "status": "ok",
+        "num_caracteres": 136,
+        "num_itens": 0
+      },
+      {
+        "file_id": "929534_6_900042025",
+        "status": "ok",
+        "num_caracteres": 136,
+        "num_itens": 0
+      },
+      {
+        "file_id": "929534_6_900052025",
+        "status": "ok",
+        "num_caracteres": 136,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930282_6_900072025",
+        "status": "ok",
+        "num_caracteres": 144,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900012025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900022025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900032025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900042025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900052025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900062025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900072025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900082025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900092025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900102025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900112025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900122025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900152025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900172025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900182025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900192025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900202025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900212025",
+        "status": "ok",
+        "num_caracteres": 103,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930686_6_900222025",
+        "status": "ok",
+        "num_caracteres": 103,
         "num_itens": 0
       },
       {
@@ -501,6 +1917,186 @@
         "num_itens": 0
       },
       {
+        "file_id": "930798_6_900012025",
+        "status": "ok",
+        "num_caracteres": 100,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930799_6_900012025",
+        "status": "ok",
+        "num_caracteres": 108,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930799_6_900022025",
+        "status": "ok",
+        "num_caracteres": 108,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930799_6_900032025",
+        "status": "ok",
+        "num_caracteres": 108,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930799_6_900042025",
+        "status": "ok",
+        "num_caracteres": 108,
+        "num_itens": 0
+      },
+      {
+        "file_id": "930799_6_900052025",
+        "status": "ok",
+        "num_caracteres": 108,
+        "num_itens": 0
+      },
+      {
+        "file_id": "931423_6_900012025",
+        "status": "ok",
+        "num_caracteres": 120,
+        "num_itens": 0
+      },
+      {
+        "file_id": "931423_6_900022025",
+        "status": "ok",
+        "num_caracteres": 120,
+        "num_itens": 0
+      },
+      {
+        "file_id": "931423_6_900032025",
+        "status": "ok",
+        "num_caracteres": 120,
+        "num_itens": 0
+      },
+      {
+        "file_id": "931631_6_900012025",
+        "status": "ok",
+        "num_caracteres": 104,
+        "num_itens": 0
+      },
+      {
+        "file_id": "932081_6_900022025",
+        "status": "ok",
+        "num_caracteres": 110,
+        "num_itens": 0
+      },
+      {
+        "file_id": "932242_6_900012025",
+        "status": "ok",
+        "num_caracteres": 114,
+        "num_itens": 0
+      },
+      {
+        "file_id": "974002_3_900012025",
+        "status": "ok",
+        "num_caracteres": 1799,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974002_5_900012025",
+        "status": "ok",
+        "num_caracteres": 8296,
+        "num_itens": 23
+      },
+      {
+        "file_id": "974002_5_900022025",
+        "status": "ok",
+        "num_caracteres": 5090,
+        "num_itens": 10
+      },
+      {
+        "file_id": "974002_5_900032025",
+        "status": "ok",
+        "num_caracteres": 1327,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974002_5_900042025",
+        "status": "ok",
+        "num_caracteres": 1281,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974002_5_900062025",
+        "status": "ok",
+        "num_caracteres": 8433,
+        "num_itens": 14
+      },
+      {
+        "file_id": "974002_5_900072025",
+        "status": "ok",
+        "num_caracteres": 6206,
+        "num_itens": 16
+      },
+      {
+        "file_id": "974002_5_900082025",
+        "status": "ok",
+        "num_caracteres": 1295,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974002_5_900092025",
+        "status": "ok",
+        "num_caracteres": 1362,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974002_5_900102025",
+        "status": "ok",
+        "num_caracteres": 2201,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974002_5_900112025",
+        "status": "ok",
+        "num_caracteres": 1865,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974002_5_900122025",
+        "status": "ok",
+        "num_caracteres": 19335,
+        "num_itens": 56
+      },
+      {
+        "file_id": "974002_5_900142025",
+        "status": "ok",
+        "num_caracteres": 1517,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974002_5_900152025",
+        "status": "ok",
+        "num_caracteres": 1770,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974002_5_900172025",
+        "status": "ok",
+        "num_caracteres": 1353,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974002_5_900202025",
+        "status": "ok",
+        "num_caracteres": 4984,
+        "num_itens": 4
+      },
+      {
+        "file_id": "974002_5_900212025",
+        "status": "ok",
+        "num_caracteres": 1338,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974002_5_900232025",
+        "status": "ok",
+        "num_caracteres": 1336,
+        "num_itens": 1
+      },
+      {
         "file_id": "974002_5_900242025",
         "status": "ok",
         "num_caracteres": 1484,
@@ -525,10 +2121,268 @@
         "num_itens": 1
       },
       {
+        "file_id": "974003_5_900012025",
+        "status": "ok",
+        "num_caracteres": 1937,
+        "num_itens": 3
+      },
+      {
+        "file_id": "974003_5_900032025",
+        "status": "ok",
+        "num_caracteres": 1966,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974003_5_900042025",
+        "status": "ok",
+        "num_caracteres": 17156,
+        "num_itens": 52
+      },
+      {
+        "file_id": "974003_5_900062025",
+        "status": "ok",
+        "num_caracteres": 1817,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974003_5_900072025",
+        "status": "ok",
+        "num_caracteres": 9957,
+        "num_itens": 26
+      },
+      {
+        "file_id": "974003_5_900082025",
+        "status": "ok",
+        "num_caracteres": 1701,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974003_5_900102025",
+        "status": "ok",
+        "num_caracteres": 1740,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974003_6_900042025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
+        "file_id": "974003_6_900182025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
         "file_id": "974003_6_900262025",
         "status": "ok",
         "num_caracteres": 107,
         "num_itens": 0
+      },
+      {
+        "file_id": "974004_5_900012025",
+        "status": "ok",
+        "num_caracteres": 8372,
+        "num_itens": 21
+      },
+      {
+        "file_id": "974004_5_900022025",
+        "status": "ok",
+        "num_caracteres": 1617,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974004_5_900032025",
+        "status": "ok",
+        "num_caracteres": 1867,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974004_5_900042025",
+        "status": "ok",
+        "num_caracteres": 1777,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974004_5_900052025",
+        "status": "ok",
+        "num_caracteres": 1618,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974004_6_900012025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
+        "file_id": "974004_6_900022025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
+        "file_id": "974004_6_900042025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
+        "file_id": "974004_6_900052025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
+        "file_id": "974004_6_900062025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
+        "file_id": "974004_6_900072025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
+        "file_id": "974004_6_900082025",
+        "status": "ok",
+        "num_caracteres": 107,
+        "num_itens": 0
+      },
+      {
+        "file_id": "974200_3_900012025",
+        "status": "ok",
+        "num_caracteres": 1104,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974200_3_900032025",
+        "status": "ok",
+        "num_caracteres": 1189,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974200_5_900012025",
+        "status": "ok",
+        "num_caracteres": 3374,
+        "num_itens": 6
+      },
+      {
+        "file_id": "974200_5_900032025",
+        "status": "ok",
+        "num_caracteres": 17424,
+        "num_itens": 45
+      },
+      {
+        "file_id": "974200_5_900042025",
+        "status": "ok",
+        "num_caracteres": 18857,
+        "num_itens": 45
+      },
+      {
+        "file_id": "974200_5_900052025",
+        "status": "ok",
+        "num_caracteres": 9931,
+        "num_itens": 18
+      },
+      {
+        "file_id": "974200_5_900062025",
+        "status": "ok",
+        "num_caracteres": 8997,
+        "num_itens": 26
+      },
+      {
+        "file_id": "974200_5_900072025",
+        "status": "ok",
+        "num_caracteres": 17600,
+        "num_itens": 46
+      },
+      {
+        "file_id": "974200_5_900082025",
+        "status": "ok",
+        "num_caracteres": 1344,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974200_5_900102025",
+        "status": "ok",
+        "num_caracteres": 3181,
+        "num_itens": 6
+      },
+      {
+        "file_id": "974200_5_900112025",
+        "status": "ok",
+        "num_caracteres": 1436,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974200_5_900122025",
+        "status": "ok",
+        "num_caracteres": 1598,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974200_5_900132025",
+        "status": "ok",
+        "num_caracteres": 6000,
+        "num_itens": 15
+      },
+      {
+        "file_id": "974200_5_900142025",
+        "status": "ok",
+        "num_caracteres": 1215,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974200_5_900152025",
+        "status": "ok",
+        "num_caracteres": 1593,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974200_5_900162025",
+        "status": "ok",
+        "num_caracteres": 1024,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974200_5_900172025",
+        "status": "ok",
+        "num_caracteres": 16995,
+        "num_itens": 48
+      },
+      {
+        "file_id": "974200_5_900182025",
+        "status": "ok",
+        "num_caracteres": 1099,
+        "num_itens": 1
+      },
+      {
+        "file_id": "974200_5_900192025",
+        "status": "ok",
+        "num_caracteres": 1895,
+        "num_itens": 2
+      },
+      {
+        "file_id": "974200_5_900212025",
+        "status": "ok",
+        "num_caracteres": 2818,
+        "num_itens": 8
+      },
+      {
+        "file_id": "974200_5_900222025",
+        "status": "ok",
+        "num_caracteres": 2525,
+        "num_itens": 4
+      },
+      {
+        "file_id": "974200_5_900232025",
+        "status": "ok",
+        "num_caracteres": 1311,
+        "num_itens": 2
       },
       {
         "file_id": "974200_5_900242025",
@@ -695,9 +2549,9 @@
     ]
   },
   "corpus": {
-    "output": "/Users/primodeckers/deep-learning-pln-project/data/processed/licitacoes_corpus.jsonl",
-    "records_written": 114,
-    "missing_html": 309,
+    "output": "D:\\deep-learning-pln-project\\data\\processed\\licitacoes_corpus.jsonl",
+    "records_written": 423,
+    "missing_html": 0,
     "csv_rows": 437,
     "unique_ids": 423
   }

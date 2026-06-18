@@ -36,6 +36,8 @@ python scripts/export_validacao_sample.py
 
 Atualiza a **amostra** neste gabarito e nas fichas ainda vazias. A ficha já preenchida (`ficha_rene.md`) **não é sobrescrita**.
 
+> **Atenção:** a amostra de 30 editais abaixo foi fixada com o corpus completo. **Não regerar** depois que fichas estiverem preenchidas — senão apaga respostas e pode mudar os IDs sorteados.
+
 ---
 
 ## Status das fichas

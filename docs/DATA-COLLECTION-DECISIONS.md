@@ -227,6 +227,24 @@ Detalhes operacionais: [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARN
 4. **Mitigação:** F1 macro, `class_weight`, validação manual de ~30 labels, análise de erros qualitativa.
 5. **Extensão futura:** coletar 2021–2024 ou cruzar PNCP se quiserem robustez temporal.
 
+### 6.7 Corpus incompleto após clonar (ex.: 114 em vez de 423)
+
+| Sintoma | Causa provável |
+|---------|----------------|
+| `licitacoes_corpus.jsonl` com **114** linhas | Preprocess rodou com **poucos HTML** em `data/raw/detalhes/` (HTMLs não vão para o Git) |
+| EDA / treino com N ≠ 423 | Mesmo motivo — não é “amostra” da análise, é corpus parcial |
+
+**Correção:**
+
+```bash
+python scripts/run_collect.py          # baixa os 423 HTMLs (rede)
+python scripts/run_preprocess.py --overwrite
+```
+
+Verifique `data/processed/preprocess_manifest.json`: `records_written: 423`, `missing_html: 0`.
+
+A **validação manual de labels** usa amostra fixa de 30 editais (seed 42) gravada em `docs/validacao_labels/` — não regerar com `export_validacao_sample.py` após fichas preenchidas.
+
 ---
 
 ## 7. Limitações documentadas (para relatório e discussão)

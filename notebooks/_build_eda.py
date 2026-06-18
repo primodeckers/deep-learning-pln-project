@@ -26,7 +26,8 @@ cells = [
         """
 # EDA — Corpus de licitações ComprasNet DF 2025
 
-Análise exploratória do corpus `data/processed/licitacoes_corpus.jsonl` (423 editais).
+Análise exploratória do corpus `data/processed/licitacoes_corpus.jsonl`.
+Carrega todos os registros do JSONL (423 editais quando HTML + preprocess estão completos).
 Objetivos: entender a distribuição das **macroáreas** (label da classificação), de
 modalidade/tipo, o **tamanho dos textos**, o **valor homologado** por área e checar o
 **vazamento de label** discutido no guia (§6.1).

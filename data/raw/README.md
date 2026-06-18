@@ -34,8 +34,10 @@ licitacoes2025.csv
         data/interim/           texto extraído
                 │
                 ▼
-        data/processed/         dataset PLN
+        data/processed/         dataset PLN (licitacoes_corpus.jsonl)
 ```
+
+**Após clonar:** HTMLs em `detalhes/` **não** vão para o Git (`.gitignore`). O JSONL versionado traz **423 registros**; para regerar localmente: `run_collect.py` + `run_preprocess.py --overwrite`. Se o preprocess rodar com poucos HTMLs locais, o JSONL fica incompleto (ex.: 114 linhas) — não é amostra da EDA, é corpus parcial.
 
 **Decisão (2026-06-06):** priorizar HTML de detalhe porque é reprodutível e não exige contornar CAPTCHA. PDF completo fica como opção se o HTML for insuficiente para a tarefa de PLN.
 
