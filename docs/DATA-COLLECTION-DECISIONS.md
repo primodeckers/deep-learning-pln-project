@@ -5,7 +5,7 @@
 > Atualizar este arquivo sempre que o grupo tomar uma nova decisão sobre dados.
 
 **Projeto:** PLN aplicado a editais de licitações públicas (ComprasNet, DF 2025)  
-**Última atualização:** 2026-06-06
+**Última atualização:** 2026-06-18
 
 ---
 
@@ -177,7 +177,7 @@ Documento de referência para a discussão do relatório: **423 editais bastam p
 | **Sumarização** (amostra + eval humana) | Dezenas a centenas para demo; 20–30 para nota humana | ✅ Adequado (não precisa rotular 423) |
 | **NER / anotação manual** | Centenas por tipo de entidade | ❌ Apertado — não é nosso foco |
 
-Referência da aula ([`aula03-04.pdf`](aula03-04.pdf)): com ~10k amostras tabulares, tree-based models ainda competem com DL; com **texto não estruturado** e **423 docs**, faz sentido usar Transformers, mas o volume é **pequeno** — baseline clássico continua obrigatório para comparação.
+Referência da aula ([`aula03-04.pdf`](referencias/aula03-04.pdf)): com ~10k amostras tabulares, tree-based models ainda competem com DL; com **texto não estruturado** e **423 docs**, faz sentido usar Transformers, mas o volume é **pequeno** — baseline clássico continua obrigatório para comparação.
 
 ### 6.3 Desbalanceamento por macroárea (label proxy via órgão)
 
@@ -244,6 +244,101 @@ python scripts/run_preprocess.py --overwrite
 Verifique `data/processed/preprocess_manifest.json`: `records_written: 423`, `missing_html: 0`.
 
 A **validação manual de labels** usa amostra fixa de 30 editais (seed 42) gravada em `docs/validacao_labels/` — não regerar com `export_validacao_sample.py` após fichas preenchidas.
+
+### 6.8 Estimativa por ano (2021–2025) e plano de coleta incremental
+
+> **Atualizado:** 2026-06-18 · Base: export ComprasNet DF já no repositório (`licitacoes2025.csv`).
+
+#### Número confirmado — 2025
+
+| Métrica | Valor |
+|---------|------:|
+| Linhas no CSV | 437 |
+| URLs únicas (`Edital`) | **423** |
+| Duplicatas de URL | 14 |
+| Órgãos distintos | 52 |
+
+**Como obter contagem exata dos outros anos:** repetir o **mesmo export manual** no [ComprasNet](http://www.comprasnet.gov.br/) (Consulta de Licitações → filtro **UF = DF** → ano → exportar CSV). Salvar como `data/raw/licitacoes{ano}.csv`. Contagem rápida:
+
+```bash
+python -c "from pathlib import Path; from src.collect.load_licitacoes import load_licitacoes as L; r=L(Path('data/raw/licitacoes2024.csv')); print(len(r), len({x.edital_url for x in r}))"
+```
+
+**PNCP** (API ou dados abertos) pode cruzar volumes, mas schema ≠ ComprasNet legado; rate limit agressivo na API pública. Usar só como sanity check, não como fonte principal do pipeline.
+
+#### Estimativa por ano (cenários)
+
+Sem CSVs 2021–2024 no repo, a projeção usa **423 URLs/ano** como referência (2025 completo). Volume real pode variar (orçamento, pandemia 2021, eleições, mudança de portal).
+
+| Ano | Conservador (~350/ano) | Baseline (~423/ano) | Otimista (~550/ano) |
+|-----|------------------------:|--------------------:|--------------------:|
+| 2021 | ~350 | ~423 | ~550 |
+| 2022 | ~350 | ~423 | ~550 |
+| 2023 | ~350 | ~423 | ~550 |
+| 2024 | ~350 | ~423 | ~550 |
+| 2025 | **423** (medido) | **423** | **423** |
+| **Total 5 anos** | **~1.923** | **~2.115** | **~2.623** |
+| Meta ~3.000 | — | exige ~**715/ano** média ou incluir mais modalidades/órgãos | possível com filtros mais amplos no export |
+
+**Interpretação:** ~**2.000–2.500** editais é a faixa mais provável com o **mesmo filtro** do export 2025. **~3.000** só se cada ano tiver volume maior que 2025 ou se ampliarem critérios (ex.: mais modalidades além de Pregão).
+
+#### Projeção de classes (baseline × N, mesma proporção de 2025)
+
+Distribuição atual (423 editais): Admin/Outros 38,5% · Saúde 26,5% · Segurança 13,7% · Saneamento 11,6% · Infra 5,7% · Educação 4,0%.
+
+| Macroárea | Hoje (423) | ~2.115 (5×) | ~3.000 |
+|-----------|----------:|------------:|-------:|
+| Administração/Outros | 163 | ~815 | ~1.156 |
+| Saúde | 112 | ~560 | ~794 |
+| Segurança | 58 | ~290 | ~411 |
+| Saneamento | 49 | ~245 | ~348 |
+| Infraestrutura/Obras | 24 | ~120 | ~170 |
+| Educação | 17 | ~85 | ~121 |
+| **~Teste (15%)** | **~63** | **~317** | **~450** |
+| Educação no teste | **~4** | **~13** | **~18** |
+| Infra no teste | **~5** | **~18** | **~26** |
+
+#### Plano incremental (não trava a entrega)
+
+Ordem **2024 → 2023 → 2022 → 2021**: anos recentes primeiro (HTML mais parecido com 2025); entrega parcial a cada onda.
+
+| Fase | Quando | Ação | Corpus acumulado (baseline) | Tempo coleta HTML* |
+|------|--------|------|----------------------------:|-------------------:|
+| **0 — entrega** | agora | Manter 423 + baseline/BERT no 2025 | 423 | — |
+| **1** | +1–2 dias | Export `licitacoes2024.csv` → `run_collect` → merge | ~846 | ~7 h (423 novos × 1 s) |
+| **2** | +1–2 dias | 2023 idem | ~1.269 | ~7 h |
+| **3** | opcional | 2022 + 2021 | ~2.115 | ~14 h |
+| **4 — BERT** | após Fase 1 ou 2 | Retreinar com corpus expandido | ≥846 já útil | — |
+
+\* `run_collect.py --delay 1.0`; retoma automaticamente (pula HTML existente). Pode rodar overnight.
+
+**Checklist por onda (1 integrante, ~30 min de trabalho ativo + download em background):**
+
+1. ComprasNet → export CSV do ano → `data/raw/licitacoes{ano}.csv`
+2. Contar URLs únicas (script acima)
+3. `python scripts/run_collect.py --csv data/raw/licitacoes2024.csv --delay 1.0`
+4. Concatenar CSVs ou rodar preprocess por ano e **append** ao JSONL (ver nota abaixo)
+5. `python scripts/run_preprocess.py --overwrite` (ou merge documentado)
+6. Reexecutar EDA § distribuição; **não** regerar validação manual de 30 editais
+7. Treinar baseline; comparar F1 macro e F1 por classe vs run `20260608-190839`
+
+**Nota técnica (código hoje):** `run_preprocess.py` aceita **um** CSV. Para multi-ano, opções mínimas:
+
+- **A (rápida):** concatenar CSVs manualmente em `licitacoes2021_2025.csv` (deduplicar coluna `Edital`) antes do preprocess; ou
+- **B (melhor):** script `scripts/merge_csv_years.py` (a implementar) → um índice + campo `ano_licitacao`.
+
+**Split recomendado com multi-ano:**
+
+| Objetivo | Split |
+|----------|--------|
+| Comparar com Fase 1 | Aleatório estratificado (mesmo `seed=42`) |
+| Avaliar robustez temporal | Treino 2021–2024 · teste **só 2025** (não mistura anos no teste) |
+
+**O que não fazer na expansão:**
+
+- Não regerar `docs/validacao_labels/` após fichas preenchidas
+- Não trocar entrada oficial para `texto` só porque F1 subiu
+- Não prometer ~3.000 antes de contar URLs únicas em cada CSV
 
 ---
 

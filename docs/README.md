@@ -21,7 +21,7 @@
 
 | Arquivo | Descrição |
 |---|---|
-| [`aula03-04.pdf`](aula03-04.pdf) | Material de aula |
+| [`aula03-04.pdf`](referencias/aula03-04.pdf) | Material de aula |
 
 ## Documentação técnica (fora de `docs/`)
 

@@ -5,7 +5,7 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 > Requisitos da disciplina: [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md)  
 > Brainstorm de temas: [`PROPOSALS.md`](PROPOSALS.md)  
 > Coleta de dados: [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md)  
-> Material de aula (referência): [`aula03-04.pdf`](aula03-04.pdf)
+> Material de aula (referência): [`aula03-04.pdf`](referencias/aula03-04.pdfula03-04.pdf)
 
 ---
 
@@ -101,7 +101,7 @@ O professor define o ciclo: **Problema → Dados → Modelo → Avaliação → 
 
 ## 3. Guia universal de Rede Neural — aplicado ao nosso PLN
 
-O material [`aula03-04.pdf`](aula03-04.pdf) propõe um guia prático cujo lema é **"depende"** — cada escolha depende do problema, do volume de dados e do diagnóstico treino vs validação. Abaixo traduzimos cada bloco para **texto + classificação + sumarização**.
+O material [`aula03-04.pdf`](referencias/aula03-04.pdf) propõe um guia prático cujo lema é **"depende"** — cada escolha depende do problema, do volume de dados e do diagnóstico treino vs validação. Abaixo traduzimos cada bloco para **texto + classificação + sumarização**.
 
 ### 3.1 Dados: split, normalização e volume
 
