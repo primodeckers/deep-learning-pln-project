@@ -13,10 +13,14 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
+import mlflow
+from mlflow.entities import SpanType
+
 from src.preprocess.dataset import load_records
 from src.preprocess.labels import AREAS
 from src.summarize.extractive import summarize_record
 from src.utils.experiment_tracking import (
+    MlflowHandle,
     corpus_fingerprint,
     git_commit_short,
     mlflow_run,
@@ -79,6 +83,7 @@ def _build_markdown(resumos: list[dict], by_id: dict[str, dict]) -> str:
     return "\n".join(linhas)
 
 
+@mlflow.trace(name="run_summarization", span_type=SpanType.CHAIN)
 def run_summarization(
     corpus_path: Path,
     processed_dir: Path,
@@ -154,9 +159,9 @@ def run_summarization(
         },
         tags=mlflow_tags,
         artifacts=[jsonl_path, md_path, exp_path],
-    ) as mlflow_run_id:
-        if mlflow_run_id:
-            experiment["mlflow_run_id"] = mlflow_run_id
+    ) as handle:
+        if isinstance(handle, MlflowHandle):
+            experiment["mlflow_run_id"] = handle.run_id
 
     print(f"Amostra: {len(resumos)} editais")
     print(

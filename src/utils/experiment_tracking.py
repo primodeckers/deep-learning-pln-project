@@ -11,6 +11,7 @@ import hashlib
 import subprocess
 from collections.abc import Iterator
 from contextlib import contextmanager
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -87,6 +88,30 @@ def _flatten_metrics(metrics: dict[str, Any], prefix: str = "") -> dict[str, flo
     return flat
 
 
+@dataclass
+class MlflowHandle:
+    """Permite log incremental de métricas e artefatos dentro de uma run."""
+
+    run_id: str
+    _flatten: Any = field(default=None, repr=False)
+
+    def log_metrics(self, metrics: dict[str, Any]) -> None:
+        import mlflow
+
+        for key, value in _flatten_metrics(metrics).items():
+            mlflow.log_metric(key, value)
+
+    def log_artifact(self, path: Path) -> None:
+        import mlflow
+
+        p = Path(path)
+        if p.exists():
+            if p.is_dir():
+                mlflow.log_artifacts(str(p))
+            else:
+                mlflow.log_artifact(str(p))
+
+
 @contextmanager
 def mlflow_run(
     *,
@@ -95,10 +120,10 @@ def mlflow_run(
     task: str,
     model: str,
     params: dict[str, Any],
-    metrics: dict[str, Any],
     tags: dict[str, str],
-    artifacts: list[Path],
-) -> Iterator[str | None]:
+    metrics: dict[str, Any] | None = None,
+    artifacts: list[Path] | None = None,
+) -> Iterator[MlflowHandle | None]:
     """Abre uma run MLflow; em falha, segue sem interromper o pipeline."""
     try:
         import mlflow
@@ -131,18 +156,16 @@ def mlflow_run(
             )
             for key, value in params.items():
                 mlflow.log_param(key, value)
-            for key, value in _flatten_metrics(metrics).items():
-                mlflow.log_metric(key, value)
 
-            for artifact in artifacts:
-                path = Path(artifact)
-                if path.exists():
-                    if path.is_dir():
-                        mlflow.log_artifacts(str(path))
-                    else:
-                        mlflow.log_artifact(str(path))
+            handle = MlflowHandle(run_id=run.info.run_id)
 
-            yield run.info.run_id
+            if metrics:
+                handle.log_metrics(metrics)
+            if artifacts:
+                for a in artifacts:
+                    handle.log_artifact(a)
+
+            yield handle
     except Exception as exc:
         print(f"Aviso: MLflow nao registrou a run ({exc})")
         yield None

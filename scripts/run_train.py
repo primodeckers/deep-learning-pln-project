@@ -18,8 +18,14 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+import mlflow
+
 from src.summarize.run_summarization import run_summarization
 from src.train.train_classification import train_classification
+from src.utils.experiment_tracking import (
+    MLFLOW_EXPERIMENT,
+    mlflow_tracking_uri,
+)
 
 DEFAULT_CORPUS = ROOT / "data" / "processed" / "licitacoes_corpus.jsonl"
 DEFAULT_CONFIG = ROOT / "configs" / "classification.yaml"
@@ -61,6 +67,10 @@ def load_config(path: Path) -> dict:
 
 
 def main() -> None:
+    mlflow.set_tracking_uri(mlflow_tracking_uri(EXPERIMENTS_DIR))
+    mlflow.set_experiment(MLFLOW_EXPERIMENT)
+    mlflow.autolog()
+
     args = build_parser().parse_args()
 
     if args.task == "summarization":
