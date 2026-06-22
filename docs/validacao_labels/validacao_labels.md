@@ -21,7 +21,7 @@ Verificar se o mapeamento automático em `src/preprocess/labels.py` reflete a **
 | Elisangela Osorio | [`ficha_elisangela.md`](ficha_elisangela.md) |
 | Alexandre Ferreira Ponte | [`ficha_alexandre.md`](ficha_alexandre.md) |
 | Renê Estevam Deckers | [`ficha_rene.md`](ficha_rene.md) |
-| Integrante 4 _(a definir)_ | [`ficha_integrante4.md`](ficha_integrante4.md) |
+| Alexandre Hugo Sampaio Netto | [`ficha_integrante4.md`](ficha_integrante4.md) |
 
 ---
 
