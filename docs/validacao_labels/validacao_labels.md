@@ -44,10 +44,10 @@ Atualiza a **amostra** neste gabarito e nas fichas ainda vazias. A ficha já pre
 
 | Integrante | Arquivo | Status | Taxa (S / S+N) |
 |------------|---------|--------|----------------|
-| Elisangela Osorio | [`ficha_elisangela.md`](ficha_elisangela.md) | Pendente | — |
-| Alexandre Ferreira Ponte | [`ficha_alexandre.md`](ficha_alexandre.md) | Pendente | — |
+| Elisangela Osorio | [`ficha_elisangela.md`](ficha_elisangela.md) | **Concluída** (2026-06-21) | **62,5%** (15/24) |
+| Alexandre Ferreira Ponte | [`ficha_alexandre.md`](ficha_alexandre.md) | **Concluída** (2026-06-22) | **95,7%** (22/23) |
 | Renê Estevam Deckers | [`ficha_rene.md`](ficha_rene.md) | **Concluída** (2026-06-18) | **96,2%** (25/26) |
-| Integrante 4 _(a definir)_ | [`ficha_integrante4.md`](ficha_integrante4.md) | Pendente | — |
+| Alexandre Hugo | [`ficha_integrante4.md`](ficha_integrante4.md) | **Concluída** (2026-06-19) | **78,3%** (18/23) |
 
 ---
 
@@ -142,7 +142,7 @@ Use exatamente um destes rótulos:
 
 ## Consolidação do grupo
 
-_Parcial — 1 de 4 fichas entregues (Renê, 2026-06-18). Atualizar quando Elisangela, Alexandre e integrante 4 concluírem._
+_Completo — 4 de 4 fichas entregues (Renê 2026-06-18; Alexandre Hugo 2026-06-19; Elisangela 2026-06-21; Alexandre Ferreira Ponte 2026-06-22)._
 
 ### Resultado — Renê Estevam Deckers
 
@@ -162,11 +162,63 @@ _Parcial — 1 de 4 fichas entregues (Renê, 2026-06-18). Atualizar quando Elisa
 
 Detalhes linha a linha: [`ficha_rene.md`](ficha_rene.md).
 
-### Síntese para o relatório (quando 4/4 fichas estiverem prontas)
+### Resultado — Alexandre Ferreira Ponte
 
-- Calcular média das taxas individuais
-- Listar editais com discordância em ≥2 revisores
-- Parágrafo único na seção de limitações
+| Métrica | Valor |
+|---------|-------|
+| Total revisado | 30/30 |
+| Concordância (`S`) | 22 |
+| Discordância (`N`) | 1 |
+| Ambíguos (`?`) | 7 |
+| **Taxa** | **95,7%** (22/23, ignorando `?`) |
+
+**Único erro claro (`N`):** `974003_6_900262025` (TCDF) — insumos odontológicos da divisão de saúde do TCDF rotulados como `Administracao/Outros`; label humano: `Saude`.
+
+**Casos ambíguos (`?`):** compras transversais — TI/serviços administrativos da CAESB rotulados como `Saneamento` (linhas 8, 19, 29); insumos/serviços de saúde do CBMDF rotulados como `Seguranca` (linhas 4, 12, 22); compra centralizada da SEFAZ com objeto educacional em `Administracao/Outros` (linha 3).
+
+**Conclusão:** o label proxy é **aceitável** para o escopo; a fragilidade não está em erros de mapeamento por órgão, mas na perda de granularidade em aquisições transversais — ruído estrutural a contextualizar na matriz de confusão (fronteiras Saúde↔Segurança e Saneamento↔Administração).
+
+Detalhes linha a linha: [`ficha_alexandre.md`](ficha_alexandre.md).
+
+### Resultado — Elisangela Osorio
+
+| Métrica | Valor |
+|---------|-------|
+| Total revisado | 30/30 |
+| Concordância (`S`) | 15 |
+| Discordância (`N`) | 9 |
+| Ambíguos (`?`) | 6 |
+| **Taxa** | **62,5%** (15/24, ignorando `?`) |
+
+Revisão mais rigorosa do grupo: marca `N` sempre que o objeto aponta para área diferente da do órgão — CBMDF→`Saude` (4, 12, 22), CAESB→`Administracao/Outros` (8, 19, 28, 29) ou `Infraestrutura/Obras` (9), e SEFAZ→`Educacao` (3). Trata os editais sem `objeto_html` como `?`. Detalhes: [`ficha_elisangela.md`](ficha_elisangela.md).
+
+### Resultado — Alexandre Hugo
+
+| Métrica | Valor |
+|---------|-------|
+| Total revisado | 30/30 |
+| Concordância (`S`) | 18 |
+| Discordância (`N`) | 5 |
+| Ambíguos (`?`) | 7 |
+| **Taxa** | **78,3%** (18/23, ignorando `?`) |
+
+Posição intermediária: marca `N` nos casos de saúde em órgão de segurança (4, 12, 22), TCDF→`Saude` (30) e CAESB divisórias→`Administracao/Outros` (28); deixa TI/serviços da CAESB como `?`. Detalhes: [`ficha_integrante4.md`](ficha_integrante4.md).
+
+### Síntese para o relatório
+
+As **4 fichas** foram concluídas. A **média das taxas individuais** de concordância (S/(S+N), ignorando ambíguos) é **≈83,2%** (Renê 96,2% · Alexandre Ponte 95,7% · Alexandre Hugo 78,3% · Elisangela 62,5%). A dispersão entre revisores (62,5%–96,2%) reflete **critério**, não erro: parte do grupo marca compras transversais como `N`, outra parte como `?`.
+
+**Editais com discordância (`N`) em ≥2 revisores** — candidatos a recategorização manual ou a regra complementar em `src/preprocess/labels.py`:
+
+| # | `id` | Órgão | Label auto | Label humano (consenso) | Nº de `N` |
+|---|------|-------|------------|-------------------------|-----------|
+| 30 | `974003_6_900262025` | TCDF | `Administracao/Outros` | `Saude` | 3 |
+| 4 | `170394_5_900242025` | CBMDF | `Seguranca` | `Saude` | 2 |
+| 12 | `170394_5_900312025` | CBMDF | `Seguranca` | `Saude` | 2 |
+| 22 | `170394_5_900432025` | CBMDF | `Seguranca` | `Saude` | 2 |
+| 28 | `974200_5_900252025` | CAESB | `Saneamento` | `Administracao/Outros` | 2 |
+
+**Parágrafo (seção de limitações):** O label proxy órgão→macroárea é **aceitável como rotulagem fraca** para o baseline da Fase 1 (concordância média ≈83%), porém apresenta viés sistemático em órgãos cujas atividades-meio cruzam outras áreas. O CBMDF mantém estrutura interna de saúde (atendimento pré-hospitalar, policlínica odontológica, lavanderia hospitalar) cujos gastos são rotulados como `Seguranca`; o TCDF, com divisão de saúde própria, cai em `Administracao/Outros`; e a CAESB concentra os casos ambíguos de TI e serviços administrativos. Esses desvios são **estruturais da base** — decorrem do mapeamento por órgão, não do classificador — e devem ser contextualizados na análise da matriz de confusão, sobretudo nas fronteiras **Saúde↔Segurança** e **Saneamento↔Administração**. Como melhoria futura (não bloqueante para o baseline), sugere-se refinar `AREA_KEYWORDS` ou adicionar regras baseadas no objeto para órgãos com divisão de saúde.
 
 ---
 
