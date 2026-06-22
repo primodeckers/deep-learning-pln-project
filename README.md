@@ -212,7 +212,7 @@ Detalhes: [`docs/UNIVERSAL-DEEP-LEARNING-GUIDE.md`](docs/UNIVERSAL-DEEP-LEARNING
 | Elisangela Osorio | [ElisangelaOsorio](https://github.com/ElisangelaOsorio) |
 | Alexandre Ferreira Ponte | [pontealexandre](https://github.com/pontealexandre) |
 | Renê Estevam Deckers | [primodeckers](https://github.com/primodeckers) |
-| _a definir_ | [xnetto2](https://github.com/xnetto2) |
+| Alexandre Hugo Sampaio Netto| [xnetto2](https://github.com/xnetto2) |
 
 ---
 
