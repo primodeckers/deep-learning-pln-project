@@ -40,20 +40,29 @@ O campo `texto` (HTML completo) repete o nome do órgão em ~97% dos casos — e
 
 **Entrada oficial:** `objeto_html`. **Não há percentual universal** de vazamento aceitável — documentamos Tabela 7 (~49% residual) e explicamos no relatório conforme [`vazamento_de_label.md`](vazamento_de_label.md). Campo experimental: `objeto_html_limpo` (~47% residual). Ver também [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
 
-### BERTimbau (Fase 2) — 1º run
+### BERTimbau (Fase 2) — run oficial (GPU)
 
-**Run:** `classification_bertimbau_20260623-213337`  
-**Modelo:** `neuralmind/bert-base-portuguese-cased` · mesmo split e `text_field`  
-**Treino:** verificar `python scripts/check_cuda.py` na máquina usada — repetir na GPU se necessário ([`GPU-EQUIPE.md`](GPU-EQUIPE.md))
+**Run:** `classification_bertimbau_20260623-222508`  
+**Modelo:** `neuralmind/bert-base-portuguese-cased` · mesmo split, `text_field` e `seed` do baseline  
+**Ambiente:** RTX 4090, PyTorch `+cu126` ([`GPU-EQUIPE.md`](GPU-EQUIPE.md))
 
 | Conjunto | Accuracy | F1 macro | F1 weighted |
 |----------|----------|----------|-------------|
 | Validação | 0,703 | **0,425** | 0,624 |
-| Teste | 0,672 | **0,401** | 0,595 |
+| Teste | 0,719 | **0,518** | 0,652 |
 
-Matriz: `reports/figures/classification_bertimbau_20260623-213337_confusion.png`
+Matriz: `reports/figures/classification_bertimbau_20260623-222508_confusion.png`
 
-**Comparação (teste):** baseline **0,74** vs BERT **0,40** — com ~295 exemplos de treino o Transformer **não superou** o TF-IDF neste run; classes raras (Segurança, Educação, Infra) ficaram com F1 0. Documentar no relatório; run de referência na GPU é próximo passo.
+Detalhes, F1 por classe e textos para o relatório: [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md).
+
+### Comparação baseline vs BERT (teste)
+
+| Modelo | Run | F1 macro (teste) |
+|--------|-----|------------------|
+| **TF-IDF + LogReg** | `classification_baseline_20260608-190839` | **0,740** ← principal |
+| **BERTimbau** | `classification_bertimbau_20260623-222508` | **0,518** |
+
+O BERT **não superou** o baseline neste corpus (~295 treino). Classes Segurança e Educação: F1 = 0 no BERT no teste. Resultado válido para o relatório — ver interpretação em [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) §4.
 
 ## Performance — sumarização extrativa
 
@@ -103,4 +112,4 @@ Avaliação quantitativa (ROUGE) e humana (escala 1–5) estão previstas na Fas
 
 ---
 
-*Última sincronização com `experiments/classification_baseline_20260608-190839.json`. Regenerar após novo treino com `make train-baseline`.*
+*Última sincronização: baseline `20260608-190839` · BERT `20260623-222508`. Regenerar após novo treino.*

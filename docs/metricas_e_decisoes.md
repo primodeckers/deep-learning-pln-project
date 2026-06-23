@@ -73,6 +73,36 @@ Definidos em `configs/classification.yaml` → bloco `params`:
 | `C` | 1.0 | Regularização da LogReg |
 | `class_weight` | balanced | Mitiga desbalanceamento |
 
+### Hiperparâmetros BERTimbau (Fase 2)
+
+Ver `configs/classification_bert_gpu.yaml`:
+
+| Parâmetro | Valor |
+|-----------|-------|
+| `model_name` | `neuralmind/bert-base-portuguese-cased` |
+| `max_length` | 512 |
+| `batch_size` | 16 |
+| `learning_rate` | 2e-5 |
+| `epochs` | 4 |
+| `early_stopping_patience` | 2 |
+
+---
+
+## Comparação baseline vs BERTimbau (Fase 2 concluída)
+
+Mesmo `text_field`, split e `seed`. Métrica primária: **F1 macro no teste**.
+
+| Modelo | Run de referência | F1 macro (teste) | Accuracy (teste) |
+|--------|-------------------|------------------|------------------|
+| TF-IDF + LogReg | `classification_baseline_20260608-190839` | **0,740** | 0,797 |
+| BERTimbau (GPU) | `classification_bertimbau_20260623-222508` | **0,518** | 0,719 |
+
+**Decisão:** reportar o **baseline como modelo principal**; BERT como experimento comparativo de deep learning.
+
+**Interpretação:** com ~295 exemplos de treino e 6 classes (Educação: 12, Infra: 17 no treino), o fine-tuning não superou TF-IDF. BERT zerou F1 em Segurança e Educação no teste; baseline ainda alcança F1 parcial nessas classes. Textos prontos para relatório: [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) §4.
+
+**Corpus fingerprint (ambos os runs):** `sha256=46c6e761…` · 423 registros.
+
 ---
 
 ## Tarefa complementar: sumarização cidadã
@@ -115,7 +145,7 @@ Fingerprint do corpus garante que duas runs comparáveis usaram o mesmo `licitac
 
 - [x] `text_field` documentado como `objeto_html`
 - [x] Validação manual de labels concluída (4/4 fichas; média ≈83,2%; ver `validacao_labels/`)
-- [ ] F1 macro reportado no **teste**, não só na validação
-- [ ] Classes com `support < 5` discutidas explicitamente
-- [ ] Hash do corpus (`dataset.sha256`) citado na tabela de experimentos
-- [ ] Baseline e BERTimbau no mesmo split (quando Fase 2 estiver pronta)
+- [x] F1 macro reportado no **teste**, não só na validação
+- [x] Baseline e BERTimbau no mesmo split — comparados (`FASE2-CLASSIFICACAO.md`)
+- [ ] Classes com `support < 5` discutidas explicitamente nos slides
+- [x] Hash do corpus (`dataset.sha256`) citado na tabela de experimentos

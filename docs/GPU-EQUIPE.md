@@ -99,9 +99,9 @@ Use os comandos `python` acima — equivalentes aos atalhos do `Makefile`.
 | Modelo | Run ID | F1 macro (teste) | Onde |
 |--------|--------|------------------|------|
 | Baseline TF-IDF | `classification_baseline_20260608-190839` | **≈ 0,74** | `experiments/` |
-| BERTimbau (1º run) | `classification_bertimbau_20260623-213337` | **≈ 0,40** | `experiments/` |
+| BERTimbau (GPU oficial) | `classification_bertimbau_20260623-222508` | **≈ 0,52** | `experiments/` |
 
-O primeiro run BERT ficou **abaixo** do baseline — esperado com corpus pequeno (~295 treino) e possível treino em CPU. **Próximo passo:** repetir na **4090 com CUDA** (`check_cuda.py` = sim) e comparar; documentar no relatório mesmo se BERT não superar (resultado válido).
+BERT **não superou** o baseline — documentado em [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) §4 (textos para relatório/slides).
 
 ---
 

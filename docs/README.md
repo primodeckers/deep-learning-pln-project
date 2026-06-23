@@ -15,6 +15,7 @@
 | [`GPU-EQUIPE.md`](GPU-EQUIPE.md) | Fluxo GPU vs CPU — quem treina o quê, o que vai pro Git |
 | [`vazamento_de_label.md`](vazamento_de_label.md) | Vazamento de label — mitigações, §9 roteiro para relatório/slides |
 | [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) | Fase 1 — decisões, justificativas e mapa do código |
+| [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) | Fase 2 — BERTimbau, comparação baseline, textos para relatório |
 | [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) | Gabarito, consolidação e status das fichas |
 | [`validacao_labels/ficha_*.md`](validacao_labels/) | Ficha individual (4/4 preenchidas — média ≈83,2%) |
 

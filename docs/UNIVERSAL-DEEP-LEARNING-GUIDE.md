@@ -16,8 +16,8 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Título provisório** | Classificação de editais por área de gasto + resumos em linguagem cidadã (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | EDA + baseline (F1 ≈ 0,74) + sumarização extrativa + validação 4/4 — **BERTimbau implementado** (`make train-bert`); próximo: treinar, comparar métricas e sumarização abstrativa |
-| **Última atualização** | 2026-06-22 |
+| **Status** | Fases 0–2 concluídas (baseline F1 ≈ 0,74 · BERT F1 ≈ 0,52 teste) — próximo: slides + sumarização abstrativa (Fase 3) |
+| **Última atualização** | 2026-06-23 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)
 
