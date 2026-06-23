@@ -11,6 +11,9 @@ if str(ROOT) not in sys.path:
 
 
 def main() -> None:
+    import sys
+
+    print(f"Python: {sys.executable}")
     try:
         import torch
     except ImportError:

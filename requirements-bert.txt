@@ -1,2 +1,8 @@
 # Dependências BERTimbau (opcional — quem tem GPU ou smoke test CPU)
 -e .[bert]
+
+# Windows + NVIDIA: o passo acima instala torch CPU-only. Com GPU, rode DEPOIS:
+#   pip uninstall torch -y
+#   pip install torch --index-url https://download.pytorch.org/whl/cu126
+#   python scripts/check_cuda.py
+# Ver docs/GPU-EQUIPE.md

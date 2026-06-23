@@ -43,10 +43,23 @@ python scripts/check_cuda.py
 ### Quem tem GPU (Renê / máquina com 4090)
 
 ```bash
+source .venv/Scripts/activate   # Git Bash — use SEMPRE o venv do projeto
 pip install -e ".[bert]"
-# PyTorch com CUDA: https://pytorch.org/get-started/locally/
+```
 
-python scripts/check_cuda.py
+**Importante (Windows):** `pip install -e ".[bert]"` instala PyTorch **só CPU** por padrão. Com placa NVIDIA, reinstale o build CUDA **dentro do `.venv`**:
+
+```bash
+pip uninstall torch -y
+pip install torch --index-url https://download.pytorch.org/whl/cu126
+python scripts/check_cuda.py    # deve mostrar: CUDA: sim — RTX 4090
+```
+
+Se `check_cuda` mostrar **CPU** num terminal e **CUDA** noutro, você está usando **dois Pythons** — confira com `which python` (deve apontar para `.venv/Scripts/python`).
+
+Depois:
+
+```bash
 python scripts/run_train.py --config configs/classification_bert_gpu.yaml
 ```
 
