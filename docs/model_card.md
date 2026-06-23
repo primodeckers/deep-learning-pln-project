@@ -67,7 +67,7 @@ Avaliação quantitativa (ROUGE) e humana (escala 1–5) estão previstas na Fas
 **Limitações declaradas:**
 
 - Corpus pequeno (~400 editais) para deep learning — classes raras (Educação, Infraestrutura) têm poucos exemplos.
-- Label é *proxy* derivado do órgão, não de anotação manual por edital. **Validação humana (parcial):** 30 editais revisados por 1 integrante — 96,2% de concordância com o mapeamento automático; ver [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md).
+- Label é *proxy* derivado do órgão, não de anotação manual por edital. **Validação humana (4/4 integrantes):** 30 editais — média ≈83,2% de concordância (62,5%–96,2% por revisor); ver [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md).
 - **Vazamento de label:** entrada oficial `objeto_html` reduz pistas do órgão no texto (~49% residual na Tabela 7); não existe limiar universal — ver [`vazamento_de_label.md`](vazamento_de_label.md).
 - Dados de um único estado (DF) e ano (2025) — não generalizam para todo o Brasil.
 

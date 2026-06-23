@@ -64,7 +64,7 @@ licitacoes_corpus.jsonl
 
 **Limitação declarada:** o label é *proxy* — um edital de "material hospitalar" comprado por órgão administrativo pode estar mal rotulado.
 
-**Mitigação — validação manual (30 editais, seed 42):** gabarito e fichas em [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md). **Status (2026-06-18):** 1/4 fichas concluídas; Renê Estevam Deckers — **96,2%** de concordância (25/26, ignorando ambíguos). Único erro claro: TCDF com insumos odontológicos rotulado como Administração. Conclusão: mapeamento **aceitável** para o escopo, com ressalva documentada.
+**Mitigação — validação manual (30 editais, seed 42):** gabarito e fichas em [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md). **Status (2026-06-22):** **4/4 fichas concluídas** — média das taxas individuais **≈83,2%** (Renê 96,2% · Alexandre Ponte 95,7% · Alexandre Hugo 78,3% · Elisangela 62,5%). Consenso em ≥2 revisores: TCDF→`Saude` (#30), CBMDF com objeto clínico→`Saude` (#4, 12, 22), CAESB divisórias→`Administracao/Outros` (#28). Conclusão: proxy **aceitável como rotulagem fraca** para o baseline, com viés estrutural em compras transversais — ver síntese no gabarito.
 
 **Código:** `src/preprocess/labels.py`
 
@@ -223,7 +223,7 @@ Use este checklist antes de considerar a fase fechada para entrega:
 - [x] Model card e doc de métricas
 - [x] Este documento (`FASE1-CLASSIFICACAO.md`)
 - [x] Template de validação manual (`validacao_labels/validacao_labels.md` + 4 fichas)
-- [ ] Quatro fichas preenchidas + consolidação final no gabarito _(1/4 — Renê concluída; ver consolidação parcial no gabarito)_
+- [x] Quatro fichas preenchidas + consolidação final no gabarito _(4/4 — média ≈83,2%; ver [`validacao_labels.md`](validacao_labels/validacao_labels.md) § Síntese)_
 - [ ] Tabela F1 por classe copiada para slides
 - [ ] 5+ referências bibliográficas citando TF-IDF, métricas multiclasse e domínio público
 

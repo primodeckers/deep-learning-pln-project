@@ -210,7 +210,7 @@ Use este roteiro (copiar/adaptar):
 
 ### 9.4 Label proxy (complemento — outro slide)
 
-> O mapeamento órgão → área é **proxy**. Validamos manualmente 30 editais (1/4 fichas): **96,2%** de concordância. Isso trata a **qualidade do rótulo**, não substitui a discussão de vazamento no texto.
+> O mapeamento órgão → área é **proxy**. Validamos manualmente 30 editais (**4/4 fichas**): média **≈83,2%** de concordância. Isso trata a **qualidade do rótulo**, não substitui a discussão de vazamento no texto.
 
 ### 9.5 Frase de fechamento sugerida
 
@@ -225,7 +225,7 @@ Use este roteiro (copiar/adaptar):
 - [ ] Declarar `text_field: objeto_html` como entrada **oficial**
 - [ ] Citar F1 ≈ 0,74 (teste), **não** 0,88
 - [ ] Dizer que **não há limiar universal** de vazamento (§5.1)
-- [ ] Mencionar validação manual do proxy (96,2% parcial)
+- [x] Mencionar validação manual do proxy (4/4; média ≈83,2%)
 - [ ] Limitação: ~49% de keyword residual em `objeto_html`
 
 ---

@@ -44,11 +44,11 @@ O modelo **não** recebe `orgao_csv` como feature — o órgão só gera o label
 |------|-------|
 | Amostra | 30 editais, seed 42 (`scripts/export_validacao_sample.py`) |
 | Gabarito | [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) |
-| Status | 1/4 fichas (Renê, 2026-06-18) |
-| Taxa de concordância | **96,2%** (25/26; 4 casos ambíguos) |
-| Erro claro | TCDF — insumos odontológicos → label auto `Administracao/Outros`, humano `Saude` |
+| Status | **4/4 fichas** (2026-06-18 a 2026-06-22) |
+| Taxa de concordância | **Média ≈83,2%** (Renê 96,2% · Ponte 95,7% · Hugo 78,3% · Elisangela 62,5%) |
+| Consenso (≥2 `N`) | TCDF #30 → `Saude`; CBMDF #4, 12, 22 → `Saude`; CAESB #28 → `Administracao/Outros` |
 
-Conclusão provisória: o proxy por órgão é **aceitável** para baseline; ajuste fino em `AREA_KEYWORDS` é melhoria futura.
+Conclusão: o proxy por órgão é **aceitável como rotulagem fraca** para o baseline; dispersão entre revisores reflete critério em compras transversais. Ajuste em `AREA_KEYWORDS` ou regras por objeto é melhoria futura — ver [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) § Síntese.
 
 ### Split e reprodutibilidade
 
@@ -114,7 +114,7 @@ Fingerprint do corpus garante que duas runs comparáveis usaram o mesmo `licitac
 ## Checklist antes de apresentar resultados
 
 - [x] `text_field` documentado como `objeto_html`
-- [x] Validação manual de labels iniciada (gabarito + 1/4 fichas; ver `validacao_labels/`)
+- [x] Validação manual de labels concluída (4/4 fichas; média ≈83,2%; ver `validacao_labels/`)
 - [ ] F1 macro reportado no **teste**, não só na validação
 - [ ] Classes com `support < 5` discutidas explicitamente
 - [ ] Hash do corpus (`dataset.sha256`) citado na tabela de experimentos

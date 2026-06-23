@@ -16,8 +16,8 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Título provisório** | Classificação de editais por área de gasto + resumos em linguagem cidadã (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | EDA + baseline de classificação (F1 macro ≈ 0,74) + baseline extrativo de sumarização concluídos — próximos: BERTimbau (Fase 2) e sumarização abstrativa (Fase 3) |
-| **Última atualização** | 2026-06-18 |
+| **Status** | EDA + baseline de classificação (F1 macro ≈ 0,74) + baseline extrativo + **validação manual 4/4** concluídos — próximo: BERTimbau (Fase 2) |
+| **Última atualização** | 2026-06-22 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)
 
@@ -184,7 +184,7 @@ A aula ensina: comparar **baseline**, **erro de treino** e **erro de validação
 3. Split estratificado treino/val/test (seed fixa para reprodutibilidade)
 4. Implementar baseline **TF-IDF (1–2 grams) + Logistic Regression**
 5. Calcular **F1 macro**, F1 por classe, matriz de confusão
-6. Validar manualmente ~30 editais sorteados (qualidade do label proxy) — **em andamento:** gabarito + 4 fichas em `docs/validacao_labels/`; 1/4 concluída (96,2% concordância)
+6. Validar manualmente ~30 editais sorteados (qualidade do label proxy) — **concluído:** 4/4 fichas em `docs/validacao_labels/`; média ≈83,2% (ver gabarito § Síntese)
 
 **Script alvo:** `scripts/run_train.py --task classification --model baseline`
 
@@ -534,6 +534,7 @@ _Ajustar datas conforme calendário real da disciplina._
 | 2026-06-08 | Baseline de sumarização = extrativo por regras (não TextRank puro) | Determinístico, não alucina; cobre objeto/quem/prazo/valor (§7) |
 | 2026-06-18 | Rastreamento com MLflow local + JSON | Comparar baseline vs BERTimbau; versionar corpus por hash SHA-256 |
 | 2026-06-18 | Dev: ruff + mypy + pytest + Makefile + `pyproject.toml` instalável | Qualidade de código e onboarding do grupo; model card e doc de métricas |
+| 2026-06-22 | Validação manual de labels: **4/4 fichas**; média ≈83,2% | Consolidação em `validacao_labels.md` § Síntese |
 | 2026-06-18 | Validação manual de labels: gabarito + 4 fichas em `docs/validacao_labels/` | 1/4 concluída (Renê, 96,2%); consolidação parcial no gabarito |
 
 ---
