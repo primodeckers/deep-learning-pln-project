@@ -23,6 +23,7 @@ from src.evaluate.metrics_classification import (
     save_confusion_matrix,
 )
 from src.models.baseline_tfidf import build_baseline
+from src.models.bert_classifier import build_bert_classifier
 from src.preprocess.dataset import Dataset, make_dataset
 from src.preprocess.labels import AREAS
 from src.utils.experiment_tracking import (
@@ -89,10 +90,17 @@ def _build_model(model_name: str, params: dict):
             seed=params.get("seed", 42),
         )
     if model_name == "bertimbau":
-        # Fase 2: fine-tuning de neuralmind/bert-base-portuguese-cased.
-        # Requer torch + transformers (ainda não no ambiente). Ver src/models.
-        raise NotImplementedError(
-            "BERTimbau (Fase 2) ainda não implementado — ver guia §6.3."
+        return build_bert_classifier(
+            label_list=AREAS,
+            model_name=params.get(
+                "model_name", "neuralmind/bert-base-portuguese-cased"
+            ),
+            max_length=params.get("max_length", 512),
+            batch_size=params.get("batch_size", 16),
+            learning_rate=params.get("learning_rate", 2.0e-5),
+            epochs=params.get("epochs", 4),
+            early_stopping_patience=params.get("early_stopping_patience", 2),
+            seed=params.get("seed", 42),
         )
     raise ValueError(f"Modelo desconhecido: {model_name!r}")
 
@@ -165,9 +173,19 @@ def train_classification(
     ) as handle:
         print(f"Treinando modelo '{model_name}'...")
         model = _build_model(model_name, params)
+        bert_cache = experiments_dir / ".bert_cache" / run_id
         with mlflow.start_span(name="fit", span_type=SpanType.TOOL) as span:
             span.set_inputs({"model": model_name, "n_samples": len(dataset.train)})
-            model.fit(dataset.train.texts, dataset.train.labels)
+            if model_name == "bertimbau":
+                model.fit(
+                    dataset.train.texts,
+                    dataset.train.labels,
+                    val_texts=dataset.val.texts,
+                    val_labels=dataset.val.labels,
+                    output_dir=bert_cache,
+                )
+            else:
+                model.fit(dataset.train.texts, dataset.train.labels)
             span.set_outputs({"status": "fitted"})
 
         with mlflow.start_span(name="evaluate_val", span_type=SpanType.TOOL) as span:
@@ -187,8 +205,12 @@ def train_classification(
             span.set_outputs(test_metrics)
 
         models_dir.mkdir(parents=True, exist_ok=True)
-        model_path = models_dir / f"{run_id}.joblib"
-        joblib.dump(model, model_path)
+        if model_name == "bertimbau":
+            model_path = models_dir / run_id
+            model.save(model_path)
+        else:
+            model_path = models_dir / f"{run_id}.joblib"
+            joblib.dump(model, model_path)
 
         fig_path = figures_dir / f"{run_id}_confusion.png"
         save_confusion_matrix(

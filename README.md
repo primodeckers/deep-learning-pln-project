@@ -19,6 +19,7 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 | [`docs/model_card.md`](docs/model_card.md) | Model card — performance, dados, limitações dos modelos |
 | [`docs/metricas_e_decisoes.md`](docs/metricas_e_decisoes.md) | Métricas, anti-leakage e decisões de avaliação |
 | [`docs/vazamento_de_label.md`](docs/vazamento_de_label.md) | Vazamento de label — mitigações, limiar universal, roteiro para relatório |
+| [`docs/GPU-EQUIPE.md`](docs/GPU-EQUIPE.md) | Fluxo GPU vs CPU — treino BERT no grupo |
 | [`docs/FASE1-CLASSIFICACAO.md`](docs/FASE1-CLASSIFICACAO.md) | Fase 1 — decisões técnicas, padrões e justificativas |
 | [`docs/validacao_labels/validacao_labels.md`](docs/validacao_labels/validacao_labels.md) | Gabarito da validação manual de labels |
 | [`docs/validacao_labels/`](docs/validacao_labels/) | Ficha individual de cada integrante |
@@ -70,6 +71,21 @@ Isso instala o pacote em modo editável (`pip install -e .[dev]`) com runtime + 
 
 Só para rodar o pipeline, sem dev tools: `pip install -r requirements.txt`
 
+**BERTimbau (Fase 2):** após o install acima, adicione PyTorch + Transformers:
+
+```bash
+pip install -e ".[bert]"
+# ou: pip install -r requirements-bert.txt
+```
+
+**Trabalho em grupo (GPU vs CPU):** quem tem placa treina BERT; demais rodam baseline. Sem branch separada — ver [`docs/GPU-EQUIPE.md`](docs/GPU-EQUIPE.md).
+
+```bash
+python scripts/check_cuda.py
+python scripts/run_train.py --config configs/classification_bert_gpu.yaml   # GPU
+python scripts/run_train.py --task classification --model baseline          # qualquer PC
+```
+
 **PowerShell:** `.venv\Scripts\Activate.ps1`  
 **CMD:** `.venv\Scripts\activate.bat`
 
@@ -105,7 +121,8 @@ Opções úteis:
 |---------|-----------|
 | `run_collect.py --limit 5` | Coleta só 5 HTMLs (teste) |
 | `run_preprocess.py --overwrite` | Reprocessa textos já extraídos |
-| `run_train.py --config configs/classification.yaml` | Hiperparâmetros do YAML |
+| `run_train.py --config configs/classification_bert_gpu.yaml` | BERTimbau (GPU recomendada) |
+| `python scripts/check_cuda.py` | Verifica se PyTorch vê a placa |
 
 Configuração de classificação: `configs/classification.yaml` (`text_field: objeto_html`, split 70/15/15, `seed: 42`).
 
@@ -130,6 +147,7 @@ Lista canônica de dependências em `pyproject.toml`. Atalhos via `Makefile` (se
 | `make typecheck` | `mypy` | Tipos estáticos em `src/` |
 | `make test` | `pytest` | Suite de testes |
 | `make train-baseline` | `python scripts/run_train.py --task classification --model baseline` | Treina baseline |
+| `make train-bert` | `python scripts/run_train.py --task classification --model bertimbau` | Fine-tune BERTimbau (requer `.[bert]`) |
 | `make train-summarize` | `python scripts/run_train.py --task summarization --model extractive` | Gera resumos |
 | `make mlflow-ui` | `mlflow ui --backend-store-uri sqlite:///experiments/mlflow.db` | UI local |
 
@@ -169,7 +187,7 @@ deactivate
 | Pré-processamento | `data/processed/licitacoes_corpus.jsonl` (423 registros) | Concluído |
 | Classificação — baseline TF-IDF + LogReg | `experiments/classification_baseline_*.json` | Concluído (F1 macro ≈ 0,74 com `objeto_html`) |
 | Validação manual de labels (proxy) | `docs/validacao_labels/` | Em andamento (1/4 fichas — 96,2% concordância, Renê) |
-| Classificação — BERTimbau | `src/models/bert_classifier.py` | Pendente (Fase 2) |
+| Classificação — BERTimbau | `src/models/bert_classifier.py` | Fase 2 — `make train-bert` (requer `pip install -e ".[bert]"`) |
 | EDA | `notebooks/01_eda.ipynb` | Concluído |
 | Sumarização cidadão — baseline extrativo | `reports/slides/resumos_exemplos.md` | Concluído |
 | Sumarização — abstrativo (mT5/LLM) | — | Pendente (Fase 3) |

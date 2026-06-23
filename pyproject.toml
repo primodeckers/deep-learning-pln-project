@@ -22,6 +22,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+bert = [
+    "torch>=2.0.0",
+    "transformers>=4.40.0",
+    "accelerate>=0.27.0",
+]
 dev = [
     "mypy>=2.0",
     "ruff>=0.9.0",

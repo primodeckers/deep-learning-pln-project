@@ -16,7 +16,7 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Título provisório** | Classificação de editais por área de gasto + resumos em linguagem cidadã (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | EDA + baseline de classificação (F1 macro ≈ 0,74) + baseline extrativo + **validação manual 4/4** concluídos — próximo: BERTimbau (Fase 2) |
+| **Status** | EDA + baseline (F1 ≈ 0,74) + sumarização extrativa + validação 4/4 — **BERTimbau implementado** (`make train-bert`); próximo: treinar, comparar métricas e sumarização abstrativa |
 | **Última atualização** | 2026-06-22 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)

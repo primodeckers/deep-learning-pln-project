@@ -25,6 +25,9 @@ test:
 train-baseline:
 	python scripts/run_train.py --task classification --model baseline
 
+train-bert:
+	python scripts/run_train.py --task classification --model bertimbau
+
 train-summarize:
 	python scripts/run_train.py --task summarization --model extractive
 

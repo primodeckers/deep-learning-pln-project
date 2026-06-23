@@ -42,6 +42,7 @@ experiments/**/checkpoints/
 experiments/mlflow.db
 experiments/mlartifacts/
 experiments/mlruns/
+experiments/.bert_cache/
 
 # SO / editor
 .DS_Store

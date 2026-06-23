@@ -1,0 +1,2 @@
+# Dependências BERTimbau (opcional — quem tem GPU ou smoke test CPU)
+-e .[bert]

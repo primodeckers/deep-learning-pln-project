@@ -1,0 +1,18 @@
+# BERTimbau em CPU — só para smoke test local (lento). Produção: use GPU.
+# Uso: python scripts/run_train.py --config configs/classification_bert_cpu.yaml
+
+task: classification
+model: bertimbau
+text_field: objeto_html
+seed: 42
+
+val_size: 0.15
+test_size: 0.15
+
+params:
+  model_name: neuralmind/bert-base-portuguese-cased
+  max_length: 512
+  batch_size: 4
+  learning_rate: 2.0e-5
+  epochs: 2
+  early_stopping_patience: 1

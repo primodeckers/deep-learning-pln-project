@@ -8,10 +8,10 @@ Dois pipelines de PLN sobre o mesmo corpus (`data/processed/licitacoes_corpus.js
 
 | Tarefa | Modelo atual | Código principal |
 |--------|--------------|------------------|
-| **Classificação** por macroárea de gasto (6 classes) | TF-IDF + Regressão Logística | `src/models/baseline_tfidf.py`, `scripts/run_train.py` |
+| **Classificação** por macroárea de gasto (6 classes) | TF-IDF + LogReg (**oficial**) · BERTimbau (Fase 2) | `baseline_tfidf.py`, `bert_classifier.py` |
 | **Sumarização** em linguagem cidadã | Extrativo por regras/regex | `src/summarize/extractive.py` |
 
-**Pendente (Fases 2–3):** BERTimbau para classificação; sumarização abstrativa (mT5 ou LLM).
+**Pendente (Fase 3):** sumarização abstrativa (mT5 ou LLM).
 
 ## Uso pretendido
 
@@ -39,6 +39,21 @@ Matriz de confusão: `reports/figures/classification_baseline_20260608-190839_co
 O campo `texto` (HTML completo) repete o nome do órgão em ~97% dos casos — e o label vem justamente do órgão (`orgao_csv`). Com `texto`, o baseline infla para F1 macro ≈ 0,88 (vazamento de label). Com `objeto_html`, a métrica cai para ≈ 0,74, mas reflete generalização mais honesta.
 
 **Entrada oficial:** `objeto_html`. **Não há percentual universal** de vazamento aceitável — documentamos Tabela 7 (~49% residual) e explicamos no relatório conforme [`vazamento_de_label.md`](vazamento_de_label.md). Campo experimental: `objeto_html_limpo` (~47% residual). Ver também [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
+
+### BERTimbau (Fase 2) — 1º run
+
+**Run:** `classification_bertimbau_20260623-213337`  
+**Modelo:** `neuralmind/bert-base-portuguese-cased` · mesmo split e `text_field`  
+**Treino:** verificar `python scripts/check_cuda.py` na máquina usada — repetir na GPU se necessário ([`GPU-EQUIPE.md`](GPU-EQUIPE.md))
+
+| Conjunto | Accuracy | F1 macro | F1 weighted |
+|----------|----------|----------|-------------|
+| Validação | 0,703 | **0,425** | 0,624 |
+| Teste | 0,672 | **0,401** | 0,595 |
+
+Matriz: `reports/figures/classification_bertimbau_20260623-213337_confusion.png`
+
+**Comparação (teste):** baseline **0,74** vs BERT **0,40** — com ~295 exemplos de treino o Transformer **não superou** o TF-IDF neste run; classes raras (Segurança, Educação, Infra) ficaram com F1 0. Documentar no relatório; run de referência na GPU é próximo passo.
 
 ## Performance — sumarização extrativa
 
