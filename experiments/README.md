@@ -6,13 +6,13 @@ JSONs e figuras **oficiais** do grupo ficam aqui no Git. Runs locais de teste po
 
 | Arquivo | Modelo | F1 macro (teste) | Papel |
 |---------|--------|------------------|--------|
-| `classification_baseline_20260608-190839.json` | TF-IDF + LogReg | **0,740** | **Modelo principal** |
-| `classification_svm_20260624-004348.json` | TF-IDF + SVM | **0,652** | Comparativo clássico (mesmo split) |
-| `classification_bertimbau_20260623-222508.json` | BERTimbau (GPU) | **0,518** | Comparativo DL (Fase 2) |
+| `classification_baseline_20260608-190839.json` | TF-IDF + LogReg | **0,740** | **Fase 1** — modelo principal |
+| `classification_svm_20260624-004348.json` | TF-IDF + SVM | **0,652** | **Fase 3** — [`FASE3-CLASSIFICACAO.md`](../docs/FASE3-CLASSIFICACAO.md) |
+| `classification_bertimbau_20260623-222508.json` | BERTimbau (GPU) | **0,518** | **Fase 2** |
 
 Matrizes: `reports/figures/<run_id>_confusion.png`
 
-Documentação Fase 2: [`docs/FASE2-CLASSIFICACAO.md`](../docs/FASE2-CLASSIFICACAO.md) — textos prontos para relatório §4.
+Documentação Fase 2: [`docs/FASE2-CLASSIFICACAO.md`](../docs/FASE2-CLASSIFICACAO.md) · Fase 3: [`FASE3-CLASSIFICACAO.md`](../docs/FASE3-CLASSIFICACAO.md)
 
 ### Run histórico (não usar como referência)
 

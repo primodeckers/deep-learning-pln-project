@@ -2,7 +2,8 @@
 
 Documento técnico da **Fase 2**: fine-tuning de `neuralmind/bert-base-portuguese-cased` no mesmo corpus e split da Fase 1, para comparar deep learning vs baseline TF-IDF + LogReg.
 
-> Baseline (Fase 1): [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md)  
+> Fase 1 (baseline LogReg): [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md)  
+> Fase 3 (SVM): [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md)  
 > Métricas e decisões: [`metricas_e_decisoes.md`](metricas_e_decisoes.md)  
 > Treino na GPU: [`GPU-EQUIPE.md`](GPU-EQUIPE.md)
 
@@ -127,7 +128,8 @@ Abrir `http://127.0.0.1:5000` → comparar runs `classification_baseline_*` e `c
 | Prioridade | Tarefa |
 |------------|--------|
 | Alta | Slides PDF com §4 acima |
-| Alta | Fase 3 — sumarização abstrativa (amostra) |
+| Alta | Fase 3 — TF-IDF + SVM ([`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md)) |
+| Alta | Fase 4 — sumarização ([`FASE4-SUMARIZACAO.md`](FASE4-SUMARIZACAO.md)) |
 | Média | Gráfico valor homologado × área predita (baseline) |
 | Baixa | Retunar BERT / expandir corpus — **não bloqueia entrega** |
 

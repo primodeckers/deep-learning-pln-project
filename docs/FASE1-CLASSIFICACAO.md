@@ -103,26 +103,14 @@ licitacoes_corpus.jsonl
 | Alternativa | Por que não (agora) |
 |-------------|---------------------|
 | Apenas bag-of-words / contagem | TF-IDF penaliza termos frequentes em todo o corpus |
-| Random Forest | Não testado; LogReg/SVM cobrem comparativo clássico |
-| SVM | **Implementado como comparativo** (`svm_tfidf.py`, `make train-svm`) — F1 teste 0,652 vs LogReg 0,740; LogReg permanece oficial |
+| Random Forest | Não testado neste projeto |
+| SVM | Fase 3 — ver [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md) |
 | BERTimbau direto | Fase 2; precisamos de referência clássica para comparar ganho do Transformer |
 | Rede neural do zero | Corpus pequeno (~423); alto risco de overfitting sem transfer learning |
 
 **Referência metodológica:** guia universal §6.3; material de aula (`aula03-04.pdf`) — começar simples, diagnosticar, depois complexificar.
 
 **Código:** `src/models/baseline_tfidf.py`
-
-### 4.1b Comparativo TF-IDF + SVM
-
-Pipeline alternativo clássico no **mesmo split e `objeto_html`**:
-
-| Item | Valor |
-|------|-------|
-| Código | `src/models/svm_tfidf.py` |
-| Treino | `python scripts/run_train.py --model svm` ou `make train-svm` |
-| Run ref. | `classification_svm_20260624-004348` — F1 macro teste **0,652** |
-
-Conclusão: no nosso corpus, **LogReg generaliza melhor no teste** que SVM linear (mesmos hiperparâmetros TF-IDF). O SVM entra na tabela comparativa do relatório; o baseline oficial continua sendo LogReg.
 
 ### 4.2 Hiperparâmetros e técnicas do vetorizador
 
@@ -203,9 +191,6 @@ python scripts/run_preprocess.py
 
 # treinar baseline (usa configs/classification.yaml por padrão)
 python scripts/run_train.py --task classification --model baseline
-
-# comparativo TF-IDF + SVM (mesmo corpus/split)
-python scripts/run_train.py --task classification --model svm
 
 # ou explicitamente
 python scripts/run_train.py --task classification --config configs/classification.yaml

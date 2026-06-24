@@ -1,30 +1,25 @@
 # Notebooks — responsabilidades
 
-Cada notebook tem **um papel**. Treino e coleta ficam em `scripts/` e `src/`.
+**Regra:** notebooks **não treinam**. Treino = `scripts/run_train.py` + docs `FASE*-*.md`.
 
-| Notebook | Responsabilidade | Não faz |
-|----------|------------------|---------|
-| [`01_eda.ipynb`](../notebooks/01_eda.ipynb) | EDA estilizado — exploração e vazamento (Tabelas 1–8) |
-| [`02_demo_apresentacao.ipynb`](../notebooks/02_demo_apresentacao.ipynb) | Demo slides — métricas + inferência (sem treino) |
+## Mapa de fases (classificação vs sumarização)
 
-## Regenerar notebooks
+| Fase | Tarefa | Treino | Documento |
+|------|--------|--------|-----------|
+| 1 | TF-IDF + LogReg | `make train-baseline` | [`FASE1-CLASSIFICACAO.md`](../docs/FASE1-CLASSIFICACAO.md) |
+| 2 | BERTimbau | `make train-bert` | [`FASE2-CLASSIFICACAO.md`](../docs/FASE2-CLASSIFICACAO.md) |
+| 3 | TF-IDF + SVM | `make train-svm` | [`FASE3-CLASSIFICACAO.md`](../docs/FASE3-CLASSIFICACAO.md) |
+| 4 | Sumarização cidadã | `make train-summarize` | [`FASE4-SUMARIZACAO.md`](../docs/FASE4-SUMARIZACAO.md) |
 
-Os `.ipynb` são gerados a partir de scripts Python (revisão em diff):
+Fases 1–3 = **mesmo protocolo** (423 editais, `objeto_html`, split 70/15/15). Fase 4 = **outra tarefa**.
 
-```bash
-python notebooks/_build_eda.py
-python notebooks/_build_demo.py
-```
+## Notebooks
 
-## Pipeline fora dos notebooks
+| Notebook | Faz | Não faz |
+|----------|-----|---------|
+| [`01_eda.ipynb`](01_eda.ipynb) | EDA, tabelas estilizadas, vazamento | coleta, treino |
+| [`02_demo_classificacao.ipynb`](02_demo_classificacao.ipynb) | Lê JSON das Fases 1–3, matrizes | treino, sumarização |
 
-```bash
-python scripts/run_collect.py          # coleta
-python scripts/run_preprocess.py       # JSONL
-make train-baseline                    # TF-IDF + LogReg
-make train-svm                         # TF-IDF + SVM
-make train-bert                        # BERTimbau
-make train-summarize                   # sumarização extrativa
-```
+Regenerar demo: `python notebooks/_build_demo_classificacao.py`
 
-Runs versionados: `experiments/classification_*.json` · ver [`experiments/README.md`](../experiments/README.md).
+`01_eda.ipynb` é editado diretamente (estilizado). `_build_eda.py` não sobrescreve sem `--force`.

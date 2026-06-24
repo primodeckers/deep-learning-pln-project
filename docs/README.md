@@ -14,10 +14,13 @@
 | [`metricas_e_decisoes.md`](metricas_e_decisoes.md) | Métricas, anti-leakage e decisões de avaliação |
 | [`GPU-EQUIPE.md`](GPU-EQUIPE.md) | Fluxo GPU vs CPU — quem treina o quê, o que vai pro Git |
 | [`vazamento_de_label.md`](vazamento_de_label.md) | Vazamento de label — mitigações, §9 roteiro para relatório/slides |
-| [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) | Fase 1 — decisões, justificativas e mapa do código |
-| [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) | Fase 2 — BERTimbau, comparação baseline, textos para relatório |
+| [`FASES.md`](FASES.md) | Índice das fases 1–4 |
+| [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) | Fase 1 — TF-IDF + LogReg |
+| [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) | Fase 2 — BERTimbau |
+| [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md) | Fase 3 — TF-IDF + SVM |
+| [`FASE4-SUMARIZACAO.md`](FASE4-SUMARIZACAO.md) | Fase 4 — sumarização cidadã |
 | [`NOTEBOOK-ENTREGA.md`](NOTEBOOK-ENTREGA.md) | Atalho → [`notebooks/README.md`](../notebooks/README.md) |
-| [`../notebooks/README.md`](../notebooks/README.md) | Papéis: `01_eda` vs `02_demo` (sem treino nos notebooks) |
+| [`../notebooks/README.md`](../notebooks/README.md) | Notebooks: EDA + demo classificação |
 | [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) | Gabarito, consolidação e status das fichas |
 | [`validacao_labels/ficha_*.md`](validacao_labels/) | Ficha individual (4/4 preenchidas — média ≈83,2%) |
 

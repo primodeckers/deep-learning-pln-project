@@ -22,8 +22,10 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 | [`docs/GPU-EQUIPE.md`](docs/GPU-EQUIPE.md) | Fluxo GPU vs CPU — treino BERT no grupo |
 | [`docs/FASE1-CLASSIFICACAO.md`](docs/FASE1-CLASSIFICACAO.md) | Fase 1 — decisões técnicas, padrões e justificativas |
 | [`docs/FASE2-CLASSIFICACAO.md`](docs/FASE2-CLASSIFICACAO.md) | Fase 2 — BERTimbau, comparação baseline, textos para relatório |
-| [`notebooks/README.md`](notebooks/README.md) | Papéis dos notebooks (EDA vs demo — sem treino nos .ipynb) |
-| [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) | Atalho para `notebooks/README.md` |
+| [`docs/FASES.md`](docs/FASES.md) | Índice das fases 1–4 |
+| [`docs/FASE3-CLASSIFICACAO.md`](docs/FASE3-CLASSIFICACAO.md) | Fase 3 — TF-IDF + SVM |
+| [`docs/FASE4-SUMARIZACAO.md`](docs/FASE4-SUMARIZACAO.md) | Fase 4 — sumarização |
+| [`notebooks/README.md`](notebooks/README.md) | Notebooks — EDA e demo (sem treino) |
 | [`docs/validacao_labels/validacao_labels.md`](docs/validacao_labels/validacao_labels.md) | Gabarito da validação manual de labels |
 | [`docs/validacao_labels/`](docs/validacao_labels/) | Ficha individual de cada integrante |
 | [`docs/README.md`](docs/README.md) | Índice de todos os arquivos em `docs/` |
@@ -39,7 +41,7 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 ├── data/             # raw → interim → processed
 ├── experiments/      # registros de experimentos (JSON + MLflow local)
 ├── models/           # checkpoints (não versionados)
-├── notebooks/        # 01_eda (exploração) · 02_demo (apresentação)
+├── notebooks/        # 01_eda · 02_demo_classificacao (sem treino)
 ├── reports/          # figuras e slides
 ├── scripts/          # pontos de entrada do pipeline
 ├── src/              # código reutilizável
@@ -118,7 +120,7 @@ python scripts/run_train.py --task summarization --model extractive
 jupyter notebook notebooks/01_eda.ipynb
 
 # Demo para apresentação (métricas + inferência — sem treino)
-jupyter notebook notebooks/02_demo_apresentacao.ipynb
+jupyter notebook notebooks/02_demo_classificacao.ipynb
 ```
 
 Opções úteis:
@@ -195,11 +197,11 @@ deactivate
 | Classificação — baseline TF-IDF + LogReg | `experiments/classification_baseline_*.json` | Concluído (F1 macro ≈ 0,74 com `objeto_html`) |
 | Validação manual de labels (proxy) | `docs/validacao_labels/` | Concluído (4/4 fichas — média ≈ 83,2%) |
 | Classificação — BERTimbau | `experiments/classification_bertimbau_20260623-222508.json` | Concluído (F1 macro teste ≈ 0,52 — abaixo do baseline) |
-| Classificação — TF-IDF + SVM | `experiments/classification_svm_20260624-004348.json` | Concluído (F1 macro teste ≈ 0,65 — comparativo) |
+| Classificação — TF-IDF + SVM (Fase 3) | `experiments/classification_svm_20260624-004348.json` | Concluído — [`FASE3-CLASSIFICACAO.md`](docs/FASE3-CLASSIFICACAO.md) |
 | EDA | `notebooks/01_eda.ipynb` | Concluído |
-| Demo / apresentação | `notebooks/02_demo_apresentacao.ipynb` | Concluído — ver [`notebooks/README.md`](notebooks/README.md) |
-| Sumarização cidadão — baseline extrativo | `reports/slides/resumos_exemplos.md` | Concluído |
-| Sumarização — abstrativo (PTT5/LLM) | `02_demo_apresentacao.ipynb` (demo) | Protótipo inferência; avaliação humana pendente (Fase 3) |
+| Demo classificação (Fases 1–3) | `notebooks/02_demo_classificacao.ipynb` | Só lê `experiments/` — ver [`notebooks/README.md`](notebooks/README.md) |
+| Sumarização extrativa (Fase 4) | `reports/slides/resumos_exemplos.md` | Concluído — [`FASE4-SUMARIZACAO.md`](docs/FASE4-SUMARIZACAO.md) |
+| Sumarização abstrativa (PTT5) | — | Pendente (Fase 4) |
 
 Rodar (ou use `make train-baseline` / `make train-svm` / `make train-summarize`):
 
@@ -208,7 +210,7 @@ python scripts/run_train.py --task classification --model baseline
 python scripts/run_train.py --task classification --model svm
 python scripts/run_train.py --task summarization --model extractive
 jupyter notebook notebooks/01_eda.ipynb     # EDA
-jupyter notebook notebooks/02_demo_apresentacao.ipynb  # demo apresentação
+jupyter notebook notebooks/02_demo_classificacao.ipynb  # demo apresentação
 ```
 
 Resultados e decisões metodológicas: [`docs/model_card.md`](docs/model_card.md) e [`docs/metricas_e_decisoes.md`](docs/metricas_e_decisoes.md).

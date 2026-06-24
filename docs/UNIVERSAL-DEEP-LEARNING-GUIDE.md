@@ -16,7 +16,7 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Título provisório** | Classificação de editais por área de gasto + resumos em linguagem cidadã (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | Fases 0–2 concluídas · baseline LogReg + SVM comparativo + BERT · notebook baseline+SVM+PTT5; próximo: slides + avaliação humana sumarização (Fase 3) |
+| **Status** | Fases 1–3 classificação concluídas (LogReg · BERT · SVM) — Fase 4 sumarização em andamento |
 | **Última atualização** | 2026-06-23 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)
@@ -199,7 +199,17 @@ A aula ensina: comparar **baseline**, **erro de treino** e **erro de validação
 
 **Script alvo:** `scripts/run_train.py --task classification --model bertimbau`
 
-### Fase 3 — Sumarização (complemento)
+### Fase 3 — Classificação TF-IDF + SVM
+
+Mesmo protocolo das Fases 1 e 2 (`objeto_html`, split 70/15/15, `seed=42`).
+
+1. `make train-svm` → `experiments/classification_svm_*.json`
+2. Comparar F1 macro teste: LogReg vs SVM vs BERT
+3. Documentar em [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md)
+
+**Script alvo:** `scripts/run_train.py --task classification --model svm`
+
+### Fase 4 — Sumarização (complemento — outra tarefa)
 
 1. **Baseline extrativa:** TextRank ou lead-3 frases do objeto + datas via regex
 2. **Modelo abstrativo (escolher um):**
@@ -212,16 +222,16 @@ A aula ensina: comparar **baseline**, **erro de treino** e **erro de validação
    - Contar **alucinações** (prazo/valor inventado)
 5. Selecionar **3 exemplos** para slide antes/depois
 
-**Script alvo:** `scripts/run_train.py --task summarization` · demo PTT5 opcional em `notebooks/02_demo_apresentacao.ipynb`
+**Script alvo:** `scripts/run_train.py --task summarization` · ver [`FASE4-SUMARIZACAO.md`](FASE4-SUMARIZACAO.md)
 
-### Fase 4 — Análise aplicada e integração
+### Fase 5 — Análise aplicada e integração
 
 1. Gráfico: distribuição de valor homologado por área predita
 2. Opcional: resumir os 5 editais **mais mal classificados** (liga tarefa 1 e 4)
 3. Redigir limitações: label proxy, corpus HTML vs PDF, desbalanceamento de classes
 4. Registrar experimentos em `experiments/` (JSON + MLflow em `experiments/mlflow.db`)
 
-### Fase 5 — Entrega e apresentação
+### Fase 6 — Entrega e apresentação
 
 1. Atualizar README com comandos de execução
 2. Montar slides (10 min) — roteiro na seção 8
