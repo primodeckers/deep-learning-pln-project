@@ -16,7 +16,7 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Título provisório** | Classificação de editais por área de gasto + resumos em linguagem cidadã (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | Fases 0–2 concluídas (baseline F1 ≈ 0,74 · BERT F1 ≈ 0,52 teste) — próximo: slides + sumarização abstrativa (Fase 3) |
+| **Status** | Fases 0–2 concluídas (baseline F1 ≈ 0,74 · BERT F1 ≈ 0,52 teste) — notebook de entrega SVM+PTT5 pronto; próximo: slides + avaliação humana da sumarização (Fase 3) |
 | **Última atualização** | 2026-06-23 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)
@@ -212,7 +212,7 @@ A aula ensina: comparar **baseline**, **erro de treino** e **erro de validação
    - Contar **alucinações** (prazo/valor inventado)
 5. Selecionar **3 exemplos** para slide antes/depois
 
-**Script alvo:** `scripts/run_train.py --task summarization` (ou notebook dedicado)
+**Script alvo:** `scripts/run_train.py --task summarization` (baseline extrativo) **ou** protótipo PTT5 em [`NOTEBOOK-ENTREGA.md`](NOTEBOOK-ENTREGA.md)
 
 ### Fase 4 — Análise aplicada e integração
 
@@ -407,7 +407,7 @@ deep-learning-pln-project/
 ├── docs/                 # documentação (+ model_card, métricas)
 ├── experiments/          # JSON por run + mlflow.db (tracking local)
 ├── models/               # checkpoints (gitignored)
-├── notebooks/            # EDA e protótipos
+├── notebooks/            # EDA (`01_eda`) + entrega integrada SVM+PTT5
 ├── reports/figures|slides/
 ├── scripts/
 │   ├── run_collect.py
@@ -535,7 +535,8 @@ _Ajustar datas conforme calendário real da disciplina._
 | 2026-06-18 | Rastreamento com MLflow local + JSON | Comparar baseline vs BERTimbau; versionar corpus por hash SHA-256 |
 | 2026-06-18 | Dev: ruff + mypy + pytest + Makefile + `pyproject.toml` instalável | Qualidade de código e onboarding do grupo; model card e doc de métricas |
 | 2026-06-22 | Validação manual de labels: **4/4 fichas**; média ≈83,2% | Consolidação em `validacao_labels.md` § Síntese |
-| 2026-06-18 | Validação manual de labels: gabarito + 4 fichas em `docs/validacao_labels/` | 1/4 concluída (Renê, 96,2%); consolidação parcial no gabarito |
+| 2026-06-23 | Fase 2 BERTimbau — run GPU `222508`; F1 teste ≈0,52 | Documentado em `FASE2-CLASSIFICACAO.md`; abaixo do baseline |
+| 2026-06-18 | Notebook de entrega TF-IDF+SVM+PTT5 com anti-vazamento | Trilha integrada para apresentação; ver `NOTEBOOK-ENTREGA.md` |
 
 ---
 

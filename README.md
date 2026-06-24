@@ -21,6 +21,8 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 | [`docs/vazamento_de_label.md`](docs/vazamento_de_label.md) | Vazamento de label — mitigações, limiar universal, roteiro para relatório |
 | [`docs/GPU-EQUIPE.md`](docs/GPU-EQUIPE.md) | Fluxo GPU vs CPU — treino BERT no grupo |
 | [`docs/FASE1-CLASSIFICACAO.md`](docs/FASE1-CLASSIFICACAO.md) | Fase 1 — decisões técnicas, padrões e justificativas |
+| [`docs/FASE2-CLASSIFICACAO.md`](docs/FASE2-CLASSIFICACAO.md) | Fase 2 — BERTimbau, comparação baseline, textos para relatório |
+| [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) | Notebook TF-IDF+SVM+PTT5 — entrega integrada vs pipeline oficial |
 | [`docs/validacao_labels/validacao_labels.md`](docs/validacao_labels/validacao_labels.md) | Gabarito da validação manual de labels |
 | [`docs/validacao_labels/`](docs/validacao_labels/) | Ficha individual de cada integrante |
 | [`docs/README.md`](docs/README.md) | Índice de todos os arquivos em `docs/` |
@@ -36,7 +38,7 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 ├── data/             # raw → interim → processed
 ├── experiments/      # registros de experimentos (JSON + MLflow local)
 ├── models/           # checkpoints (não versionados)
-├── notebooks/        # exploração e EDA
+├── notebooks/        # EDA + notebook de entrega (SVM + PTT5)
 ├── reports/          # figuras e slides
 ├── scripts/          # pontos de entrada do pipeline
 ├── src/              # código reutilizável
@@ -186,11 +188,12 @@ deactivate
 | Coleta HTML | `data/raw/detalhes/` (423 arquivos) | Concluído |
 | Pré-processamento | `data/processed/licitacoes_corpus.jsonl` (423 registros) | Concluído |
 | Classificação — baseline TF-IDF + LogReg | `experiments/classification_baseline_*.json` | Concluído (F1 macro ≈ 0,74 com `objeto_html`) |
-| Validação manual de labels (proxy) | `docs/validacao_labels/` | Em andamento (1/4 fichas — 96,2% concordância, Renê) |
-| Classificação — BERTimbau | `src/models/bert_classifier.py` | Fase 2 — `make train-bert` (requer `pip install -e ".[bert]"`) |
+| Validação manual de labels (proxy) | `docs/validacao_labels/` | Concluído (4/4 fichas — média ≈ 83,2%) |
+| Classificação — BERTimbau | `experiments/classification_bertimbau_20260623-222508.json` | Concluído (F1 macro teste ≈ 0,52 — abaixo do baseline) |
 | EDA | `notebooks/01_eda.ipynb` | Concluído |
+| Notebook de entrega (SVM + PTT5) | `notebooks/projeto_final_pln_*_anti_vazamento2.ipynb` | Concluído — ver [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) |
 | Sumarização cidadão — baseline extrativo | `reports/slides/resumos_exemplos.md` | Concluído |
-| Sumarização — abstrativo (mT5/LLM) | — | Pendente (Fase 3) |
+| Sumarização — abstrativo (PTT5/LLM) | Notebook + script | Protótipo PTT5 no notebook; avaliação humana pendente (Fase 3) |
 
 Rodar (ou use `make train-baseline` / `make train-summarize`):
 
@@ -198,6 +201,7 @@ Rodar (ou use `make train-baseline` / `make train-summarize`):
 python scripts/run_train.py --task classification --model baseline
 python scripts/run_train.py --task summarization --model extractive
 jupyter notebook notebooks/01_eda.ipynb     # análise exploratória
+jupyter notebook notebooks/projeto_final_pln_macroareas_tfidf_svm_ptt5_anti_vazamento2.ipynb  # entrega integrada
 ```
 
 Resultados e decisões metodológicas: [`docs/model_card.md`](docs/model_card.md) e [`docs/metricas_e_decisoes.md`](docs/metricas_e_decisoes.md).
