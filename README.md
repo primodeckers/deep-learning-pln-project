@@ -22,7 +22,7 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 | [`docs/GPU-EQUIPE.md`](docs/GPU-EQUIPE.md) | Fluxo GPU vs CPU — treino BERT no grupo |
 | [`docs/FASE1-CLASSIFICACAO.md`](docs/FASE1-CLASSIFICACAO.md) | Fase 1 — decisões técnicas, padrões e justificativas |
 | [`docs/FASE2-CLASSIFICACAO.md`](docs/FASE2-CLASSIFICACAO.md) | Fase 2 — BERTimbau, comparação baseline, textos para relatório |
-| [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) | Notebook TF-IDF+SVM+PTT5 — entrega integrada vs pipeline oficial |
+| [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) | Notebook baseline LogReg + PTT5 — entrega integrada alinhada ao pipeline |
 | [`docs/validacao_labels/validacao_labels.md`](docs/validacao_labels/validacao_labels.md) | Gabarito da validação manual de labels |
 | [`docs/validacao_labels/`](docs/validacao_labels/) | Ficha individual de cada integrante |
 | [`docs/README.md`](docs/README.md) | Índice de todos os arquivos em `docs/` |
@@ -38,7 +38,7 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 ├── data/             # raw → interim → processed
 ├── experiments/      # registros de experimentos (JSON + MLflow local)
 ├── models/           # checkpoints (não versionados)
-├── notebooks/        # EDA + notebook de entrega (SVM + PTT5)
+├── notebooks/        # EDA + notebook de entrega (baseline + PTT5)
 ├── reports/          # figuras e slides
 ├── scripts/          # pontos de entrada do pipeline
 ├── src/              # código reutilizável
@@ -191,7 +191,7 @@ deactivate
 | Validação manual de labels (proxy) | `docs/validacao_labels/` | Concluído (4/4 fichas — média ≈ 83,2%) |
 | Classificação — BERTimbau | `experiments/classification_bertimbau_20260623-222508.json` | Concluído (F1 macro teste ≈ 0,52 — abaixo do baseline) |
 | EDA | `notebooks/01_eda.ipynb` | Concluído |
-| Notebook de entrega (SVM + PTT5) | `notebooks/projeto_final_pln_*_anti_vazamento2.ipynb` | Concluído — ver [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) |
+| Notebook de entrega (baseline + PTT5) | `notebooks/projeto_final_pln_*_anti_vazamento2.ipynb` | Concluído — ver [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) |
 | Sumarização cidadão — baseline extrativo | `reports/slides/resumos_exemplos.md` | Concluído |
 | Sumarização — abstrativo (PTT5/LLM) | Notebook + script | Protótipo PTT5 no notebook; avaliação humana pendente (Fase 3) |
 
