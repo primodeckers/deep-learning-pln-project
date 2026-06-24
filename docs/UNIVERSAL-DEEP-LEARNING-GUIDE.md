@@ -239,7 +239,7 @@ Práticas comuns em produção de PLN em 2024–2025, mapeadas para o nosso esco
 | Transformer pré-treinado em PT | BERTimbau, Legal-BERT-PT | Sim — BERTimbau |
 | Fine-tuning com Hugging Face | `transformers` + `Trainer` | Sim |
 | Experiment tracking | MLflow (local) + JSON em `experiments/` | Sim — desde Fase 2 |
-| Hiperparâmetros | Grid/random search, Optuna | Manual (suficiente para o prazo) |
+| Hiperparâmetros | Grid/random search, Optuna | Manual (suficiente para o prazo); ver [`hiperparametros_e_melhorias.md`](hiperparametros_e_melhorias.md) |
 | Classificação desbalanceada | `class_weight`, focal loss | `class_weight` |
 | Sumarização | T5/mT5, BART, GPT com RAG | mT5 ou prompt LLM (amostra) |
 | Avaliação de resumo | ROUGE + avaliação humana | Sim (ambos) |

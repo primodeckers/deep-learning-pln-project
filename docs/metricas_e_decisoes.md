@@ -4,6 +4,7 @@ Anotações do grupo sobre o que medimos, como ler os números e por que o relat
 
 > Números consolidados: [`model_card.md`](model_card.md)  
 > Validação vs teste (as três fases): [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md)  
+> Tuning e melhoria de métricas (discussão futura): [`hiperparametros_e_melhorias.md`](hiperparametros_e_melhorias.md)  
 > Guia do projeto: [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) §6
 
 ---
@@ -124,6 +125,8 @@ Conclusão: proxy por órgão é **rotulagem fraca aceitável** para baseline; e
 ---
 
 ## 7. Hiperparâmetros de referência
+
+Valores **em produção** nos runs oficiais. Ideias de grid, pesos no BERT e backlog de implementação: [`hiperparametros_e_melhorias.md`](hiperparametros_e_melhorias.md).
 
 ### Baseline (Fase 1) — `configs/classification.yaml`
 
