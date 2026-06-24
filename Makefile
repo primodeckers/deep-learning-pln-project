@@ -1,4 +1,4 @@
-.PHONY: install install-dev lint lint-fix typecheck test train-baseline train-summarize mlflow-ui
+.PHONY: install install-dev lint lint-fix typecheck test train-baseline train-svm train-summarize mlflow-ui
 
 install:
 	python -m pip install -U pip
@@ -24,6 +24,9 @@ test:
 
 train-baseline:
 	python scripts/run_train.py --task classification --model baseline
+
+train-svm:
+	python scripts/run_train.py --task classification --model svm
 
 train-bert:
 	python scripts/run_train.py --task classification --model bertimbau

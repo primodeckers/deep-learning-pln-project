@@ -22,7 +22,7 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 | [`docs/GPU-EQUIPE.md`](docs/GPU-EQUIPE.md) | Fluxo GPU vs CPU — treino BERT no grupo |
 | [`docs/FASE1-CLASSIFICACAO.md`](docs/FASE1-CLASSIFICACAO.md) | Fase 1 — decisões técnicas, padrões e justificativas |
 | [`docs/FASE2-CLASSIFICACAO.md`](docs/FASE2-CLASSIFICACAO.md) | Fase 2 — BERTimbau, comparação baseline, textos para relatório |
-| [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) | Notebook baseline LogReg + PTT5 — entrega integrada alinhada ao pipeline |
+| [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) | Notebook baseline + SVM + PTT5 — entrega integrada |
 | [`docs/validacao_labels/validacao_labels.md`](docs/validacao_labels/validacao_labels.md) | Gabarito da validação manual de labels |
 | [`docs/validacao_labels/`](docs/validacao_labels/) | Ficha individual de cada integrante |
 | [`docs/README.md`](docs/README.md) | Índice de todos os arquivos em `docs/` |
@@ -38,7 +38,7 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 ├── data/             # raw → interim → processed
 ├── experiments/      # registros de experimentos (JSON + MLflow local)
 ├── models/           # checkpoints (não versionados)
-├── notebooks/        # EDA + notebook de entrega (baseline + PTT5)
+├── notebooks/        # EDA + notebook de entrega (baseline + SVM + PTT5)
 ├── reports/          # figuras e slides
 ├── scripts/          # pontos de entrada do pipeline
 ├── src/              # código reutilizável
@@ -149,6 +149,7 @@ Lista canônica de dependências em `pyproject.toml`. Atalhos via `Makefile` (se
 | `make typecheck` | `mypy` | Tipos estáticos em `src/` |
 | `make test` | `pytest` | Suite de testes |
 | `make train-baseline` | `python scripts/run_train.py --task classification --model baseline` | Treina baseline |
+| `make train-svm` | `python scripts/run_train.py --task classification --model svm` | Treina TF-IDF + SVM (comparativo) |
 | `make train-bert` | `python scripts/run_train.py --task classification --model bertimbau` | Fine-tune BERTimbau (requer `.[bert]`) |
 | `make train-summarize` | `python scripts/run_train.py --task summarization --model extractive` | Gera resumos |
 | `make mlflow-ui` | `mlflow ui --backend-store-uri sqlite:///experiments/mlflow.db` | UI local |
@@ -191,17 +192,19 @@ deactivate
 | Validação manual de labels (proxy) | `docs/validacao_labels/` | Concluído (4/4 fichas — média ≈ 83,2%) |
 | Classificação — BERTimbau | `experiments/classification_bertimbau_20260623-222508.json` | Concluído (F1 macro teste ≈ 0,52 — abaixo do baseline) |
 | EDA | `notebooks/01_eda.ipynb` | Concluído |
-| Notebook de entrega (baseline + PTT5) | `notebooks/projeto_final_pln_*_anti_vazamento2.ipynb` | Concluído — ver [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) |
+| Classificação — TF-IDF + SVM (comparativo) | `experiments/classification_svm_20260624-004348.json` | Concluído (F1 macro teste ≈ 0,65 — abaixo do LogReg) |
+| Notebook de entrega (baseline + SVM + PTT5) | `notebooks/projeto_final_pln_baseline_svm_ptt5.ipynb` | Concluído — ver [`docs/NOTEBOOK-ENTREGA.md`](docs/NOTEBOOK-ENTREGA.md) |
 | Sumarização cidadão — baseline extrativo | `reports/slides/resumos_exemplos.md` | Concluído |
 | Sumarização — abstrativo (PTT5/LLM) | Notebook + script | Protótipo PTT5 no notebook; avaliação humana pendente (Fase 3) |
 
-Rodar (ou use `make train-baseline` / `make train-summarize`):
+Rodar (ou use `make train-baseline` / `make train-svm` / `make train-summarize`):
 
 ```bash
 python scripts/run_train.py --task classification --model baseline
+python scripts/run_train.py --task classification --model svm
 python scripts/run_train.py --task summarization --model extractive
 jupyter notebook notebooks/01_eda.ipynb     # análise exploratória
-jupyter notebook notebooks/projeto_final_pln_macroareas_tfidf_svm_ptt5_anti_vazamento2.ipynb  # entrega integrada
+jupyter notebook notebooks/projeto_final_pln_baseline_svm_ptt5.ipynb  # entrega integrada
 ```
 
 Resultados e decisões metodológicas: [`docs/model_card.md`](docs/model_card.md) e [`docs/metricas_e_decisoes.md`](docs/metricas_e_decisoes.md).

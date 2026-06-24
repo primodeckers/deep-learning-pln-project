@@ -2,7 +2,7 @@
 # Usado por: scripts/run_train.py --task classification
 
 task: classification
-model: baseline            # baseline | bertimbau
+model: baseline            # baseline | svm | bertimbau
 text_field: objeto_html    # objeto_html | objeto_html_limpo | texto (ver docs/vazamento_de_label.md)
 seed: 42
 
@@ -19,6 +19,10 @@ params:
   C: 1.0
   max_iter: 1000
   class_weight: balanced
+
+  # --- svm (TF-IDF + LinearSVC — comparativo clássico) ---
+  svm_kernel: linear
+  svm_probability: true
 
   # --- bertimbau (Fase 2 — referência) ---
   model_name: neuralmind/bert-base-portuguese-cased

@@ -2,6 +2,7 @@
 
 Exemplos (guia §10):
     python scripts/run_train.py --task classification --model baseline
+    python scripts/run_train.py --task classification --model svm
     python scripts/run_train.py --task classification --model bertimbau
     python scripts/run_train.py --task classification --config configs/classification.yaml
 """
@@ -48,7 +49,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--model",
         default=None,
-        help="Sobrescreve o modelo definido no config (ex.: baseline, bertimbau).",
+        help="Sobrescreve o modelo definido no config (ex.: baseline, svm, bertimbau).",
     )
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--corpus", type=Path, default=DEFAULT_CORPUS)

@@ -24,6 +24,7 @@ from src.evaluate.metrics_classification import (
 )
 from src.models.baseline_tfidf import build_baseline
 from src.models.bert_classifier import build_bert_classifier
+from src.models.svm_tfidf import build_svm
 from src.preprocess.dataset import Dataset, make_dataset
 from src.preprocess.labels import AREAS
 from src.utils.experiment_tracking import (
@@ -47,6 +48,16 @@ _MODEL_PARAM_KEYS = {
         "C",
         "max_iter",
         "class_weight",
+        "seed",
+    ),
+    "svm": (
+        "ngram_max",
+        "min_df",
+        "max_features",
+        "C",
+        "class_weight",
+        "svm_kernel",
+        "svm_probability",
         "seed",
     ),
     "bertimbau": (
@@ -87,6 +98,17 @@ def _build_model(model_name: str, params: dict):
             C=params.get("C", 1.0),
             max_iter=params.get("max_iter", 1000),
             class_weight=params.get("class_weight", "balanced"),
+            seed=params.get("seed", 42),
+        )
+    if model_name == "svm":
+        return build_svm(
+            ngram_max=params.get("ngram_max", 2),
+            min_df=params.get("min_df", 2),
+            max_features=params.get("max_features", 20000),
+            C=params.get("C", 1.0),
+            class_weight=params.get("class_weight", "balanced"),
+            kernel=params.get("svm_kernel", "linear"),
+            probability=params.get("svm_probability", True),
             seed=params.get("seed", 42),
         )
     if model_name == "bertimbau":

@@ -8,7 +8,7 @@ Dois pipelines de PLN sobre o mesmo corpus (`data/processed/licitacoes_corpus.js
 
 | Tarefa | Modelo atual | Código principal |
 |--------|--------------|------------------|
-| **Classificação** por macroárea de gasto (6 classes) | TF-IDF + LogReg (**oficial**) · BERTimbau (Fase 2) | `baseline_tfidf.py`, `bert_classifier.py` |
+| **Classificação** por macroárea de gasto (6 classes) | TF-IDF + LogReg (**oficial**) · TF-IDF + SVM (comparativo) · BERTimbau (Fase 2) | `baseline_tfidf.py`, `svm_tfidf.py`, `bert_classifier.py` |
 | **Sumarização** em linguagem cidadã | Extrativo por regras/regex | `src/summarize/extractive.py` |
 
 **Pendente (Fase 3):** sumarização abstrativa (mT5 ou LLM).
@@ -33,6 +33,20 @@ Nenhum dos modelos substitui análise jurídica ou decisão administrativa — s
 | Teste | 0,797 | **0,740** | 0,788 |
 
 Matriz de confusão: `reports/figures/classification_baseline_20260608-190839_confusion.png`
+
+### TF-IDF + SVM (comparativo clássico)
+
+**Run:** `classification_svm_20260624-004348`  
+**Mesmo corpus, split e `objeto_html` do baseline** · `src/models/svm_tfidf.py`
+
+| Conjunto | Accuracy | F1 macro | F1 weighted |
+|----------|----------|----------|-------------|
+| Validação | 0,797 | **0,797** | 0,775 |
+| Teste | 0,797 | **0,652** | 0,774 |
+
+Matriz: `reports/figures/classification_svm_20260624-004348_confusion.png`
+
+No teste, o SVM ficou **abaixo do LogReg** (0,652 vs 0,740), com queda forte em Educação (F1=0) e Segurança. Mantemos **LogReg como baseline oficial**; o SVM entra na tabela comparativa do relatório.
 
 ### Por que não usar `texto` como entrada?
 

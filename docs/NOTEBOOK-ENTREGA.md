@@ -1,40 +1,38 @@
-# Notebook de entrega — baseline + PTT5
+# Notebook de entrega — baseline + SVM + PTT5
 
-Documento que explica o papel do notebook integrado de apresentação e como ele se relaciona com o **pipeline oficial** em `scripts/`.
+Notebook integrado para apresentação (Colab/Jupyter): **dois classificadores clássicos** + sumarização.
 
 ## Arquivo
 
 | Notebook | Conteúdo |
 |---|---|
-| [`notebooks/projeto_final_pln_macroareas_tfidf_svm_ptt5_anti_vazamento2.ipynb`](../notebooks/projeto_final_pln_macroareas_tfidf_svm_ptt5_anti_vazamento2.ipynb) | **Baseline TF-IDF + LogReg** (Fase 1) + sumarização PTT5 (Fase 3) |
+| [`notebooks/projeto_final_pln_baseline_svm_ptt5.ipynb`](../notebooks/projeto_final_pln_baseline_svm_ptt5.ipynb) | EDA/anti-vazamento · **LogReg + SVM** · PTT5 |
 
-## Papel do notebook
+## Classificação — padrão do repositório
 
-Este notebook é a **trilha integrada para apresentação** (Colab/Jupyter): classificação + sumarização no mesmo fluxo. A classificação usa **o mesmo padrão** do restante do repositório — não é um experimento paralelo com SVM ou split diferente.
+Ambos os modelos usam o **mesmo** corpus, split e campo de texto:
 
-| Componente | Padrão do projeto |
+| Item | Valor |
 |---|---|
 | Corpus | `data/processed/licitacoes_corpus.jsonl` (423 editais) |
-| Campo de texto | `objeto_html` |
-| Labels | `src/preprocess/labels.py` |
-| Modelo | TF-IDF + LogReg (`src/models/baseline_tfidf.py`) |
+| Campo | `objeto_html` |
 | Split | 70 / 15 / 15, `seed=42` |
-| Métrica de referência | F1 macro teste ≈ **0,74** (run `classification_baseline_20260608-190839`) |
+| Labels | `src/preprocess/labels.py` |
 
-Comparação com BERTimbau (Fase 2): [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md).
+| Modelo | Código | Treino | F1 macro (teste) |
+|---|---|---|---|
+| **Baseline (oficial)** | `baseline_tfidf.py` | `make train-baseline` | ≈ **0,74** |
+| **SVM (comparativo)** | `svm_tfidf.py` | `make train-svm` | ≈ **0,65** (`classification_svm_20260624-004348`) |
+| BERTimbau (Fase 2) | `bert_classifier.py` | `make train-bert` | ≈ 0,52 |
 
-## O que o notebook faz
+Runs versionados: `experiments/classification_*.json`
 
-1. Exploração e auditoria anti-vazamento (seções iniciais — didático).
-2. **Classificação oficial:** carrega o JSONL e treina via `make_dataset` + `build_baseline`.
-3. **Sumarização (Fase 3):** protótipo PTT5 (`RUN_PTT5_SUMMARIZATION`).
-
-## Sumarização
+## Sumarização (Fase 3)
 
 | Trilha | Onde |
 |---|---|
-| Extrativo (oficial) | `scripts/run_train.py --task summarization --model extractive` |
-| Abstrativo (protótipo) | PTT5 neste notebook |
+| Extrativo | `make train-summarize` |
+| PTT5 (protótipo) | Notebook (`RUN_PTT5_SUMMARIZATION`) |
 
 ## Como executar
 
@@ -42,13 +40,11 @@ Comparação com BERTimbau (Fase 2): [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICA
 cd deep-learning-pln-project
 source .venv/Scripts/activate
 pip install -r requirements-dev.txt
-jupyter notebook notebooks/projeto_final_pln_macroareas_tfidf_svm_ptt5_anti_vazamento2.ipynb
+jupyter notebook notebooks/projeto_final_pln_baseline_svm_ptt5.ipynb
 ```
-
-Para PTT5: `pip install -e ".[bert]"` e `RUN_PTT5_SUMMARIZATION = True`.
 
 ## Outros notebooks
 
 | Notebook | Papel |
 |---|---|
-| [`notebooks/01_eda.ipynb`](../notebooks/01_eda.ipynb) | EDA oficial — vazamento quantificado (Tabela 7) |
+| [`notebooks/01_eda.ipynb`](../notebooks/01_eda.ipynb) | EDA oficial |

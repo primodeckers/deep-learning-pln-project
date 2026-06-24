@@ -16,7 +16,7 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Título provisório** | Classificação de editais por área de gasto + resumos em linguagem cidadã (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | Fases 0–2 concluídas (baseline F1 ≈ 0,74 · BERT F1 ≈ 0,52 teste) — notebook de entrega baseline+PTT5 alinhado; próximo: slides + avaliação humana da sumarização (Fase 3) |
+| **Status** | Fases 0–2 concluídas · baseline LogReg + SVM comparativo + BERT · notebook baseline+SVM+PTT5; próximo: slides + avaliação humana sumarização (Fase 3) |
 | **Última atualização** | 2026-06-23 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)
@@ -407,7 +407,7 @@ deep-learning-pln-project/
 ├── docs/                 # documentação (+ model_card, métricas)
 ├── experiments/          # JSON por run + mlflow.db (tracking local)
 ├── models/               # checkpoints (gitignored)
-├── notebooks/            # EDA (`01_eda`) + entrega integrada baseline+PTT5
+├── notebooks/            # EDA + entrega baseline+SVM+PTT5
 ├── reports/figures|slides/
 ├── scripts/
 │   ├── run_collect.py
@@ -536,7 +536,8 @@ _Ajustar datas conforme calendário real da disciplina._
 | 2026-06-18 | Dev: ruff + mypy + pytest + Makefile + `pyproject.toml` instalável | Qualidade de código e onboarding do grupo; model card e doc de métricas |
 | 2026-06-22 | Validação manual de labels: **4/4 fichas**; média ≈83,2% | Consolidação em `validacao_labels.md` § Síntese |
 | 2026-06-23 | Fase 2 BERTimbau — run GPU `222508`; F1 teste ≈0,52 | Documentado em `FASE2-CLASSIFICACAO.md`; abaixo do baseline |
-| 2026-06-18 | Notebook de entrega baseline LogReg + PTT5 | Trilha integrada alinhada ao pipeline; ver `NOTEBOOK-ENTREGA.md` |
+| 2026-06-24 | TF-IDF + SVM como comparativo clássico (`svm_tfidf.py`) | F1 teste 0,652 — LogReg permanece baseline oficial |
+| 2026-06-18 | Notebook de entrega baseline + SVM + PTT5 | `projeto_final_pln_baseline_svm_ptt5.ipynb` |
 
 ---
 
