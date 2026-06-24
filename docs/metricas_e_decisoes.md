@@ -1,81 +1,145 @@
 # Métricas e decisões de avaliação
 
-Documento de referência para escolhas metodológicas — equivalente ao espírito do `metricas_e_limiar.md` do projeto tech-challenge, adaptado para PLN em licitações.
+Anotações do grupo sobre o que medimos, como ler os números e por que o relatório usa o LogReg da Fase 1 como modelo principal.
 
-> Guia completo: [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) §6  
-> Model card com números: [`model_card.md`](model_card.md)
+> Números consolidados: [`model_card.md`](model_card.md)  
+> Validação vs teste (as três fases): [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md)  
+> Guia do projeto: [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) §6
 
 ---
 
-## Tarefa principal: classificação por macroárea
+## 1. O que cada métrica significa
 
-### Métrica primária — F1 macro
+### Classificação multiclasse (6 macroáreas)
 
-**Por quê:** o corpus é desbalanceado (Saúde e Administração/Outros dominam; Educação e Infraestrutura são raras). Accuracy alta mascara falhas nas classes pequenas. F1 macro trata todas as classes com peso igual.
+| Métrica | Fórmula (intuição) | Quando usar | Armadilha |
+|---------|-------------------|-------------|-----------|
+| **F1 macro** | Média do F1 de **cada classe**, com peso igual | **Métrica primária** — corpus desbalanceado | Uma classe com F1=0 puxa o macro para baixo (correto para nosso caso) |
+| **F1 weighted** | Média do F1 ponderada pelo `support` de cada classe | Referência secundária | Favorece Saúde e Administração/Outros (classes grandes) |
+| **Accuracy** | Acertos / total | Contexto em slides | 79% de accuracy pode esconder F1=0 em Educação (só 2 exemplos no teste) |
+| **F1 por classe** | Harmônica de precisão e recall **por macroárea** | Diagnóstico — onde o modelo falha | Classes com `support < 5` no teste são **instáveis** (não comparar com rigor estatístico) |
+| **Precisão** | Dos preditos como X, quantos eram X de verdade | Ver confusão “para onde vai” | Alta precisão + recall baixo = modelo raramente prevê a classe |
+| **Recall** | Dos verdadeiros X, quantos o modelo achou | Ver classes “cegas” | BERT costuma recall alto em `Administracao/Outros` (classe majoritária) |
+| **Matriz de confusão** | Tabela verdadeiro × predito | Slides e relatório | Mostra se erros são entre áreas semanticamente próximas |
 
-**Uso:** comparar baseline TF-IDF vs BERTimbau no **mesmo split** (`seed=42`, proporções em `configs/classification.yaml`).
+**F1 de uma classe:** \(F1 = 2 \cdot \frac{\text{precision} \cdot \text{recall}}{\text{precision} + \text{recall}}\). Penaliza tanto falsos positivos quanto falsos negativos — adequado quando errar Segurança como Administração tem o mesmo custo metodológico que o inverso.
 
-### Métricas secundárias
+**Por que não só accuracy?** Com 25/64 exemplos de teste em Administração/Outros, um modelo que **sempre** prevê essa classe teria accuracy ≈ 39% só nessa classe, mas o padrão real é pior: mascaramos falhas em Educação (2 exemplos) e Segurança (9).
 
-| Métrica | Papel |
-|---------|--------|
-| F1 por classe | Diagnosticar qual macroárea falha |
-| F1 weighted | Referência, mas favorece classes frequentes |
-| Accuracy | Contexto, não critério de seleção |
-| Matriz de confusão | Visualizar confusões entre áreas parecidas |
+### Sumarização extrativa (Fase 4)
 
-### Decisão crítica — campo de entrada (`text_field`)
+| Métrica | Significado |
+|---------|-------------|
+| `com_prazo` / `total` | Quantos resumos extraíram data de entrega de propostas (regex) |
+| `com_valor` / `total` | Quantos extraíram valor homologado |
+| ROUGE-L | **Previsto** — overlap com referência fraca; ainda não implementado |
+| Avaliação humana 1–5 | **Previsto** — clareza, completude, fidelidade |
 
-| Campo | F1 macro (teste, baseline) | Vazamento (Tabela 7) | Papel |
-|-------|------------------------------|----------------------|--------|
-| `texto` | ≈ 0,88 | ~97% | ❌ Contraste — teto inflado |
-| `objeto_html` | ≈ 0,74 | ~49% | ✅ **Entrada oficial** |
-| `objeto_html_limpo` | _(experimento)_ | ~47% | ⚗️ Limpeza extra — ganho pequeno |
+O extrativo **não** tem F1 — sucesso = cobertura de campos + qualidade qualitativa nos exemplos.
 
-**Decisão adotada:** `text_field: objeto_html` em `configs/classification.yaml`.
+---
 
-**Não há limiar universal** de “quanto pode vazar” — o critério é metodológico: não repetir a fonte do label no input e documentar limitações. Ver [`vazamento_de_label.md`](vazamento_de_label.md) §5.1 e §9 (roteiro para relatório/slides).
+## 2. Protocolo experimental (igual para todos os classificadores)
 
-O modelo **não** recebe `orgao_csv` como feature — o órgão só gera o label inicial (limitação *label proxy* declarada no relatório).
+| Item | Valor fixo | Por quê |
+|------|------------|---------|
+| Corpus | `licitacoes_corpus.jsonl` — 423 editais | `sha256=46c6e761…` em cada JSON |
+| Entrada | `objeto_html` | Evita vazamento de label (~49% residual vs ~97% em `texto`) |
+| Split | 70% treino / 15% val / 15% teste | ~295 / 64 / 64 exemplos |
+| Estratificação | Por `area` | Preserva proporção de classes em cada fold |
+| `seed` | 42 | Mesmas partições para LogReg, SVM e BERT |
+| Seleção de modelo | Olhar **val** durante desenvolvimento | **Relatório final reporta teste** (nunca “só val”) |
 
-### Validação humana do label proxy
+**Código:** `src/preprocess/dataset.py` · `configs/classification.yaml`
+
+---
+
+## 3. Qual modelo ficou no relatório
+
+Retreino de jun/2026 (`20260624-*`). Critério: F1 macro no **teste**.
+
+| Fase | Modelo | Run | F1 teste | Papel |
+|------|--------|-----|----------|--------|
+| 1 | TF-IDF + LogReg | `classification_baseline_20260624-013836` | **0,740** | Principal |
+| 3 | TF-IDF + SVM | `classification_svm_20260624-013851` | 0,652 | Comparativo |
+| 2 | BERTimbau | `classification_bertimbau_20260624-013908` | 0,400 | Comparativo |
+| 4 | Sumarização extrativa | `summarization_extractive_20260624-013951` | — | Outra tarefa |
+
+### LogReg em vez de SVM
+
+Mesmo vetorizador TF-IDF. O SVM foi melhor na validação (F1 0,797) e pior no teste (0,652). O LogReg ficou estável (0,743 → 0,740). Parece overfitting nos 64 editais de val — ver [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md).
+
+### LogReg em vez de BERT
+
+O BERT tem muitos parâmetros e pouco treino (~295 editais). Nos runs que fizemos o teste ficou entre 0,40 e 0,52; o LogReg ficou em 0,74. A hipótese do trabalho era testar o Transformer; no nosso volume de dados o clássico ganhou. Detalhe por classe no comparativo.
+
+### Sobre o BERT ter “piorado” no retreino
+
+Run antigo (`222508`): teste 0,518. Run novo (`013908`): teste 0,400, mas validação subiu. Mesmo seed no split — o treino neural não é 100% reprodutível. De qualquer forma, nos dois ficou abaixo do LogReg.
+
+---
+
+## 4. Campo de entrada e vazamento de label
+
+| Campo | F1 macro (teste, baseline) | Vazamento (Tabela 7 EDA) | Papel |
+|-------|------------------------------|--------------------------|--------|
+| `texto` | ≈ 0,88 | ~97% | Contraste — teto inflado |
+| **`objeto_html`** | **≈ 0,74** | ~49% | **Entrada oficial** |
+| `objeto_html_limpo` | _(experimento)_ | ~47% | Limpeza extra — ganho marginal |
+
+**Decisão:** `text_field: objeto_html` em `configs/classification.yaml`.
+
+Não há limiar universal de vazamento aceitável — critério **metodológico**. Ver [`vazamento_de_label.md`](vazamento_de_label.md) §5.1 e §9.
+
+O modelo **não** recebe `orgao_csv` como feature.
+
+---
+
+## 5. Validação humana do label proxy
 
 | Item | Valor |
 |------|-------|
-| Amostra | 30 editais, seed 42 (`scripts/export_validacao_sample.py`) |
+| Amostra | 30 editais, seed 42 |
 | Gabarito | [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) |
-| Status | **4/4 fichas** (2026-06-18 a 2026-06-22) |
-| Taxa de concordância | **Média ≈83,2%** (Renê 96,2% · Ponte 95,7% · Hugo 78,3% · Elisangela 62,5%) |
-| Consenso (≥2 `N`) | TCDF #30 → `Saude`; CBMDF #4, 12, 22 → `Saude`; CAESB #28 → `Administracao/Outros` |
+| Status | 4/4 fichas (2026-06-18 a 2026-06-22) |
+| Concordância média | **≈83,2%** (62,5%–96,2% por revisor) |
 
-Conclusão: o proxy por órgão é **aceitável como rotulagem fraca** para o baseline; dispersão entre revisores reflete critério em compras transversais. Ajuste em `AREA_KEYWORDS` ou regras por objeto é melhoria futura — ver [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) § Síntese.
+Conclusão: proxy por órgão é **rotulagem fraca aceitável** para baseline; erros estruturais (ex.: CBMDF com objeto clínico) explicam parte das confusões Segurança ↔ Saúde.
 
-### Split e reprodutibilidade
+---
 
-```
-Treino 70% ─┐
-Val    15% ─┼─ estratificado por `area`, random_state=42
-Teste  15% ─┘
-```
+## 6. F1 por classe (teste) — três classificadores
 
-- Mesmas partições para baseline e BERTimbau (`src/preprocess/dataset.py`).
-- Cada run grava `dataset.sha256` e `git_commit` em `experiments/*.json`.
+| Macroárea | Support | LogReg | SVM | BERT |
+|-----------|--------:|-------:|----:|-----:|
+| Saúde | 17 | 0,903 | 0,903 | 0,875 |
+| Saneamento | 7 | 1,000 | 1,000 | 0,800 |
+| Segurança | 9 | 0,462 | 0,462 | **0,000** |
+| Educação | 2 | 0,667 | **0,000** | **0,000** |
+| Infraestrutura/Obras | 4 | 0,600 | 0,750 | **0,000** |
+| Administração/Outros | 25 | 0,807 | 0,800 | 0,727 |
 
-### Hiperparâmetros do baseline (referência)
+**Leitura:** classes com poucos exemplos (Educação n=2) têm F1 instável. BERT colapsa nas classes raras e converge para Administração/Outros.
 
-Definidos em `configs/classification.yaml` → bloco `params`:
+---
+
+## 7. Hiperparâmetros de referência
+
+### Baseline (Fase 1) — `configs/classification.yaml`
 
 | Parâmetro | Valor | Nota |
 |-----------|-------|------|
 | `ngram_max` | 2 | Unigramas + bigramas |
-| `min_df` | 2 | Ignora termos muito raros |
-| `max_features` | 20 000 | Limite de vocabulário TF-IDF |
-| `C` | 1.0 | Regularização da LogReg |
+| `min_df` | 2 | Ignora termos únicos |
+| `max_features` | 20 000 | Teto de vocabulário |
+| `C` | 1.0 | Regularização L2 |
 | `class_weight` | balanced | Mitiga desbalanceamento |
 
-### Hiperparâmetros BERTimbau (Fase 2)
+### SVM (Fase 3)
 
-Ver `configs/classification_bert_gpu.yaml`:
+Mesmo vetorizador; `kernel=linear`, `probability=true`, `class_weight=balanced`.
+
+### BERTimbau (Fase 2) — `configs/classification_bert_gpu.yaml`
 
 | Parâmetro | Valor |
 |-----------|-------|
@@ -83,69 +147,50 @@ Ver `configs/classification_bert_gpu.yaml`:
 | `max_length` | 512 |
 | `batch_size` | 16 |
 | `learning_rate` | 2e-5 |
-| `epochs` | 4 |
-| `early_stopping_patience` | 2 |
+| `epochs` | 4 (early stopping patience 2) |
 
 ---
 
-## Comparação baseline vs BERTimbau (Fase 2 concluída)
+## 8. Sumarização (Fase 4)
 
-Mesmo `text_field`, split e `seed`. Métrica primária: **F1 macro no teste**.
+**Run:** `summarization_extractive_20260624-013951`  
+**Amostra:** 18 editais estratificados por área
 
-| Modelo | Run de referência | F1 macro (teste) | Accuracy (teste) |
-|--------|-------------------|------------------|------------------|
-| TF-IDF + LogReg | `classification_baseline_20260608-190839` | **0,740** | 0,797 |
-| BERTimbau (GPU) | `classification_bertimbau_20260623-222508` | **0,518** | 0,719 |
+| Cobertura | Valor |
+|-----------|-------|
+| Com prazo extraído | **15/18** (83%) |
+| Com valor extraído | **18/18** (100%) |
 
-**Decisão:** reportar o **baseline como modelo principal**; BERT como experimento comparativo de deep learning.
-
-**Interpretação:** com ~295 exemplos de treino e 6 classes (Educação: 12, Infra: 17 no treino), o fine-tuning não superou TF-IDF. BERT zerou F1 em Segurança e Educação no teste; baseline ainda alcança F1 parcial nessas classes. Textos prontos para relatório: [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) §4.
-
-**Corpus fingerprint (ambos os runs):** `sha256=46c6e761…` · 423 registros.
+Dispensas e editais sem campo “Entrega da Proposta” explicam prazos ausentes — não é falha do modelo, é ausência no HTML.
 
 ---
 
-## Tarefa complementar: sumarização cidadã
+## 9. Rastreamento (JSON + MLflow)
 
-### Baseline atual — extrativo por regras
+Cada treino gera:
 
-Não usa ROUGE ainda. Cobertura medida na run JSON:
+1. **`experiments/<run_id>.json`** — versionável no Git; métricas + `dataset.sha256` + `git_commit`.
+2. **`experiments/mlflow.db`** — comparação local (`make mlflow-ui`, Windows: `--workers 1`).
+3. **`models/`** — LogReg/SVM `.joblib`; BERT pasta `model.safetensors` (~416 MB, gitignored).
 
-- `com_prazo` / `com_valor` — quantos resumos extraíram esses campos.
-
-### Avaliação prevista (Fase 3)
-
-| Tipo | Método |
-|------|--------|
-| Automática | ROUGE-L (referência fraca: `objeto_html` + datas) |
-| Humana | Escala 1–5: clareza, completude, fidelidade (3 avaliadores) |
+Baseline e SVM aparecem na aba **Models** do MLflow via autolog sklearn. BERT usa `mlflow.transformers.log_model` (desde retreino com código atualizado).
 
 ---
 
-## Rastreamento de experimentos
+## 10. O que não fazemos (escopo consciente)
 
-Cada treino produz:
-
-1. **JSON portátil** em `experiments/<run_id>.json` — versionável no Git.
-2. **MLflow** em `experiments/mlflow.db` — comparação local (`make mlflow-ui`).
-
-Fingerprint do corpus garante que duas runs comparáveis usaram o mesmo `licitacoes_corpus.jsonl`.
+- Limiar de probabilidade de negócio — classificação multiclasse pura.
+- API de produção — pipeline batch via `scripts/run_train.py`.
+- Retreino automático — runs manuais documentados.
 
 ---
 
-## O que não fazemos (escopo consciente)
+## 11. Checklist antes de apresentar
 
-- **Limiar de decisão** — classificação multiclasse, não binária; sem corte de probabilidade de negócio (diferente do churn).
-- **Serving em produção** — sem API FastAPI; pipeline batch via scripts.
-- **Validação Pandera** — corpus é JSONL/texto; validação futura seria schema do corpus, não linhas tabulares.
-
----
-
-## Checklist antes de apresentar resultados
-
-- [x] `text_field` documentado como `objeto_html`
-- [x] Validação manual de labels concluída (4/4 fichas; média ≈83,2%; ver `validacao_labels/`)
-- [x] F1 macro reportado no **teste**, não só na validação
-- [x] Baseline e BERTimbau no mesmo split — comparados (`FASE2-CLASSIFICACAO.md`)
-- [ ] Classes com `support < 5` discutidas explicitamente nos slides
-- [x] Hash do corpus (`dataset.sha256`) citado na tabela de experimentos
+- [x] `objeto_html` documentado como entrada oficial
+- [x] Validação manual 4/4 (≈83,2%)
+- [x] F1 macro no **teste** para os três classificadores
+- [x] Tabela comparativa Fases 1–3 + decisão LogReg
+- [x] Classes com `support < 5` discutidas (Educação n=2)
+- [x] Hash do corpus citado
+- [ ] Slides PDF com matrizes e §3 deste documento

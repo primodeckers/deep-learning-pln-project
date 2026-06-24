@@ -35,4 +35,4 @@ train-summarize:
 	python scripts/run_train.py --task summarization --model extractive
 
 mlflow-ui:
-	mlflow ui --backend-store-uri sqlite:///experiments/mlflow.db
+	mlflow ui --backend-store-uri sqlite:///experiments/mlflow.db --workers 1

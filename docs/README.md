@@ -11,7 +11,8 @@
 | [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md) | Decisões de coleta de dados (CAPTCHA, HTML vs PDF, etc.) |
 | [`PROPOSALS.md`](PROPOSALS.md) | Brainstorm de temas/tarefas de PLN para o projeto |
 | [`model_card.md`](model_card.md) | Model card — performance, dados, limitações |
-| [`metricas_e_decisoes.md`](metricas_e_decisoes.md) | Métricas, anti-leakage e decisões de avaliação |
+| [`metricas_e_decisoes.md`](metricas_e_decisoes.md) | Glossário de métricas, tabela comparativa e **decisão do modelo principal** |
+| [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) | Validação vs teste nas Fases 1–3 — notas do grupo pro relatório |
 | [`GPU-EQUIPE.md`](GPU-EQUIPE.md) | Fluxo GPU vs CPU — quem treina o quê, o que vai pro Git |
 | [`vazamento_de_label.md`](vazamento_de_label.md) | Vazamento de label — mitigações, §9 roteiro para relatório/slides |
 | [`FASES.md`](FASES.md) | Índice das fases 1–4 |

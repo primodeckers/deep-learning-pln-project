@@ -1,71 +1,55 @@
 # Fase 4 — Sumarização cidadã
 
-Documento da **Fase 4** — tarefa **complementar** à classificação (Fases 1–3). Mesmo corpus, **outro objetivo**: resumir editais em linguagem acessível.
+Tarefa à parte da classificação: mesmo corpus, objetivo diferente — um parágrafo legível pra quem não é da área jurídica.
 
-> Classificação: Fases 1–3 em [`FASE1`](FASE1-CLASSIFICACAO.md) · [`FASE2`](FASE2-CLASSIFICACAO.md) · [`FASE3`](FASE3-CLASSIFICACAO.md)
-
----
-
-## 1. Objetivo
-
-Gerar **resumos em linguagem cidadã** (objeto, quem participa, prazo, valor quando houver), sem substituir o edital oficial.
-
-**Treino / geração:** via script — **não** misturar com notebook de classificação.
-
-```bash
-make train-summarize
-# ou: python scripts/run_train.py --task summarization --model extractive
-```
+> Classificação: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) · [`metricas_e_decisoes.md`](metricas_e_decisoes.md)
 
 ---
 
-## 2. Baseline extrativo (concluído)
+## Objetivo
 
-| Item | Valor |
-|------|--------|
-| Código | `src/summarize/extractive.py` |
-| Orquestração | `src/summarize/run_summarization.py` |
-| Saída slides | `reports/slides/resumos_exemplos.md` |
-| Amostra | ~18 editais estratificados por área |
-
-**Vantagem:** determinístico — **não alucina** prazo/valor.
-
----
-
-## 3. Pendente (protótipo abstrativo)
-
-| Item | Status |
-|------|--------|
-| PTT5 / mT5 inferência em amostra | Pendente |
-| Comparação extrativo vs abstrativo | Pendente |
-| Avaliação humana (escala 1–5) | Pendente |
-| 3 exemplos antes/depois para slides | Pendente |
-
-Quando implementar abstrativo, usar **script ou notebook dedicado** (`03_demo_sumarizacao.ipynb` — opcional), nunca o notebook de classificação.
-
----
-
-## 4. Formato do resumo
-
-Parágrafo curto respondendo:
+Responder, em linguagem simples:
 
 1. O que está sendo contratado?
 2. Quem pode participar?
 3. Prazo para propostas?
-4. Valor estimado (se constar)?
+4. Valor (se tiver no HTML)?
 
-Ver exemplos em [`reports/slides/resumos_exemplos.md`](../reports/slides/resumos_exemplos.md).
+Não substitui o edital — é acessibilidade.
 
----
-
-## 5. Integração na apresentação
-
-Na **demo ao vivo**, mostrar fluxo conceitual:
-
-> Edital → **área predita** (Fases 1–3) + **resumo cidadã** (Fase 4)
-
-Métricas do relatório vêm da **classificação**; sumarização ilustra **impacto aplicado**.
+```bash
+make train-summarize
+```
 
 ---
 
-*Última atualização: 2026-06-24.*
+## Baseline extrativo (feito)
+
+Extrativo por regex/regras em `src/summarize/extractive.py`. Run: `summarization_extractive_20260624-013951`.
+
+| O quê | Resultado |
+|-------|-----------|
+| Amostra | 18 editais (uma por área, mais ou menos) |
+| Prazo extraído | 15/18 |
+| Valor extraído | 18/18 |
+| Exemplos | `reports/slides/resumos_exemplos.md` |
+
+Os 3 sem prazo em geral são dispensas ou HTML sem campo de entrega — não é o modelo inventando errado; é o dado que não tem.
+
+Vantagem frente a LLM: não alucina prazo nem valor.
+
+---
+
+## O que falta (se der tempo)
+
+- mT5 / PTT5 em amostra pequena
+- ROUGE e avaliação humana (escala 1–5)
+- Comparar extrativo vs abstrativo nos slides
+
+---
+
+## Na apresentação
+
+Mostramos o fluxo: edital → área (LogReg, F1 0,74) + resumo cidadã.
+
+As métricas duras do relatório vêm da classificação; sumarização mostra o “pra que serve” na prática.

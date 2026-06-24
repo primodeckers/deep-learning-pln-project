@@ -194,13 +194,13 @@ deactivate
 |---|---|---|
 | Coleta HTML | `data/raw/detalhes/` (423 arquivos) | Concluído |
 | Pré-processamento | `data/processed/licitacoes_corpus.jsonl` (423 registros) | Concluído |
-| Classificação — baseline TF-IDF + LogReg | `experiments/classification_baseline_*.json` | Concluído (F1 macro ≈ 0,74 com `objeto_html`) |
+| Classificação — baseline TF-IDF + LogReg | `experiments/classification_baseline_20260624-013836.json` | Concluído — **modelo principal** (F1 macro teste **0,74**) |
 | Validação manual de labels (proxy) | `docs/validacao_labels/` | Concluído (4/4 fichas — média ≈ 83,2%) |
-| Classificação — BERTimbau | `experiments/classification_bertimbau_20260623-222508.json` | Concluído (F1 macro teste ≈ 0,52 — abaixo do baseline) |
-| Classificação — TF-IDF + SVM (Fase 3) | `experiments/classification_svm_20260624-004348.json` | Concluído — [`FASE3-CLASSIFICACAO.md`](docs/FASE3-CLASSIFICACAO.md) |
+| Classificação — BERTimbau (Fase 2) | `experiments/classification_bertimbau_20260624-013908.json` | Concluído (F1 teste **0,40** — comparativo DL) |
+| Classificação — TF-IDF + SVM (Fase 3) | `experiments/classification_svm_20260624-013851.json` | Concluído (F1 teste **0,65**) — [`FASE3-CLASSIFICACAO.md`](docs/FASE3-CLASSIFICACAO.md) |
 | EDA | `notebooks/01_eda.ipynb` | Concluído |
 | Demo classificação (Fases 1–3) | `notebooks/02_demo_classificacao.ipynb` | Só lê `experiments/` — ver [`notebooks/README.md`](notebooks/README.md) |
-| Sumarização extrativa (Fase 4) | `reports/slides/resumos_exemplos.md` | Concluído — [`FASE4-SUMARIZACAO.md`](docs/FASE4-SUMARIZACAO.md) |
+| Sumarização extrativa (Fase 4) | `experiments/summarization_extractive_20260624-013951.json` | Concluído (15/18 prazo, 18/18 valor) — [`FASE4-SUMARIZACAO.md`](docs/FASE4-SUMARIZACAO.md) |
 | Sumarização abstrativa (PTT5) | — | Pendente (Fase 4) |
 
 Rodar (ou use `make train-baseline` / `make train-svm` / `make train-summarize`):

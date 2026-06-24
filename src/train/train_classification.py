@@ -273,7 +273,10 @@ def train_classification(
 
         if isinstance(handle, MlflowHandle):
             handle.log_metrics(experiment["metrics"])
-            handle.log_artifact(model_path)
+            if model_name == "bertimbau":
+                handle.log_transformers_model(model_path)
+            else:
+                handle.log_artifact(model_path)
             handle.log_artifact(fig_path)
             handle.log_artifact(exp_path)
             experiment["mlflow_run_id"] = handle.run_id

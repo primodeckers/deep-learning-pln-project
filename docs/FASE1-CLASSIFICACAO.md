@@ -1,26 +1,24 @@
 # Fase 1 — Classificação baseline (TF-IDF + LogReg)
 
-Documento técnico da **Fase 1** do pipeline de classificação. Serve para o relatório, slides e onboarding do grupo: explica **o que** foi feito, **por que** cada escolha foi tomada e **onde** está no código.
+Notas da Fase 1: o que implementamos, por que fizemos assim, e onde está no código. É o modelo que o grupo leva pro relatório como principal.
 
-> Métricas e anti-leakage: [`metricas_e_decisoes.md`](metricas_e_decisoes.md)  
-> Performance consolidada: [`model_card.md`](model_card.md)  
-> Guia metodológico geral: [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) §6
+> Métricas: [`metricas_e_decisoes.md`](metricas_e_decisoes.md) · Val vs teste (3 fases): [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md)  
+> Números: [`model_card.md`](model_card.md) · Guia: [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) §6
 
 ---
 
 ## 1. Objetivo da fase
 
-Estabelecer uma **linha de base reprodutível** para classificar editais em **6 macroáreas de gasto público**, antes de comparar com BERTimbau (Fase 2).
+Montar um baseline clássico reprodutível — classificar editais em 6 macroáreas de gasto — antes de testar BERT (Fase 2) e SVM (Fase 3).
 
-| Critério de sucesso | Como medimos |
-|---------------------|--------------|
-| Pipeline executável por script | `python scripts/run_train.py --task classification --model baseline` |
-| Avaliação honesta (sem vazamento de label) | Entrada = `objeto_html`, não `texto` |
-| Métrica principal reportável | F1 macro no **conjunto de teste** |
-| Comparabilidade futura | Mesmo split (`seed=42`, 70/15/15) para baseline e BERT |
+Na prática precisávamos de:
 
-**Resultado de referência:** F1 macro ≈ **0,74** no teste (`experiments/classification_baseline_20260608-190839.json`).
+- Script que qualquer um do grupo roda: `make train-baseline`
+- Avaliação sem “colar” no nome do órgão → entrada `objeto_html`, não `texto`
+- F1 macro no **teste** como número do relatório
+- Mesmo split (`seed=42`, 70/15/15) pros comparativos depois
 
+**Resultado:** F1 macro ≈ **0,74** no teste (`classification_baseline_20260624-013836`). Validação ficou em 0,743 — praticamente igual, o que nos deu confiança pra usar esse modelo.
 ---
 
 ## 2. Fluxo do pipeline
@@ -55,63 +53,42 @@ licitacoes_corpus.jsonl
 
 ### 3.1 Label proxy: órgão → macroárea
 
-| Decisão | Justificativa |
-|---------|---------------|
-| Label derivado de `orgao_csv`, não anotação manual por edital | Viável no prazo; corpus de 423 editais; taxonomia alinhada ao gasto público do DF |
-| Modelo **não** recebe `orgao_csv` como feature | Senão a tarefa vira lookup do órgão, não PLN sobre o texto |
-| 6 macroáreas + `Administracao/Outros` como fallback | Cobre o escopo do trabalho sem explodir granularidade (dezenas de secretarias) |
-| Palavras-chave com ordem fixa | Primeiro match vence — ex.: "Secretaria de Educação" não cai em Saúde |
+Não tínhamos tempo de rotular edital por edital na mão. O label vem do `orgao_csv`: palavras-chave no nome do órgão mapeiam pra uma das 6 macroáreas (Saúde, Saneamento, etc.). Quem não casa cai em `Administracao/Outros`.
 
-**Limitação declarada:** o label é *proxy* — um edital de "material hospitalar" comprado por órgão administrativo pode estar mal rotulado.
+Importante: o modelo **não** recebe o órgão como feature — só o texto. Se recebesse, virava lookup, não PLN.
 
-**Mitigação — validação manual (30 editais, seed 42):** gabarito e fichas em [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md). **Status (2026-06-22):** **4/4 fichas concluídas** — média das taxas individuais **≈83,2%** (Renê 96,2% · Alexandre Ponte 95,7% · Alexandre Hugo 78,3% · Elisangela 62,5%). Consenso em ≥2 revisores: TCDF→`Saude` (#30), CBMDF com objeto clínico→`Saude` (#4, 12, 22), CAESB divisórias→`Administracao/Outros` (#28). Conclusão: proxy **aceitável como rotulagem fraca** para o baseline, com viés estrutural em compras transversais — ver síntese no gabarito.
+Limitação óbvia: um edital de “material hospitalar” comprado por órgão administrativo pode estar com label errado.
+
+**Validação manual:** sorteamos 30 editais (`seed=42`); os quatro integrantes preencheram ficha. Média de concordância com o proxy ≈ **83%** (varia por revisor). Detalhe em [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md). Conclusão do grupo: dá pra usar como rotulagem fraca, mas citar a limitação no relatório.
 
 **Código:** `src/preprocess/labels.py`
-
 ### 3.2 Campo de entrada: `objeto_html` (não `texto`)
 
-| Campo | Papel | Problema |
-|-------|-------|----------|
-| `texto` | HTML completo do edital | Nome do órgão em ~97% dos casos → **vazamento** (F1 macro ≈ 0,88) |
-| `objeto_html` | Descrição do objeto da compra | Sem cabeçalho identificador → **F1 macro ≈ 0,74** (honesto) |
+No EDA vimos que o HTML completo (`texto`) traz o nome do órgão em quase todos os editais — e o label vem justamente do órgão. Com `texto`, o baseline sobe pra F1 macro ≈ **0,88** no teste; com `objeto_html` (só a descrição do que está sendo comprado) cai pra ≈ **0,74**. Preferimos o número menor e mais honesto.
 
-**Decisão:** `text_field: objeto_html` em `configs/classification.yaml`.
+Config: `text_field: objeto_html` em `configs/classification.yaml`.
 
-**Discussão completa (vazamento, opções, roteiro para relatório/slides):** [`vazamento_de_label.md`](vazamento_de_label.md) — inclui §5.1 (não há limiar universal) e §9 (o que explicar na apresentação).
+Discussão longa (Tabela 7, slides): [`vazamento_de_label.md`](vazamento_de_label.md).
 
-**Evidência:** EDA em `notebooks/01_eda.ipynb` (Tabela 7); números em [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
-
-**Código:** `src/preprocess/dataset.py` → `make_dataset(..., text_field=...)` · limpeza opcional em `src/preprocess/clean_objeto.py` (`objeto_html_limpo`).
-
+**Código:** `src/preprocess/dataset.py` · limpeza opcional em `clean_objeto.py`
 ### 3.3 Split treino / validação / teste
 
-| Parâmetro | Valor | Justificativa |
-|-----------|-------|---------------|
-| Proporção | 70% / 15% / 15% | Recomendação do guia (§3.1) para corpus ~400 amostras |
-| Estratificação | Por `area` | Classes desbalanceadas (Saúde e Administração dominam) |
-| `random_state` | 42 | Reprodutibilidade entre integrantes e entre baseline vs BERT |
-| Dois cortes sequenciais | `test` primeiro, depois `val` no restante | Padrão sklearn quando se quer três conjuntos com `train_test_split` |
+70% treino, 15% val, 15% teste — estratificado por `area`, `random_state=42`. Com ~423 editais isso dá 295 / 64 / 64. O guia da disciplina sugere proporção parecida pra corpus desse tamanho.
 
-**Código:** `src/preprocess/dataset.py` → `make_dataset()`
+Dois `train_test_split` em sequência (primeiro separa teste, depois val do resto) — padrão sklearn.
 
+**Código:** `src/preprocess/dataset.py`
 ---
 
 ## 4. Decisões de modelagem (baseline clássico)
 
 ### 4.1 Por que TF-IDF + Regressão Logística?
 
-| Alternativa | Por que não (agora) |
-|-------------|---------------------|
-| Apenas bag-of-words / contagem | TF-IDF penaliza termos frequentes em todo o corpus |
-| Random Forest | Não testado neste projeto |
-| SVM | Fase 3 — ver [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md) |
-| BERTimbau direto | Fase 2; precisamos de referência clássica para comparar ganho do Transformer |
-| Rede neural do zero | Corpus pequeno (~423); alto risco de overfitting sem transfer learning |
+Começamos pelo que a aula recomenda: simples, interpretável, baseline forte em texto curto com poucos dados. TF-IDF + LogReg virou nossa referência; depois testamos SVM (Fase 3) e BERT (Fase 2) no mesmo protocolo.
 
-**Referência metodológica:** guia universal §6.3; material de aula (`aula03-04.pdf`) — começar simples, diagnosticar, depois complexificar.
+Não testamos Random Forest nem rede do zero — com 423 editais o risco de overfitting sem transfer learning era alto.
 
 **Código:** `src/models/baseline_tfidf.py`
-
 ### 4.2 Hiperparâmetros e técnicas do vetorizador
 
 | Parâmetro | Valor | Justificativa |
@@ -136,18 +113,13 @@ licitacoes_corpus.jsonl
 
 ---
 
-## 5. Decisões de avaliação
+## 5. Como avaliamos
 
-| Decisão | Justificativa |
-|---------|---------------|
-| **F1 macro** como métrica primária | Trata classes minoritárias (Educação, Infra) com mesmo peso que majoritárias |
-| Accuracy e F1 weighted como secundárias | Accuracy mascara falhas em classes pequenas; weighted favorece frequentes |
-| `zero_division=0` | Classe ausente no fold não quebra o pipeline |
-| Matriz de confusão no **teste** | Seleção de modelo pode olhar val; relatório final reporta test |
-| Figura PNG da matriz | Entrega visual para slides (`reports/figures/`) |
+Usamos **F1 macro** como métrica principal — trata todas as classes com o mesmo peso, o que importa porque Saúde e Administração dominam o corpus. Accuracy e F1 weighted entram como contexto, mas accuracy sozinha esconde falha em Educação (2 exemplos no teste).
+
+Matriz de confusão e figura PNG saem do conjunto de **teste** (`reports/figures/`). Durante o desenvolvimento olhamos val; no relatório vai teste.
 
 **Código:** `src/evaluate/metrics_classification.py`
-
 ---
 
 ## 6. Padrões de código adotados
@@ -204,14 +176,15 @@ python scripts/run_train.py --task classification --config configs/classificatio
 
 ---
 
-## 9. Limitações conhecidas (para discussão no relatório)
+## 9. Limitações (discussão no relatório)
 
-1. **Corpus pequeno** (~423) para deep learning — classes raras têm F1 instável.
-2. **Label proxy** — qualidade depende do mapeamento por palavra-chave, não de anotação por edital.
-3. **Baseline bag-of-words** — não captura ordem longa nem contexto semântico profundo (motivo da Fase 2).
-4. **Só HTML ComprasNet DF 2025** — não generaliza para outros estados ou PDF com CAPTCHA.
-5. **Validação manual de 30 labels** — [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md); `python scripts/export_validacao_sample.py`
+- Corpus pequeno (~423) — F1 de classes raras oscila muito.
+- Label proxy por órgão, não anotação manual por edital.
+- TF-IDF não captura ordem longa nem semântica profunda (motivo de ter testado BERT).
+- Só ComprasNet DF 2025 em HTML — não generaliza pra PDF ou outros estados.
+- Validação manual em 30 editais — ver [`validacao_labels/`](validacao_labels/validacao_labels.md).
 
+Depois das Fases 2 e 3, o LogReg continuou com melhor F1 no teste (0,74). Comparativo: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md).
 ---
 
 ## 10. Checklist de documentação da Fase 1
@@ -225,11 +198,11 @@ Use este checklist antes de considerar a fase fechada para entrega:
 - [x] Este documento (`FASE1-CLASSIFICACAO.md`)
 - [x] Template de validação manual (`validacao_labels/validacao_labels.md` + 4 fichas)
 - [x] Quatro fichas preenchidas + consolidação final no gabarito _(4/4 — média ≈83,2%; ver [`validacao_labels.md`](validacao_labels/validacao_labels.md) § Síntese)_
-- [ ] Tabela F1 por classe copiada para slides
+- [x] Tabela F1 por classe copiada para slides — ver [`metricas_e_decisoes.md`](metricas_e_decisoes.md) §6
 - [ ] 5+ referências bibliográficas citando TF-IDF, métricas multiclasse e domínio público
 
 ---
 
-## 11. Próximo passo (Fase 2)
+## 11. Depois da Fase 1
 
-Mesmo split e `text_field`; substituir `build_baseline()` por fine-tuning de `neuralmind/bert-base-portuguese-cased`. Comparar tabela baseline vs BERT no `model_card.md` e nos slides.
+Rodamos BERT ([`FASE2`](FASE2-CLASSIFICACAO.md)) e SVM ([`FASE3`](FASE3-CLASSIFICACAO.md)) no mesmo split. Nenhum bateu o LogReg no teste. Tabela e explicação val vs teste em [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md).

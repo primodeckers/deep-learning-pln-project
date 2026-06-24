@@ -1,129 +1,121 @@
 # Model card — licitações ComprasNet DF 2025
 
-Quem avaliar o repositório sem mergulhar no código deve conseguir ler isto em cinco minutos. As tabelas em **Performance** vêm dos JSON em `experiments/` (e do MLflow local, se regenerado).
+Resumo do que o projeto faz e dos números que usamos no relatório. Runs em `experiments/` (`20260624-*`).
 
 ## O que é isto
 
-Dois pipelines de PLN sobre o mesmo corpus (`data/processed/licitacoes_corpus.jsonl`):
+Dois pipelines no mesmo corpus (`licitacoes_corpus.jsonl`, 423 editais):
 
-| Tarefa | Modelo atual | Código principal |
-|--------|--------------|------------------|
-| **Classificação** por macroárea de gasto (6 classes) | TF-IDF + LogReg (**oficial**) · TF-IDF + SVM (comparativo) · BERTimbau (Fase 2) | `baseline_tfidf.py`, `svm_tfidf.py`, `bert_classifier.py` |
-| **Sumarização** em linguagem cidadã | Extrativo por regras/regex | `src/summarize/extractive.py` |
+| Tarefa | Modelos | Papel |
+|--------|---------|-------|
+| Classificação (6 macroáreas) | LogReg · SVM · BERTimbau | LogReg = o que reportamos; SVM e BERT = comparativos |
+| Sumarização cidadã | Extrativo (regex/regras) | Complementar |
 
-**Pendente (Fase 3):** sumarização abstrativa (mT5 ou LLM).
+Ficamos com o LogReg porque teve o melhor F1 macro no teste (0,74). Explicação em [`metricas_e_decisoes.md`](metricas_e_decisoes.md) e [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md).
 
 ## Uso pretendido
 
-- **Classificação:** apoio à triagem de editais por área de gasto (Saúde, Saneamento, Segurança, Educação, Infraestrutura/Obras, Administração/Outros).
-- **Sumarização:** gerar resumos legíveis para cidadãos (objeto, modalidade, quem pode participar, prazo, valor).
+- **Classificação:** triagem de editais por área de gasto (Saúde, Saneamento, Segurança, Educação, Infraestrutura/Obras, Administração/Outros).
+- **Sumarização:** parágrafo legível para cidadãos (objeto, quem participa, prazo, valor).
 
-Nenhum dos modelos substitui análise jurídica ou decisão administrativa — são baselines acadêmicos.
+Não substitui análise jurídica nem decisão administrativa.
+
+---
 
 ## Performance — classificação
 
-**Run de referência:** `classification_baseline_20260608-190839`  
-**Entrada:** `objeto_html` (descrição do objeto, sem cabeçalho do órgão)  
-**Split:** 70/15/15 estratificado por macroárea, `seed=42`  
-**Corpus:** 423 registros no manifesto de pré-processamento; 423 exemplos rotulados no split completo
+**Protocolo comum:** `objeto_html` · split 70/15/15 estratificado · `seed=42` · label proxy órgão→área
+
+### Modelo principal — TF-IDF + LogReg (Fase 1)
+
+**Run:** `classification_baseline_20260624-013836`
 
 | Conjunto | Accuracy | F1 macro | F1 weighted |
 |----------|----------|----------|-------------|
 | Validação | 0,766 | **0,743** | 0,750 |
 | Teste | 0,797 | **0,740** | 0,788 |
 
-Matriz de confusão: `reports/figures/classification_baseline_20260608-190839_confusion.png`
+Matriz: `reports/figures/classification_baseline_20260624-013836_confusion.png`
 
-### TF-IDF + SVM (comparativo clássico)
+### Comparativo — TF-IDF + SVM (Fase 3)
 
-**Run:** `classification_svm_20260624-004348`  
-**Mesmo corpus, split e `objeto_html` do baseline** · `src/models/svm_tfidf.py`
+**Run:** `classification_svm_20260624-013851`
 
 | Conjunto | Accuracy | F1 macro | F1 weighted |
 |----------|----------|----------|-------------|
 | Validação | 0,797 | **0,797** | 0,775 |
 | Teste | 0,797 | **0,652** | 0,774 |
 
-Matriz: `reports/figures/classification_svm_20260624-004348_confusion.png`
+Queda val→teste sugere overfitting relativo ao LogReg. Matriz: `reports/figures/classification_svm_20260624-013851_confusion.png`
 
-No teste, o SVM ficou **abaixo do LogReg** (0,652 vs 0,740), com queda forte em Educação (F1=0) e Segurança. Mantemos **LogReg como baseline oficial**; o SVM entra na tabela comparativa do relatório.
+### Comparativo — BERTimbau (Fase 2)
 
-### Por que não usar `texto` como entrada?
-
-O campo `texto` (HTML completo) repete o nome do órgão em ~97% dos casos — e o label vem justamente do órgão (`orgao_csv`). Com `texto`, o baseline infla para F1 macro ≈ 0,88 (vazamento de label). Com `objeto_html`, a métrica cai para ≈ 0,74, mas reflete generalização mais honesta.
-
-**Entrada oficial:** `objeto_html`. **Não há percentual universal** de vazamento aceitável — documentamos Tabela 7 (~49% residual) e explicamos no relatório conforme [`vazamento_de_label.md`](vazamento_de_label.md). Campo experimental: `objeto_html_limpo` (~47% residual). Ver também [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
-
-### BERTimbau (Fase 2) — run oficial (GPU)
-
-**Run:** `classification_bertimbau_20260623-222508`  
-**Modelo:** `neuralmind/bert-base-portuguese-cased` · mesmo split, `text_field` e `seed` do baseline  
-**Ambiente:** RTX 4090, PyTorch `+cu126` ([`GPU-EQUIPE.md`](GPU-EQUIPE.md))
+**Run:** `classification_bertimbau_20260624-013908`  
+**Modelo:** `neuralmind/bert-base-portuguese-cased` · GPU RTX 4090
 
 | Conjunto | Accuracy | F1 macro | F1 weighted |
 |----------|----------|----------|-------------|
-| Validação | 0,703 | **0,425** | 0,624 |
-| Teste | 0,719 | **0,518** | 0,652 |
+| Validação | 0,734 | **0,559** | 0,667 |
+| Teste | 0,688 | **0,400** | 0,604 |
 
-Matriz: `reports/figures/classification_bertimbau_20260623-222508_confusion.png`
+Matriz: `reports/figures/classification_bertimbau_20260624-013908_confusion.png`  
+Detalhes: [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md)
 
-Detalhes, F1 por classe e textos para o relatório: [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md).
+### Tabela resumo (teste)
 
-### Comparação baseline vs BERT (teste)
+| Modelo | F1 macro | Δ vs LogReg |
+|--------|----------|-------------|
+| **TF-IDF + LogReg** | **0,740** | — |
+| TF-IDF + SVM | 0,652 | −0,09 |
+| BERTimbau | 0,400 | −0,34 |
 
-| Modelo | Run | F1 macro (teste) |
-|--------|-----|------------------|
-| **TF-IDF + LogReg** | `classification_baseline_20260608-190839` | **0,740** ← principal |
-| **BERTimbau** | `classification_bertimbau_20260623-222508` | **0,518** |
+### Por que não `texto` como entrada?
 
-O BERT **não superou** o baseline neste corpus (~295 treino). Classes Segurança e Educação: F1 = 0 no BERT no teste. Resultado válido para o relatório — ver interpretação em [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) §4.
+`texto` (HTML completo) repete o órgão em ~97% dos casos → F1 macro ≈ 0,88 (vazamento). Com `objeto_html`: ≈ 0,74 (honesto). Ver [`vazamento_de_label.md`](vazamento_de_label.md).
 
-## Performance — sumarização extrativa
+---
 
-**Run de referência:** `summarization_extractive_20260608-190841`  
-**Amostra:** 18 editais do conjunto de teste da classificação
+## Performance — sumarização extrativa (Fase 4)
+
+**Run:** `summarization_extractive_20260624-013951`  
+**Amostra:** 18 editais do teste (estratificados)
 
 | Cobertura | Valor |
 |-----------|-------|
-| Com prazo extraído | 15/18 |
-| Com valor extraído | 18/18 |
+| Com prazo | 15/18 (83%) |
+| Com valor | 18/18 (100%) |
 
-Exemplos qualitativos: `reports/slides/resumos_exemplos.md`  
-Saída estruturada: `data/processed/resumos_extrativos.jsonl`
+Exemplos: `reports/slides/resumos_exemplos.md` · JSONL: `data/processed/resumos_extrativos.jsonl`
 
-Avaliação quantitativa (ROUGE) e humana (escala 1–5) estão previstas na Fase 3.
+---
 
-## Dados
+## Dados e limitações
 
 | Campo | Papel |
 |-------|--------|
-| `orgao_csv` | Gera o label (`area`) por palavras-chave — **não** entra como feature |
-| `objeto_html` | Entrada recomendada do classificador |
-| `texto` | HTML completo; útil para sumarização, mas vaza label na classificação |
-| `modalidade`, `tipo`, `total_homologado` | Usados pelo resumidor extrativo |
+| `orgao_csv` | Gera label — **não** é feature |
+| `objeto_html` | Entrada do classificador |
+| `texto` | Sumarização; vaza label na classificação |
 
-**Limitações declaradas:**
+- Corpus pequeno (~423) — classes raras (Educação: 2 no teste).
+- Label proxy — validação humana ≈83,2% ([`validacao_labels/`](validacao_labels/validacao_labels.md)).
+- Só ComprasNet DF 2025 — não generaliza para todo o Brasil.
 
-- Corpus pequeno (~400 editais) para deep learning — classes raras (Educação, Infraestrutura) têm poucos exemplos.
-- Label é *proxy* derivado do órgão, não de anotação manual por edital. **Validação humana (4/4 integrantes):** 30 editais — média ≈83,2% de concordância (62,5%–96,2% por revisor); ver [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md).
-- **Vazamento de label:** entrada oficial `objeto_html` reduz pistas do órgão no texto (~49% residual na Tabela 7); não existe limiar universal — ver [`vazamento_de_label.md`](vazamento_de_label.md).
-- Dados de um único estado (DF) e ano (2025) — não generalizam para todo o Brasil.
+## Onde o modelo engana
 
-## Onde o modelo engana ou fica cego
-
-- **Classes minoritárias** (Segurança, Educação, Infraestrutura): F1 instável; confusão com Administração/Outros.
-- **Órgãos ambíguos** no mapeamento por palavra-chave caem em `Administracao/Outros`.
-- **Objetos genéricos** (“aquisição de materiais”) dificultam a classificação só pelo texto do objeto.
-- **Sumarização extrativa** não parafraseia — só monta frases a partir de campos extraídos; não cobre cláusulas complexas.
+- **Segurança / Educação / Infra:** F1 instável; BERT chega a F1=0.
+- **Objetos genéricos** (“aquisição de materiais”) confundem áreas.
+- **Sumarização extrativa** não parafraseia — só extrai campos.
 
 ## Artefatos
 
 | Artefato | Caminho |
 |----------|---------|
-| Modelo baseline | `models/classification_baseline_*.joblib` (não versionado) |
-| Registro portátil | `experiments/<run_id>.json` |
-| MLflow local | `experiments/mlflow.db` (gitignored) |
+| LogReg / SVM | `models/classification_*_<timestamp>.joblib` |
+| BERT | `models/classification_bertimbau_<timestamp>/` (pasta, ~416 MB) |
+| Registro | `experiments/<run_id>.json` |
+| MLflow | `experiments/mlflow.db` — `make mlflow-ui` |
 
 ---
 
-*Última sincronização: baseline `20260608-190839` · BERT `20260623-222508`. Regenerar após novo treino.*
+*Sincronizado com runs `20260624-013836`, `013851`, `013908`, `013951`.*

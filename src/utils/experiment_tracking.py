@@ -111,6 +111,27 @@ class MlflowHandle:
             else:
                 mlflow.log_artifact(str(p))
 
+    def log_transformers_model(self, model_path: Path, *, task: str = "text-classification") -> None:
+        """Registra checkpoint HuggingFace como Logged Model (aba Models do MLflow)."""
+        import mlflow
+
+        from src.models.bert_classifier import BertTextClassifier
+
+        p = Path(model_path)
+        if not p.is_dir():
+            raise ValueError(f"Caminho do BERT deve ser um diretório: {p}")
+
+        classifier = BertTextClassifier.load(p)
+        mlflow.transformers.log_model(
+            transformers_model={
+                "model": classifier.model,
+                "tokenizer": classifier.tokenizer,
+            },
+            name="model",
+            task=task,
+            pip_requirements=["mlflow", "transformers", "torch", "scikit-learn"],
+        )
+
 
 @contextmanager
 def mlflow_run(

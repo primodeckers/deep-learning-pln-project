@@ -1,9 +1,16 @@
 {
-  "run_id": "summarization_extractive_20260608-190841",
+  "run_id": "summarization_extractive_20260624-013951",
   "task": "summarization",
   "model": "extractive",
-  "created_at": "2026-06-08T19:08:41.677149+00:00",
+  "created_at": "2026-06-24T01:39:51.360435+00:00",
   "seed": 42,
+  "dataset": {
+    "path": "data/processed/licitacoes_corpus.jsonl",
+    "sha256": "46c6e761ca24bc9ba687a2b60349f7392eb9a7ca2d5d1abf7a78861443f45984",
+    "size_bytes": 1939707,
+    "n_records": 423
+  },
+  "git_commit": "d96fee8",
   "sample_size": 18,
   "coverage": {
     "com_prazo": 15,

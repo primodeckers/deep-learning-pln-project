@@ -1,11 +1,10 @@
 # Universal Deep Learning Guide
 
-Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema à apresentação.
+Roteiro do grupo — do problema à apresentação. Vai sendo atualizado conforme rodamos experimentos.
 
-> Requisitos da disciplina: [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md)  
-> Brainstorm de temas: [`PROPOSALS.md`](PROPOSALS.md)  
-> Coleta de dados: [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md)  
-> Material de aula (referência): [`aula03-04.pdf`](referencias/aula03-04.pdfula03-04.pdf)
+> Requisitos: [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md)  
+> Coleta: [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md)  
+> Aula (referência): [`aula03-04.pdf`](referencias/aula03-04.pdf)
 
 ---
 
@@ -16,8 +15,8 @@ Guia vivo do projeto — roteiro metodológico para o grupo seguir do problema �
 | **Título provisório** | Classificação de editais por área de gasto + resumos em linguagem cidadã (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | Fases 1–3 classificação concluídas (LogReg · BERT · SVM) — Fase 4 sumarização em andamento |
-| **Última atualização** | 2026-06-23 |
+| **Status** | Classificação: Fases 1–3 rodadas (LogReg · BERT · SVM). Sumarização extrativa (Fase 4) com baseline pronto. |
+| **Última atualização** | 2026-06-24 |
 
 ### Decisão de escopo (Ideia 1 + Ideia 4)
 
@@ -25,7 +24,7 @@ O grupo adota **duas tarefas complementares** sobre o mesmo corpus:
 
 | Papel | Tarefa | Tipo de modelo | Entrega principal |
 |---|---|---|---|
-| **Principal** | Classificar edital por **área de gasto público** (Saúde, Saneamento…) | Classificação multiclasse | F1, matriz de confusão, comparação baseline vs BERTimbau |
+| **Principal** | Classificar edital por **área de gasto** (6 macroáreas) | TF-IDF + LogReg (oficial) · SVM · BERT | F1 no teste, matriz de confusão — ver [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) |
 | **Complemento** | **Resumir** edital em linguagem acessível ao cidadão | Sumarização | 5–10 exemplos antes/depois + avaliação humana |
 
 A classificação responde *"em que o DF gasta?"*; a sumarização responde *"o que esse edital significa pra quem não é especialista?"*. Na apresentação, a demo de resumo ilustra o impacto aplicado; as métricas vêm da classificação.
@@ -55,7 +54,7 @@ A classificação responde *"em que o DF gasta?"*; a sumarização responde *"o 
 
 ### 1.3 Hipóteses
 
-1. Modelos baseados em **Transformers** (BERTimbau) superam um **baseline clássico** (TF-IDF + Regressão Logística) na classificação por área.
+1. Modelos baseados em **Transformers** (BERTimbau) superam um **baseline clássico** (TF-IDF + Regressão Logística) na classificação por área. → **Não confirmado** no corpus atual (BERT F1 teste 0,40 vs LogReg 0,74); hipótese permanece no guia como motivação do experimento.
 2. Resumos gerados por PLN reduzem o jargão jurídico mantendo informações críticas (objeto, prazo, quem pode participar).
 3. Cruzar área predita com valor homologado e modalidade gera **insights de transparência** além da métrica pura.
 
@@ -177,27 +176,17 @@ A aula ensina: comparar **baseline**, **erro de treino** e **erro de validação
 3. Extrair texto e montar JSONL (`run_preprocess.py`)
 4. Documentar decisões em `DATA-COLLECTION-DECISIONS.md`
 
-### Fase 1 — Preparar labels e baseline (classificação)
+### Fase 1 — Baseline (modelo principal)
 
-1. Definir taxonomia de **6 macroáreas** e mapeamento `orgao_csv` → área
-2. Gerar `data/processed/labels_areas.json` ou coluna `area` no dataset
-3. Split estratificado treino/val/test (seed fixa para reprodutibilidade)
-4. Implementar baseline **TF-IDF (1–2 grams) + Logistic Regression**
-5. Calcular **F1 macro**, F1 por classe, matriz de confusão
-6. Validar manualmente ~30 editais sorteados (qualidade do label proxy) — **concluído:** 4/4 fichas em `docs/validacao_labels/`; média ≈83,2% (ver gabarito § Síntese)
+Taxonomia de 6 áreas, split 70/15/15, TF-IDF + LogReg, validação manual de 30 labels (4/4 fichas, ~83% concordância). **F1 teste 0,74** — é o que reportamos.
 
-**Script alvo:** `scripts/run_train.py --task classification --model baseline`
+`make train-baseline`
 
-### Fase 2 — Modelo principal (BERTimbau)
+### Fase 2 — BERTimbau (comparativo)
 
-1. Fine-tuning `neuralmind/bert-base-portuguese-cased` com Hugging Face `Trainer`
-2. Mesmo split da Fase 1 (comparabilidade)
-3. Hiperparâmetros iniciais: lr=2e-5, batch=16, epochs=4, max_len=512
-4. Early stopping em `val_f1_macro`
-5. Comparar tabela baseline vs BERT no relatório
-6. Análise de erros: top confusões, cruzamento com `total_homologado` e `modalidade`
+Rodado na GPU. Mesmo split da Fase 1. Resultado: **não bateu** o LogReg no teste (F1 0,40 vs 0,74). Detalhe em [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md).
 
-**Script alvo:** `scripts/run_train.py --task classification --model bertimbau`
+`scripts/run_train.py --config configs/classification_bert_gpu.yaml --model bertimbau`
 
 ### Fase 3 — Classificação TF-IDF + SVM
 
@@ -281,11 +270,22 @@ O modelo **não** recebe o órgão como feature — só o texto. O órgão gera 
 
 > ⚠️ **Vazamento de label no campo `texto`.** O HTML completo (`texto`) repete o nome do órgão (ex.: "Secretaria de Estado de Saúde…"), que é a própria fonte do label. Medido empiricamente: o baseline atinge **F1 macro ≈ 0,88 (teste) usando `texto`**, mas cai para **≈ 0,74 usando `objeto_html`** (descrição do que é comprado, sem o cabeçalho do órgão). Para uma avaliação honesta, usar `objeto_html` como entrada (padrão recomendado) **ou** remover o cabeçalho identificador de `texto`. Os ~0,88 de `texto` devem ser tratados como teto otimista contaminado por vazamento.
 
-### 6.2 Métricas
+### 6.2 Métricas e resultados
 
-- **Primária:** F1 macro (seleção de modelo)
-- **Secundárias:** F1 por classe, accuracy, matriz de confusão
-- **Análise:** curva treino vs val (detectar overfitting conforme aula)
+F1 macro no **teste** é o número que usamos pra comparar modelos. Validação serve pra diagnóstico (e early stopping do BERT), não pra escolher o modelo final.
+
+Glossário e decisão do LogReg: [`metricas_e_decisoes.md`](metricas_e_decisoes.md).  
+Val vs teste nas três fases: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md).
+
+**Números oficiais (jun/2026, `objeto_html`, seed 42):**
+
+| Modelo | F1 val | F1 teste |
+|--------|-------:|---------:|
+| LogReg (principal) | 0,743 | **0,740** |
+| SVM | 0,797 | 0,652 |
+| BERTimbau | 0,559 | 0,400 |
+
+O SVM e o BERT pareciam melhores na val; no teste o LogReg ganhou.
 
 ### 6.3 Estrutura de código prevista
 
@@ -499,19 +499,21 @@ mlflow ui --backend-store-uri sqlite:///experiments/mlflow.db
 
 ## 11. Apresentação (10 minutos)
 
+Rascunho de slides — ajustar com o grupo.
+
 | Min | Slide | Conteúdo |
 |---|---|---|
-| 0–1 | Problema | Edital é inacessível; DF 2025; 423 licitações |
-| 1–2 | Dados | ComprasNet, HTML sem CAPTCHA, corpus JSONL |
-| 2–3 | Metodologia | Guia universal: baseline → BERT + resumo cidadã |
-| 3–5 | Resultados classificação | F1, matriz de confusão, baseline vs BERT |
-| 5–6 | Demo sumarização | 1 edital antes/depois ao vivo |
-| 6–7 | Impacto aplicado | Área + valor homologado; quem se beneficia |
-| 7–8 | Limitações | Label proxy, HTML vs PDF, amostra pequena |
-| 8–9 | Conclusão | O que aprendemos; contribuição |
-| 9–10 | Próximos passos | PDF, PNCP, deploy |
+| 0–1 | Problema | Edital difícil de ler; 423 licitações DF 2025 |
+| 1–2 | Dados | ComprasNet HTML, corpus JSONL, label proxy |
+| 2–3 | Metodologia | TF-IDF + LogReg, depois SVM e BERT no mesmo split |
+| 3–5 | Resultados | Tabela: LogReg 0,74 · SVM 0,65 · BERT 0,40 (teste). Matrizes. Val vs teste |
+| 5–6 | Demo sumarização | 1 edital: área predita + resumo cidadã |
+| 6–7 | Impacto | Transparência de gasto; quem se beneficia |
+| 7–8 | Limitações | Proxy, corpus pequeno, `objeto_html` vs vazamento |
+| 8–9 | Conclusão | LogReg ficou; BERT não venceu neste volume |
+| 9–10 | Próximos passos | Mais dados, sumarização abstrativa, etc. |
 
-**Mensagem principal (1 frase):** _"PLN pode classificar gastos públicos e traduzir editais para a linguagem do cidadão — com limites que precisamos reconhecer."_
+Frase que costumamos usar: *"PLN ajuda a classificar gasto e resumir edital pro cidadão — com limites que a gente documentou."*
 
 ---
 
@@ -545,9 +547,10 @@ _Ajustar datas conforme calendário real da disciplina._
 | 2026-06-18 | Rastreamento com MLflow local + JSON | Comparar baseline vs BERTimbau; versionar corpus por hash SHA-256 |
 | 2026-06-18 | Dev: ruff + mypy + pytest + Makefile + `pyproject.toml` instalável | Qualidade de código e onboarding do grupo; model card e doc de métricas |
 | 2026-06-22 | Validação manual de labels: **4/4 fichas**; média ≈83,2% | Consolidação em `validacao_labels.md` § Síntese |
-| 2026-06-23 | Fase 2 BERTimbau — run GPU `222508`; F1 teste ≈0,52 | Documentado em `FASE2-CLASSIFICACAO.md`; abaixo do baseline |
-| 2026-06-24 | TF-IDF + SVM como comparativo clássico (`svm_tfidf.py`) | F1 teste 0,652 — LogReg permanece baseline oficial |
-| 2026-06-24 | Notebooks separados por responsabilidade | `01_eda` (EDA) · `02_demo` (apresentação); treino só em `scripts/` |
+| 2026-06-23 | Fase 2 BERTimbau — run GPU `222508`; F1 teste ≈0,52 | Abaixo do baseline |
+| 2026-06-24 | TF-IDF + SVM (Fase 3); F1 teste 0,652 | LogReg permanece oficial |
+| 2026-06-24 | Retreino completo runs `20260624-013*`; docs métricas + decisão modelo | LogReg 0,74 · SVM 0,65 · BERT 0,40 |
+| 2026-06-24 | Notebooks separados por responsabilidade | `01_eda` · `02_demo`; treino só em `scripts/` |
 
 ---
 

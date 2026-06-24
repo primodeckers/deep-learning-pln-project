@@ -1,8 +1,8 @@
 {
-  "run_id": "classification_bertimbau_20260623-213337",
+  "run_id": "classification_bertimbau_20260624-013908",
   "task": "classification",
   "model": "bertimbau",
-  "created_at": "2026-06-23T21:55:04.855544+00:00",
+  "created_at": "2026-06-24T01:39:40.306522+00:00",
   "text_field": "objeto_html",
   "seed": 42,
   "dataset": {
@@ -11,7 +11,7 @@
     "size_bytes": 1939707,
     "n_records": 423
   },
-  "git_commit": "c2690e3",
+  "git_commit": "d96fee8",
   "params": {
     "model_name": "neuralmind/bert-base-portuguese-cased",
     "max_length": 512,
@@ -62,14 +62,14 @@
   },
   "metrics": {
     "val": {
-      "accuracy": 0.703125,
-      "f1_macro": 0.4251567351146594,
-      "f1_weighted": 0.6239424875031467,
+      "accuracy": 0.734375,
+      "f1_macro": 0.5592754467754468,
+      "f1_weighted": 0.6668114437645687,
       "per_class": {
         "Saude": {
-          "precision": 1.0,
+          "precision": 0.9333333333333333,
           "recall": 0.8235294117647058,
-          "f1": 0.9032258064516129,
+          "f1": 0.875,
           "support": 17
         },
         "Saneamento": {
@@ -85,9 +85,9 @@
           "support": 9
         },
         "Educacao": {
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
+          "precision": 1.0,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
           "support": 3
         },
         "Infraestrutura/Obras": {
@@ -97,9 +97,110 @@
           "support": 3
         },
         "Administracao/Outros": {
-          "precision": 0.5681818181818182,
+          "precision": 0.6097560975609756,
           "recall": 1.0,
-          "f1": 0.7246376811594203,
+          "f1": 0.7575757575757576,
+          "support": 25
+        }
+      },
+      "labels": [
+        "Saude",
+        "Saneamento",
+        "Seguranca",
+        "Educacao",
+        "Infraestrutura/Obras",
+        "Administracao/Outros"
+      ],
+      "confusion_matrix": [
+        [
+          14,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          6,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          25
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.6875,
+      "f1_macro": 0.4003787878787879,
+      "f1_weighted": 0.6040127840909091,
+      "per_class": {
+        "Saude": {
+          "precision": 0.9333333333333333,
+          "recall": 0.8235294117647058,
+          "f1": 0.875,
+          "support": 17
+        },
+        "Saneamento": {
+          "precision": 0.75,
+          "recall": 0.8571428571428571,
+          "f1": 0.8,
+          "support": 7
+        },
+        "Seguranca": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 9
+        },
+        "Educacao": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "Infraestrutura/Obras": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 4
+        },
+        "Administracao/Outros": {
+          "precision": 0.5853658536585366,
+          "recall": 0.96,
+          "f1": 0.7272727272727273,
           "support": 25
         }
       },
@@ -130,112 +231,11 @@
         ],
         [
           0,
+          1,
           0,
           0,
           0,
-          0,
-          9
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          3
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          3
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          25
-        ]
-      ]
-    },
-    "test": {
-      "accuracy": 0.671875,
-      "f1_macro": 0.40066425120772947,
-      "f1_weighted": 0.595306838768116,
-      "per_class": {
-        "Saude": {
-          "precision": 0.9333333333333333,
-          "recall": 0.8235294117647058,
-          "f1": 0.875,
-          "support": 17
-        },
-        "Saneamento": {
-          "precision": 1.0,
-          "recall": 0.7142857142857143,
-          "f1": 0.8333333333333334,
-          "support": 7
-        },
-        "Seguranca": {
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
-          "support": 9
-        },
-        "Educacao": {
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
-          "support": 2
-        },
-        "Infraestrutura/Obras": {
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
-          "support": 4
-        },
-        "Administracao/Outros": {
-          "precision": 0.5454545454545454,
-          "recall": 0.96,
-          "f1": 0.6956521739130435,
-          "support": 25
-        }
-      },
-      "labels": [
-        "Saude",
-        "Saneamento",
-        "Seguranca",
-        "Educacao",
-        "Infraestrutura/Obras",
-        "Administracao/Outros"
-      ],
-      "confusion_matrix": [
-        [
-          14,
-          0,
-          0,
-          0,
-          0,
-          3
-        ],
-        [
-          0,
-          5,
-          0,
-          0,
-          0,
-          2
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          9
+          8
         ],
         [
           0,
@@ -247,11 +247,11 @@
         ],
         [
           0,
+          1,
           0,
           0,
           0,
-          0,
-          4
+          3
         ],
         [
           1,
@@ -265,7 +265,7 @@
     }
   },
   "artifacts": {
-    "model": "models/classification_bertimbau_20260623-213337",
-    "confusion_matrix": "reports/figures/classification_bertimbau_20260623-213337_confusion.png"
+    "model": "models/classification_bertimbau_20260624-013908",
+    "confusion_matrix": "reports/figures/classification_bertimbau_20260624-013908_confusion.png"
   }
 }

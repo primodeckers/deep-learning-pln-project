@@ -1,24 +1,22 @@
 # Fase 3 — Classificação TF-IDF + SVM
 
-Documento técnico da **Fase 3**: segundo classificador **clássico** no **mesmo protocolo** das Fases 1 e 2 (corpus, `objeto_html`, split 70/15/15, `seed=42`).
+Mesmo protocolo das Fases 1 e 2 — só trocamos o classificador em cima do mesmo TF-IDF.
 
-> Fase 1 (baseline LogReg): [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md)  
-> Fase 2 (BERTimbau): [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md)  
-> Fase 4 (sumarização — **outra tarefa**): [`FASE4-SUMARIZACAO.md`](FASE4-SUMARIZACAO.md)
+> Fase 1: [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) · Fase 2: [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md)  
+> Comparativo val/teste: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md)
 
 ---
 
 ## 1. Objetivo
 
-Testar se **SVM linear** sobre os mesmos features TF-IDF do baseline **supera** a Regressão Logística, mantendo comparabilidade total com Fases 1 e 2.
+Testar se **SVM linear** sobre os **mesmos features TF-IDF** do baseline **supera** a Regressão Logística.
 
 **Critério:** F1 macro no **conjunto de teste**.
 
-**Treino:** sempre via script — **não** em notebook.
+**Resultado:** SVM **não superou** LogReg (0,652 vs 0,740); validação alta com queda no teste indica **overfitting** relativo.
 
 ```bash
 make train-svm
-# ou: python scripts/run_train.py --task classification --model svm
 ```
 
 ---
@@ -27,34 +25,30 @@ make train-svm
 
 | Item | Valor |
 |------|--------|
-| Corpus | `licitacoes_corpus.jsonl` — 423 editais |
+| Corpus | 423 editais · `sha256=46c6e761…` |
 | `text_field` | `objeto_html` |
-| Split | 295 treino / 64 val / 64 teste |
-| Label | Proxy órgão → área (`labels.py`) |
+| Split | 295 / 64 / 64 · `seed=42` |
 | Config | `configs/classification.yaml` (`model: svm`) |
 
 ### Hiperparâmetros SVM
 
 | Parâmetro | Valor |
 |-----------|--------|
-| Vetorizador | Igual ao baseline (`baseline_tfidf.PORTUGUESE_STOPWORDS`) |
-| `ngram_max` | 2 |
-| `max_features` | 20000 |
-| `C` | 1.0 |
+| Vetorizador | Igual ao baseline |
 | `kernel` | `linear` |
+| `C` | 1.0 |
 | `class_weight` | `balanced` |
-| `probability` | `true` (Platt — `predict_proba`) |
-| `seed` | 42 |
+| `probability` | `true` |
 
-**Código:** `src/models/svm_tfidf.py` · `src/train/train_classification.py`
+**Código:** `src/models/svm_tfidf.py`
 
 ---
 
 ## 3. Run de referência
 
-**ID:** `classification_svm_20260624-004348`  
-**JSON:** `experiments/classification_svm_20260624-004348.json`  
-**Matriz:** `reports/figures/classification_svm_20260624-004348_confusion.png`
+**ID:** `classification_svm_20260624-013851`  
+**JSON:** `experiments/classification_svm_20260624-013851.json`  
+**Matriz:** `reports/figures/classification_svm_20260624-013851_confusion.png`
 
 | Conjunto | Accuracy | F1 macro | F1 weighted |
 |----------|----------|----------|-------------|
@@ -63,13 +57,11 @@ make train-svm
 
 ### Comparação dos três classificadores (teste)
 
-| Fase | Modelo | Run | F1 macro (teste) |
-|------|--------|-----|------------------|
-| 1 | TF-IDF + **LogReg** | `classification_baseline_20260608-190839` | **0,740** |
-| 3 | TF-IDF + **SVM** | `classification_svm_20260624-004348` | **0,652** |
-| 2 | **BERTimbau** | `classification_bertimbau_20260623-222508` | **0,518** |
-
-**Decisão:** **Fase 1 (LogReg) permanece o modelo principal** do relatório. Fase 3 mostra que trocar LogReg por SVM **não melhorou** generalização no teste. Fase 2 (BERT) ficou abaixo dos dois clássicos.
+| Fase | Modelo | F1 macro (teste) |
+|------|--------|------------------|
+| **1** | TF-IDF + **LogReg** | **0,740** ← principal |
+| 3 | TF-IDF + SVM | 0,652 |
+| 2 | BERTimbau | 0,400 |
 
 ### F1 por classe (teste) — SVM
 
@@ -84,32 +76,20 @@ make train-svm
 
 ---
 
-## 4. Interpretação (para relatório)
+## 4. Interpretação
 
-> Treinamos TF-IDF + SVM linear com o mesmo split e entrada `objeto_html` das Fases 1 e 2. No **teste**, o SVM atingiu **F1 macro 0,65**, abaixo do baseline LogReg (**0,74**) e acima do BERTimbau (**0,52**). O SVM teve validação alta (F1 0,80) e queda no teste — sinal de **overfitting** relativo ao LogReg no mesmo protocolo.
+Treinamos SVM linear com o mesmo TF-IDF e split do LogReg. No teste o F1 macro foi 0,65 — abaixo do LogReg (0,74) e acima do BERT (0,40). Na validação chegou a 0,80, então a queda val→teste chamou atenção: parece que o SVM se ajustou demais aos 64 editais de val. Educação zerou no teste (só 2 exemplos). Mantemos o LogReg como baseline do relatório.
 
-### Frase curta (slide)
-
-> *Fase 1 LogReg 0,74 · Fase 3 SVM 0,65 · Fase 2 BERT 0,52 — mesmo split.*
+Para slides: *LogReg 0,74 · SVM 0,65 · BERT 0,40 — mesmo split.*
 
 ---
 
-## 5. O que colocar nos slides
+## 5. Slides
 
-- [ ] Tabela **três modelos** (Fases 1, 2, 3)
-- [ ] Matriz de confusão SVM (`004348`)
-- [ ] Deixar claro: SVM seguiu o **mesmo processo** (`run_train.py` + JSON em `experiments/`)
-
----
-
-## 6. Artefatos
-
-| Artefato | Caminho |
-|----------|---------|
-| Pipeline SVM | `src/models/svm_tfidf.py` |
-| Run oficial | `experiments/classification_svm_20260624-004348.json` |
-| Demo (só leitura) | `notebooks/02_demo_classificacao.ipynb` |
+- [ ] Tabela três modelos
+- [ ] Matriz SVM (`013851`)
+- [ ] Mesmo processo: `run_train.py` + JSON + MLflow
 
 ---
 
-*Última atualização: 2026-06-24 — run `004348`.*
+*Última atualização: 2026-06-24 — run `013851`.*

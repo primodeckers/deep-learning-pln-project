@@ -1,11 +1,9 @@
 # Fase 2 — Classificação BERTimbau
 
-Documento técnico da **Fase 2**: fine-tuning de `neuralmind/bert-base-portuguese-cased` no mesmo corpus e split da Fase 1, para comparar deep learning vs baseline TF-IDF + LogReg.
+Fine-tuning do `neuralmind/bert-base-portuguese-cased` no mesmo corpus e split do baseline — pra ver se Transformer ganha do clássico.
 
-> Fase 1 (baseline LogReg): [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md)  
-> Fase 3 (SVM): [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md)  
-> Métricas e decisões: [`metricas_e_decisoes.md`](metricas_e_decisoes.md)  
-> Treino na GPU: [`GPU-EQUIPE.md`](GPU-EQUIPE.md)
+> Fase 1: [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) · Comparativo: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md)  
+> GPU: [`GPU-EQUIPE.md`](GPU-EQUIPE.md)
 
 ---
 
@@ -14,6 +12,8 @@ Documento técnico da **Fase 2**: fine-tuning de `neuralmind/bert-base-portugues
 Testar a hipótese do guia: *Transformers (BERTimbau) superam baseline clássico* na classificação por macroárea, com **mesma entrada** (`objeto_html`), **mesmo split** (`seed=42`, 70/15/15) e **mesmo label proxy**.
 
 **Critério de comparação:** F1 macro no **conjunto de teste**.
+
+**Resultado:** hipótese **não confirmada** — BERT ficou abaixo do LogReg e do SVM.
 
 ---
 
@@ -42,108 +42,104 @@ Testar a hipótese do guia: *Transformers (BERTimbau) superam baseline clássico
 
 ---
 
-## 3. Runs e resultados
+## 3. Run de referência (oficial)
 
-### Run de referência (oficial — GPU)
-
-**ID:** `classification_bertimbau_20260623-222508`  
-**Ambiente:** RTX 4090, PyTorch `2.12.1+cu126` (`check_cuda.py` = sim)  
-**JSON:** `experiments/classification_bertimbau_20260623-222508.json`  
-**Matriz:** `reports/figures/classification_bertimbau_20260623-222508_confusion.png`
+**ID:** `classification_bertimbau_20260624-013908`  
+**Ambiente:** RTX 4090, PyTorch `2.12.1+cu126`  
+**JSON:** `experiments/classification_bertimbau_20260624-013908.json`  
+**Modelo em disco:** `models/classification_bertimbau_20260624-013908/` (~416 MB)  
+**Matriz:** `reports/figures/classification_bertimbau_20260624-013908_confusion.png`  
+**MLflow:** logged model `transformers` na aba Models (run `pln-licitacoes`)
 
 | Conjunto | Accuracy | F1 macro | F1 weighted |
 |----------|----------|----------|-------------|
-| Validação | 0,703 | **0,425** | 0,624 |
-| Teste | 0,719 | **0,518** | 0,652 |
+| Validação | 0,734 | **0,559** | 0,667 |
+| Teste | 0,688 | **0,400** | 0,604 |
 
-### Comparação com baseline (teste)
+### Comparação dos três classificadores (teste)
 
-| Modelo | Run | F1 macro (teste) | Δ vs baseline |
-|--------|-----|------------------|---------------|
-| **TF-IDF + LogReg** | `classification_baseline_20260608-190839` | **0,740** | — |
-| **BERTimbau** | `classification_bertimbau_20260623-222508` | **0,518** | **−0,22** |
+| Fase | Modelo | Run | F1 macro (teste) | Δ vs LogReg |
+|------|--------|-----|------------------|-------------|
+| 1 | TF-IDF + **LogReg** | `classification_baseline_20260624-013836` | **0,740** | — |
+| 3 | TF-IDF + SVM | `classification_svm_20260624-013851` | 0,652 | −0,09 |
+| 2 | **BERTimbau** | `classification_bertimbau_20260624-013908` | **0,400** | **−0,34** |
 
-**Decisão:** o **baseline permanece o modelo principal** reportado no relatório. BERTimbau entra como **comparativo de deep learning** no mesmo protocolo.
+**Decisão:** baseline **permanece o modelo principal**; BERT é **comparativo de deep learning**.
 
-### F1 por classe (teste) — baseline vs BERT
+### F1 por classe (teste) — LogReg vs BERT
 
-| Macroárea | Support (teste) | Baseline F1 | BERT F1 |
-|-----------|----------------:|------------:|--------:|
-| Saúde | 17 | 0,903 | 0,824 |
-| Saneamento | 7 | **1,000** | 0,857 |
+| Macroárea | Support | LogReg F1 | BERT F1 |
+|-----------|--------:|----------:|--------:|
+| Saúde | 17 | 0,903 | 0,875 |
+| Saneamento | 7 | 1,000 | 0,800 |
 | Segurança | 9 | 0,462 | **0,000** |
 | Educação | 2 | 0,667 | **0,000** |
-| Infraestrutura/Obras | 4 | 0,600 | 0,667 |
-| Administração/Outros | 25 | 0,807 | 0,762 |
+| Infraestrutura/Obras | 4 | 0,600 | **0,000** |
+| Administração/Outros | 25 | 0,807 | 0,727 |
 
-**Padrão BERT:** forte em Saúde/Saneamento; **colapso** em Segurança e Educação (F1 0); tendência a prever `Administracao/Outros` (recall 0,96).
+**Padrão BERT:** razoável em Saúde/Saneamento; **colapso** em classes raras; tendência a prever `Administracao/Outros`.
 
-### Run preliminar (CPU)
+### Run histórico (referência)
 
-`classification_bertimbau_20260623-213337` — F1 macro teste **0,401** (mesmo val 0,425). Substituído pelo run GPU acima como referência; mantido no histórico do repo.
+| Run | F1 macro (teste) | Nota |
+|-----|------------------|------|
+| `20260623-222508` | 0,518 | Retreino anterior GPU |
+| `20260623-213337` | 0,401 | CPU — preliminar |
 
----
-
-## 4. Interpretação (para relatório e slides)
-
-### Parágrafo — comparação de modelos
-
-> Treinamos BERTimbau (`neuralmind/bert-base-portuguese-cased`) com o mesmo split estratificado (`seed=42`) e entrada `objeto_html` usados no baseline TF-IDF + Regressão Logística. No conjunto de **teste** (64 editais), o baseline atingiu **F1 macro 0,74**, enquanto o BERTimbau atingiu **0,52**. O Transformer **não superou** o modelo clássico neste corpus (~295 exemplos de treino, 6 classes desbalanceadas). O BERT manteve desempenho razoável em Saúde e Saneamento, mas **não classificou** editais de Segurança e Educação no teste (F1 = 0), convergindo frequentemente para Administração/Outros.
-
-### Parágrafo — limitações estruturais
-
-> O resultado reforça limitações já documentadas: **corpus pequeno para fine-tuning**, **label proxy** por órgão (validação humana ≈83,2% de concordância) e **poucos exemplos** nas classes raras (2–9 no teste). Não interpretamos o F1 inferior do BERT como falha do pipeline, e sim como evidência de que, **neste volume de dados**, o baseline esparso (TF-IDF) generaliza melhor que um modelo com milhões de parâmetros.
-
-### Frase curta (slide)
-
-> *Baseline F1 0,74 · BERT F1 0,52 · mesmo split · BERT não venceu — corpus pequeno + classes raras.*
+Variância entre runs BERT é esperada (fine-tuning estocástico); em todos os casos **abaixo** do LogReg (0,74).
 
 ---
 
-## 5. O que colocar nos slides (checklist Fase 2)
+## 4. O que a gente tira disso (relatório / slides)
 
-- [ ] Tabela baseline vs BERT (F1 macro **teste**)
-- [ ] Matriz de confusão BERT (`222508`) — ou print MLflow
-- [ ] F1 por classe: destacar Segurança/Educação = 0 no BERT
-- [ ] Mencionar treino na **RTX 4090** (reprodutibilidade de ambiente)
+O BERT não ganhou do LogReg no teste (0,40 vs 0,74). Principais motivos que citamos na discussão:
+
+- Pouco treino (~295 editais) pro tamanho do modelo.
+- Classes desbalanceadas — Educação tem 12 no treino e 2 no teste.
+- Label vem do órgão; o texto do objeto nem sempre bate com a área.
+- TF-IDF + LogReg já pega bem palavras-chave do domínio sem fine-tuning.
+
+No retreino de junho o teste caiu em relação ao run `222508` (0,52 → 0,40), mas a validação melhorou. Fine-tuning não sai igual toda vez, mesmo com o mesmo split.
+
+Texto pronto pra colar no relatório:
+
+> Treinamos BERTimbau com o mesmo split e `objeto_html` do baseline. No teste, LogReg ficou com F1 macro 0,74 e BERT com 0,40. O Transformer não superou o clássico. Segurança, Educação e Infraestrutura zeraram no teste; o modelo empurra muita coisa pra Administração/Outros.
+
+Slide curto: *LogReg 0,74 · SVM 0,65 · BERT 0,40 — mesmo split.*
+
+Mais detalhe val vs teste: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md).
+
+---
+
+## 5. O que colocar nos slides
+
+- [ ] Tabela **três modelos** (Fases 1, 2, 3) — F1 macro **teste**
+- [ ] Matriz de confusão BERT (`013908`)
+- [ ] F1 por classe: Segurança/Educação/Infra = 0 no BERT
+- [ ] Mencionar GPU (reprodutibilidade de ambiente)
 - [ ] **Não** esconder que DL perdeu — interpretar com volume + desbalanceamento
-- [ ] Ligar confusões ao label proxy ([`validacao_labels.md`](validacao_labels/validacao_labels.md) — CBMDF, TCDF)
 
 ---
 
-## 6. MLflow (print para slide)
-
-Experimento: **`pln-licitacoes`**
+## 6. MLflow
 
 ```bash
-python -m mlflow ui --backend-store-uri sqlite:///experiments/mlflow.db
+make mlflow-ui
+# Windows: http://127.0.0.1:5001 se porta 5000 ocupada
 ```
 
-Abrir `http://127.0.0.1:5000` → comparar runs `classification_baseline_*` e `classification_bertimbau_222508`.
+Experimento `pln-licitacoes` — comparar runs `classification_*_20260624-*`.
 
 ---
 
-## 7. Próximos passos (pós Fase 2)
-
-| Prioridade | Tarefa |
-|------------|--------|
-| Alta | Slides PDF com §4 acima |
-| Alta | Fase 3 — TF-IDF + SVM ([`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md)) |
-| Alta | Fase 4 — sumarização ([`FASE4-SUMARIZACAO.md`](FASE4-SUMARIZACAO.md)) |
-| Média | Gráfico valor homologado × área predita (baseline) |
-| Baixa | Retunar BERT / expandir corpus — **não bloqueia entrega** |
-
----
-
-## 8. Referências no repositório
+## 7. Artefatos
 
 | Artefato | Caminho |
 |----------|---------|
 | Classificador BERT | `src/models/bert_classifier.py` |
-| Orquestração | `src/train/train_classification.py` |
 | Config GPU | `configs/classification_bert_gpu.yaml` |
 | Runs oficiais | [`experiments/README.md`](../experiments/README.md) |
 
 ---
 
-*Última atualização: 2026-06-23 — run oficial GPU `222508`.*
+*Última atualização: 2026-06-24 — run oficial `013908`.*
