@@ -4,8 +4,8 @@ Cada notebook tem **um papel**. Treino e coleta ficam em `scripts/` e `src/`.
 
 | Notebook | Responsabilidade | Não faz |
 |----------|------------------|---------|
-| [`01_eda.ipynb`](01_eda.ipynb) | EDA do corpus JSONL, gráficos, vazamento de label | Coleta HTML, treino |
-| [`02_demo_apresentacao.ipynb`](02_demo_apresentacao.ipynb) | Métricas oficiais, inferência demo, slides | Treino, scraping |
+| [`01_eda.ipynb`](../notebooks/01_eda.ipynb) | EDA estilizado — exploração e vazamento (Tabelas 1–8) |
+| [`02_demo_apresentacao.ipynb`](../notebooks/02_demo_apresentacao.ipynb) | Demo slides — métricas + inferência (sem treino) |
 
 ## Regenerar notebooks
 
