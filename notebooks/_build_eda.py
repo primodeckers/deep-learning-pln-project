@@ -1,10 +1,12 @@
-"""Gera notebooks/01_eda.ipynb a partir de células declaradas aqui.
+"""Gera notebooks/01_eda.ipynb — EDA e exploração (sem treino de modelos).
 
-Manter o notebook em código (e não JSON solto) facilita revisão e regeneração.
+Coleta e preprocess: scripts/run_collect.py e scripts/run_preprocess.py.
+Treino: scripts/run_train.py.
+
 Rode: python notebooks/_build_eda.py
 """
 
-from __future__ import annotations 
+from __future__ import annotations
 
 from pathlib import Path
 
@@ -26,11 +28,20 @@ cells = [
         """
 # EDA — Corpus de licitações ComprasNet DF 2025
 
-Análise exploratória do corpus `data/processed/licitacoes_corpus.jsonl`.
-Carrega todos os registros do JSONL (423 editais quando HTML + preprocess estão completos).
-Objetivos: entender a distribuição das **macroáreas** (label da classificação), de
-modalidade/tipo, o **tamanho dos textos**, o **valor homologado** por área e checar o
-**vazamento de label** discutido no guia (§6.1).
+**Responsabilidade deste notebook:** explorar dados já processados — **não** coletar HTML,
+**não** treinar modelos.
+
+| Etapa | Onde fica |
+|-------|-----------|
+| Coleta HTML | `python scripts/run_collect.py` |
+| Pré-processamento → JSONL | `python scripts/run_preprocess.py` |
+| Treino (baseline / SVM / BERT) | `python scripts/run_train.py` |
+| Demo / apresentação | `notebooks/02_demo_apresentacao.ipynb` |
+
+Corpus: `data/processed/licitacoes_corpus.jsonl` (423 editais quando coleta + preprocess completos).
+
+Objetivos: distribuição das **macroáreas**, modalidade/tipo, **tamanho dos textos**,
+**valor homologado** por área e **vazamento de label** (guia §6.1, `docs/vazamento_de_label.md`).
 """
     ),
     code(
@@ -42,19 +53,22 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-# Permite importar src.* ao rodar o notebook de dentro de notebooks/.
 ROOT = Path.cwd()
-if (ROOT / "src").exists():
-    pass
-elif (ROOT.parent / "src").exists():
+if not (ROOT / "src").exists() and (ROOT.parent / "src").exists():
     ROOT = ROOT.parent
 sys.path.insert(0, str(ROOT))
 
-from src.preprocess.labels import AREAS, area_for_orgao, normalize
+from src.preprocess.labels import AREAS, AREA_KEYWORDS, area_for_orgao, normalize
 
 CORPUS = ROOT / "data" / "processed" / "licitacoes_corpus.jsonl"
 FIGURES = ROOT / "reports" / "figures"
 FIGURES.mkdir(parents=True, exist_ok=True)
+
+if not CORPUS.is_file():
+    raise FileNotFoundError(
+        f"Corpus não encontrado: {CORPUS}\\n"
+        "Rode: python scripts/run_collect.py && python scripts/run_preprocess.py"
+    )
 
 records = []
 with CORPUS.open(encoding="utf-8") as f:
@@ -73,7 +87,7 @@ print("Campos:", list(records[0].keys()))
         """
 ## 1. Distribuição das macroáreas (label)
 
-O label é derivado do órgão (`orgao_csv`) por palavras-chave — ver `src/preprocess/labels.py`.
+Label derivado de `orgao_csv` por palavras-chave — `src/preprocess/labels.py`.
 """
     ),
     code(
@@ -97,8 +111,8 @@ plt.show()
     ),
     md(
         """
-> Classes muito **desbalanceadas**: Administração/Outros e Saúde dominam; Educação (17) e
-> Infraestrutura (24) são minoritárias — esperar F1 instável nelas (documentar na discussão).
+> **Desbalanceamento:** Administração/Outros e Saúde dominam; Educação e Infraestrutura
+> são minoritárias — reportar F1 por classe e usar `class_weight='balanced'`.
 """
     ),
     md("## 2. Modalidade e tipo de contratação"),
@@ -119,12 +133,14 @@ word_counts_sorted = sorted(word_counts)
 n = len(word_counts_sorted)
 mediana = word_counts_sorted[n // 2]
 print(f"min={min(word_counts)}  mediana={mediana}  max={max(word_counts)}")
-print(f"acima de 512 palavras: {sum(1 for w in word_counts if w > 512)} editais "
-      f"(relevante para o truncamento do BERT em 512 tokens)")
+print(
+    f"acima de 512 palavras: {sum(1 for w in word_counts if w > 512)} editais "
+    "(truncamento BERT = 512 tokens)"
+)
 
 fig, ax = plt.subplots(figsize=(8, 4))
 ax.hist([min(w, 2000) for w in word_counts], bins=40, color="#55A868")
-ax.set_xlabel("nº de palavras (truncado em 2000 para visualização)")
+ax.set_xlabel("nº de palavras (truncado em 2000)")
 ax.set_ylabel("nº de editais")
 ax.set_title("Distribuição do tamanho dos editais")
 fig.tight_layout()
@@ -136,7 +152,6 @@ plt.show()
     code(
         """
 def parse_valor(v: str) -> float | None:
-    \"\"\"Converte 'R$ 1.234,56' (formato BR) para float; None se não numérico.\"\"\"
     if not v:
         return None
     s = str(v).replace("R$", "").strip().replace(".", "").replace(",", ".")
@@ -174,23 +189,20 @@ plt.show()
     ),
     md(
         """
-## 5. Vazamento de label: o órgão aparece no texto?
+## 5. Vazamento de label — palavras-chave da área no texto
 
-O label vem do órgão. Se o **nome do órgão** estiver dentro do `texto`, o classificador
-pode "colar" em vez de aprender o conteúdo. Medimos quantos editais contêm uma das
-palavras-chave da sua própria área no `texto` vs no `objeto_html`.
+Se a **palavra-chave do órgão/área** aparece no texto de entrada, o classificador pode
+"colar" no label. Comparamos `texto` (HTML completo) vs `objeto_html` (entrada oficial).
 """
     ),
     code(
         """
-from src.preprocess.labels import AREA_KEYWORDS
-
-kw_by_area = dict(AREA_KEYWORDS)  # área -> tuple de palavras-chave
+kw_by_area = dict(AREA_KEYWORDS)
 
 def contem_keyword(texto: str, area: str) -> bool:
     kws = kw_by_area.get(area)
     if not kws:
-        return False  # Administração/Outros não tem palavra-chave própria
+        return False
     alvo = normalize(texto)
     return any(kw in alvo for kw in kws)
 
@@ -199,21 +211,43 @@ vaz_texto = sum(contem_keyword(r.get("texto", ""), r["area"]) for r in com_kw)
 vaz_obj = sum(contem_keyword(r.get("objeto_html", ""), r["area"]) for r in com_kw)
 base = len(com_kw)
 print(f"Editais de áreas com palavra-chave: {base}")
-print(f"  palavra-chave da área aparece em 'texto'      : {vaz_texto}/{base} ({vaz_texto/base:.0%})")
-print(f"  palavra-chave da área aparece em 'objeto_html': {vaz_obj}/{base} ({vaz_obj/base:.0%})")
-print()
-print("→ Por isso usamos objeto_html como entrada honesta (ver guia §6.1).")
+print(f"  keyword da área em 'texto'      : {vaz_texto}/{base} ({vaz_texto/base:.0%})")
+print(f"  keyword da área em 'objeto_html'  : {vaz_obj}/{base} ({vaz_obj/base:.0%})")
+print("\\n→ Entrada oficial da classificação: objeto_html (ver docs/vazamento_de_label.md)")
+"""
+    ),
+    md(
+        """
+## 6. Vazamento residual — nome do órgão em `objeto_html`
+
+Auditoria complementar: o **nome normalizado do órgão** ainda aparece no campo de classificação?
+"""
+    ),
+    code(
+        """
+def orgao_aparece_no_texto(orgao: str, texto: str) -> bool:
+    org = normalize(orgao or "")
+    if len(org) < 8:
+        return False
+    return org in normalize(texto or "")
+
+residual = [r for r in records if orgao_aparece_no_texto(r.get("orgao_csv", ""), r.get("objeto_html", ""))]
+print(f"Registros com nome do órgão em objeto_html: {len(residual)}/{len(records)}")
+if residual:
+    print("\\nExemplos (até 5):")
+    for r in residual[:5]:
+        print(f"  {r.get('numero_licitacao')} | {r.get('orgao_csv', '')[:50]}")
 """
     ),
     md(
         """
 ## Conclusões da EDA
 
-- **Desbalanceamento forte** entre macroáreas → usar `class_weight`, reportar F1 por classe.
-- Boa parte dos editais passa de **512 palavras** → BERTimbau truncará; considerar isso.
-- O **gasto** concentra-se em poucas áreas (Saúde/Saneamento) — insight para a apresentação.
-- **Vazamento confirmado**: o órgão aparece no `texto` com frequência muito maior que no
-  `objeto_html`, justificando a escolha de entrada da classificação.
+- **Desbalanceamento** entre macroáreas → F1 macro + F1 por classe no relatório.
+- Muitos editais **> 512 palavras** → truncamento do BERTimbau.
+- **Gasto** concentrado em Saúde/Saneamento — insight para slides.
+- **Vazamento:** `texto` >> `objeto_html`; auditoria residual quantifica órgão no objeto.
+- Próximo passo: treinar em `scripts/run_train.py` — **não neste notebook**.
 """
     ),
 ]

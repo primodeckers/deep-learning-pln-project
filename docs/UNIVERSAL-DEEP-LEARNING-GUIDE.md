@@ -212,7 +212,7 @@ A aula ensina: comparar **baseline**, **erro de treino** e **erro de validação
    - Contar **alucinações** (prazo/valor inventado)
 5. Selecionar **3 exemplos** para slide antes/depois
 
-**Script alvo:** `scripts/run_train.py --task summarization` (baseline extrativo) **ou** protótipo PTT5 em [`NOTEBOOK-ENTREGA.md`](NOTEBOOK-ENTREGA.md)
+**Script alvo:** `scripts/run_train.py --task summarization` · demo PTT5 opcional em `notebooks/02_demo_apresentacao.ipynb`
 
 ### Fase 4 — Análise aplicada e integração
 
@@ -407,7 +407,7 @@ deep-learning-pln-project/
 ├── docs/                 # documentação (+ model_card, métricas)
 ├── experiments/          # JSON por run + mlflow.db (tracking local)
 ├── models/               # checkpoints (gitignored)
-├── notebooks/            # EDA + entrega baseline+SVM+PTT5
+├── notebooks/            # 01_eda (exploração) · 02_demo (apresentação)
 ├── reports/figures|slides/
 ├── scripts/
 │   ├── run_collect.py
@@ -537,7 +537,7 @@ _Ajustar datas conforme calendário real da disciplina._
 | 2026-06-22 | Validação manual de labels: **4/4 fichas**; média ≈83,2% | Consolidação em `validacao_labels.md` § Síntese |
 | 2026-06-23 | Fase 2 BERTimbau — run GPU `222508`; F1 teste ≈0,52 | Documentado em `FASE2-CLASSIFICACAO.md`; abaixo do baseline |
 | 2026-06-24 | TF-IDF + SVM como comparativo clássico (`svm_tfidf.py`) | F1 teste 0,652 — LogReg permanece baseline oficial |
-| 2026-06-18 | Notebook de entrega baseline + SVM + PTT5 | `projeto_final_pln_baseline_svm_ptt5.ipynb` |
+| 2026-06-24 | Notebooks separados por responsabilidade | `01_eda` (EDA) · `02_demo` (apresentação); treino só em `scripts/` |
 
 ---
 
