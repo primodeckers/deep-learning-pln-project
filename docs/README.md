@@ -6,6 +6,7 @@
 
 | Documento | Descrição |
 |---|---|
+| [`TRABALHO-CONSOLIDADO.md`](TRABALHO-CONSOLIDADO.md) | **Resumo narrativo do trabalho** — texto autossuficiente (contexto → conclusão) |
 | [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md) | Requisitos oficiais da disciplina |
 | [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) | Guia vivo do projeto (preencher em conjunto) |
 | [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md) | Decisões de coleta de dados (CAPTCHA, HTML vs PDF, etc.) |
