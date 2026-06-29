@@ -2,9 +2,10 @@
 
 Anotações do grupo sobre o que medimos, como ler os números e por que o relatório usa o LogReg da Fase 1 como modelo principal.
 
-> Números consolidados: [`model_card.md`](model_card.md)  
+> Números consolidados: [`MODEL-CARD.md`](MODEL-CARD.md)  
 > Validação vs teste (as três fases): [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md)  
-> Tuning e melhoria de métricas (discussão futura): [`hiperparametros_e_melhorias.md`](hiperparametros_e_melhorias.md)  
+> Tuning e melhoria de métricas: [`HIPERPARAMETROS-E-MELHORIAS.md`](HIPERPARAMETROS-E-MELHORIAS.md)  
+> Regras e protocolos PNCP: [`REGRAS-E-PROTOCOLOS.md`](REGRAS-E-PROTOCOLOS.md)  
 > Guia do projeto: [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) §6
 
 ---
@@ -90,7 +91,7 @@ Run antigo (`222508`): teste 0,518. Run novo (`013908`): teste 0,400, mas valida
 
 **Decisão:** `text_field: objeto_html` em `configs/classification.yaml`.
 
-Não há limiar universal de vazamento aceitável — critério **metodológico**. Ver [`vazamento_de_label.md`](vazamento_de_label.md) §5.1 e §9.
+Não há limiar universal de vazamento aceitável — critério **metodológico**. Ver [`VAZAMENTO-DE-LABEL.md`](VAZAMENTO-DE-LABEL.md) §5.1 e §9.
 
 O modelo **não** recebe `orgao_csv` como feature.
 
@@ -101,7 +102,7 @@ O modelo **não** recebe `orgao_csv` como feature.
 | Item | Valor |
 |------|-------|
 | Amostra | 30 editais, seed 42 |
-| Gabarito | [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) |
+| Gabarito | [`VALIDACAO-LABELS/VALIDACAO-LABELS.md`](VALIDACAO-LABELS/VALIDACAO-LABELS.md) |
 | Status | 4/4 fichas (2026-06-18 a 2026-06-22) |
 | Concordância média | **≈83,2%** (62,5%–96,2% por revisor) |
 
@@ -126,7 +127,7 @@ Conclusão: proxy por órgão é **rotulagem fraca aceitável** para baseline; e
 
 ## 7. Hiperparâmetros de referência
 
-Valores **em produção** nos runs oficiais. Ideias de grid, pesos no BERT e backlog de implementação: [`hiperparametros_e_melhorias.md`](hiperparametros_e_melhorias.md).
+Valores **em produção** nos runs oficiais. Ideias de grid, pesos no BERT e backlog: [`HIPERPARAMETROS-E-MELHORIAS.md`](HIPERPARAMETROS-E-MELHORIAS.md).
 
 ### Baseline (Fase 1) — `configs/classification.yaml`
 
@@ -180,7 +181,56 @@ Baseline e SVM aparecem na aba **Models** do MLflow via autolog sklearn. BERT us
 
 ---
 
-## 10. O que não fazemos (escopo consciente)
+## 12. EDA PNCP DF/2025 (exploratório — não treinado)
+
+Fonte: `data/comprasGOV-anual-VW_FT_PNCP_COMPRA-2025.xls` · Notebook: [`03_eda_pncp.ipynb`](../notebooks/03_eda_pncp.ipynb)  
+Filtro: `UF=DF`, `ano=2025` → **19.944** compras · **215** órgãos
+
+| Métrica / achado | Valor | Nota |
+|------------------|------:|------|
+| Mediana palavras (`objeto_compra`) | 32 | Texto curto vs HTML (~239 no corpus) |
+| Compras > 512 palavras | 0 | BERT `max_len=512` irrelevante neste metadado |
+| Vazamento em `objeto_compra` | 50,6% | Análogo ao ~49% do `objeto_html` |
+| Vazamento residual (órgão no objeto) | 11,0% | 2.185 compras |
+| Modalidade dominante | Inexigibilidade 38,8% | Perfil ≠ corpus pregão (~66%) |
+| Mediana valor homologado (Saúde) | ~R$ 110.575 | Ver §3.4 em [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) |
+
+---
+
+## 10. Extensão PNCP DF/2025 (~19.944 compras)
+
+Corpus: `data/processed/pncp_corpus_df2025.jsonl` · split 70/15/15 · seed 42 · F1 macro **teste**.
+
+### Protocolo honesto — 6 macroáreas por órgão (`pncp`)
+
+| Modelo | F1 teste | Run |
+|--------|----------|-----|
+| LogReg | 0,756 | `classification_pncp_baseline_20260628-232841` |
+| SVM | 0,783 | `classification_pncp_svm_20260628-232909` |
+| **BERTimbau** | **0,858** | `classification_pncp_bertimbau_20260628-233442` |
+
+Referência conservadora em escala grande: BERT supera baselines quando o rótulo é órgão→macroárea.
+
+### Protocolos 9 setores (exploratórios)
+
+| Protocolo | Descrição | LogReg | SVM | BERT |
+|-----------|-----------|-------:|----:|-----:|
+| **`pncp9`** | Só compras com keyword (~10,3k) | 0,857 | 0,877 | **0,969** |
+| **`pncp9full`** | 9 + Indeterminado (19,9k) | 0,816 | 0,862 | **0,970** |
+| **`pncp9fb`** | Fallback órgão, só objeto | **0,824** | — | — |
+| **`pncp9fbi`** | Fallback + info complementar | 0,788 | 0,829 | **0,955** |
+
+**Leitura:**
+
+- F1 ~0,97 (`pncp9`, `pncp9full`, `pncp9fbi`+BERT) reflete **reprodução de regras keyword** + acoplamento rótulo↔texto quando info entra nos dois — não substitui o protocolo honesto (`pncp` 0,858).
+- Info complementar **piora** LogReg (0,824→0,788) mas **dispara** BERT (0,829→0,955).
+- Benchmark de coortes difíceis: `python scripts/run_benchmark_pncp_dificeis.py`.
+
+Detalhe das regras: [`REGRAS-E-PROTOCOLOS.md`](REGRAS-E-PROTOCOLOS.md).
+
+---
+
+## 11. O que não fazemos (escopo consciente)
 
 - Limiar de probabilidade de negócio — classificação multiclasse pura.
 - API de produção — pipeline batch via `scripts/run_train.py`.
@@ -188,7 +238,7 @@ Baseline e SVM aparecem na aba **Models** do MLflow via autolog sklearn. BERT us
 
 ---
 
-## 11. Checklist antes de apresentar
+## 12. Checklist antes de apresentar
 
 - [x] `objeto_html` documentado como entrada oficial
 - [x] Validação manual 4/4 (≈83,2%)

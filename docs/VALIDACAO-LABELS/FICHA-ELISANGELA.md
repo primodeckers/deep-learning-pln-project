@@ -1,6 +1,6 @@
 # Validação manual de labels — Elisangela Osorio
 
-Revisão humana da qualidade do **label proxy** (órgão → macroárea). Gabarito e instruções: [`validacao_labels.md`](validacao_labels.md).
+Revisão humana da qualidade do **label proxy** (órgão → macroárea). Gabarito e instruções: [`VALIDACAO-LABELS.md`](VALIDACAO-LABELS.md).
 
 > **Ficha individual.** Preencha **Concorda?**, **Label humano** e **Observação** na tabela abaixo.
 
@@ -77,4 +77,4 @@ Observa-se que há muitos registros cujas classificações se dão apenas pelo �
 
 ## Referências
 
-- [`FASE1-CLASSIFICACAO.md`](../FASE1-CLASSIFICACAO.md) · [`metricas_e_decisoes.md`](../metricas_e_decisoes.md)
+- [`FASE1-CLASSIFICACAO.md`](../FASE1-CLASSIFICACAO.md) · [`METRICAS-E-DECISOES.md`](../METRICAS-E-DECISOES.md)

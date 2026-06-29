@@ -243,7 +243,7 @@ python scripts/run_preprocess.py --overwrite
 
 Verifique `data/processed/preprocess_manifest.json`: `records_written: 423`, `missing_html: 0`.
 
-A **validação manual de labels** usa amostra fixa de 30 editais (seed 42) gravada em `docs/validacao_labels/` — não regerar com `export_validacao_sample.py` após fichas preenchidas.
+A **validação manual de labels** usa amostra fixa de 30 editais (seed 42) gravada em `docs/VALIDACAO-LABELS/` — não regerar com `export_validacao_sample.py` após fichas preenchidas.
 
 ### 6.8 Estimativa por ano (2021–2025) e plano de coleta incremental
 
@@ -336,7 +336,7 @@ Ordem **2024 → 2023 → 2022 → 2021**: anos recentes primeiro (HTML mais par
 
 **O que não fazer na expansão:**
 
-- Não regerar `docs/validacao_labels/` após fichas preenchidas
+- Não regerar `docs/VALIDACAO-LABELS/` após fichas preenchidas
 - Não trocar entrada oficial para `texto` só porque F1 subiu
 - Não prometer ~3.000 antes de contar URLs únicas em cada CSV
 

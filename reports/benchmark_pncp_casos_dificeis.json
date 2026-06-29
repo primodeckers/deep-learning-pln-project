@@ -1,0 +1,121 @@
+{
+  "generated_at": "2026-06-29T00:57:23.237651+00:00",
+  "corpus": "data/processed/pncp_corpus_df2025.jsonl",
+  "n_total": 19944,
+  "cohorts": {
+    "com_keyword": {
+      "n": 10311,
+      "pct": 51.7
+    },
+    "sem_keyword_admin": {
+      "n": 8780,
+      "pct": 44.0
+    },
+    "sem_keyword_macroarea_nomeada": {
+      "n": 853,
+      "pct": 4.3
+    }
+  },
+  "escondidas_por_macroarea_orgao": {
+    "Seguranca": 311,
+    "Saude": 279,
+    "Infraestrutura/Obras": 157,
+    "Educacao": 57,
+    "Saneamento": 49
+  },
+  "distribuicao_10_classes": {
+    "Indeterminado": 9633,
+    "Saude": 3070,
+    "TI/Administracao": 1844,
+    "Infraestrutura/Obras": 1366,
+    "Educacao": 1101,
+    "Cultura": 1098,
+    "Seguranca": 869,
+    "Transporte": 492,
+    "MeioAmbiente": 272,
+    "Saneamento": 199
+  },
+  "leakage": {
+    "n_rotulavel_keyword": 10311,
+    "oracle_match_limpo_pct": 97.0,
+    "sem_vazamento_pct": 3.0
+  },
+  "eval_org_logreg_escondidas": {
+    "status": "ok",
+    "n_train": 2227,
+    "n_val": 393,
+    "n_test_escondidas": 853,
+    "labels": [
+      "Educacao",
+      "Infraestrutura/Obras",
+      "Saneamento",
+      "Saude",
+      "Seguranca"
+    ],
+    "metrics_val": {
+      "f1_macro": 0.901532646343967,
+      "accuracy": 0.9363867684478372
+    },
+    "metrics_test_escondidas": {
+      "f1_macro": 0.6526250406723163,
+      "accuracy": 0.7045720984759671,
+      "per_class": {
+        "Educacao": {
+          "precision": 0.5,
+          "recall": 0.5789473684210527,
+          "f1": 0.5365853658536586,
+          "support": 57
+        },
+        "Infraestrutura/Obras": {
+          "precision": 0.6687898089171974,
+          "recall": 0.6687898089171974,
+          "f1": 0.6687898089171974,
+          "support": 157
+        },
+        "Saneamento": {
+          "precision": 0.5283018867924528,
+          "recall": 0.5714285714285714,
+          "f1": 0.5490196078431373,
+          "support": 49
+        },
+        "Saude": {
+          "precision": 0.9894179894179894,
+          "recall": 0.6702508960573477,
+          "f1": 0.7991452991452992,
+          "support": 279
+        },
+        "Seguranca": {
+          "precision": 0.6391752577319587,
+          "recall": 0.797427652733119,
+          "f1": 0.709585121602289,
+          "support": 311
+        }
+      }
+    }
+  },
+  "eval_detecao_sinal_binario": {
+    "n_total": 19944,
+    "n_com_keyword": 10311,
+    "n_sem_keyword": 9633,
+    "test_accuracy": 0.9174,
+    "test_f1_positivo": 0.916
+  },
+  "tratamentos_sugeridos": [
+    {
+      "id": "pncp9_filter",
+      "descricao": "Excluir sem keyword (atual pncp9)",
+      "n_treino": 10311
+    },
+    {
+      "id": "pncp9full_indeterminado",
+      "descricao": "10 classes com Indeterminado",
+      "n_treino": 19944,
+      "n_indeterminado": 9633
+    },
+    {
+      "id": "benchmark_escondidas",
+      "descricao": "Gold proxy = macroárea órgão nas ~853 escondidas",
+      "n": 853
+    }
+  ]
+}

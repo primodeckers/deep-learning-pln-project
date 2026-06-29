@@ -89,7 +89,7 @@ Use os comandos `python` acima — equivalentes aos atalhos do `Makefile`.
 1. Conferir métricas no terminal e em `experiments/classification_bertimbau_*.json`
 2. **Commitar** o JSON + PNG do run **oficial** (se for referência do grupo)
 3. **Não commitar** `models/classification_bertimbau_*`
-4. Atualizar [`model_card.md`](model_card.md) se o run virar referência
+4. Atualizar [`MODEL-CARD.md`](MODEL-CARD.md) se o run virar referência
 5. Avisar o grupo (métricas + link do commit)
 
 ---

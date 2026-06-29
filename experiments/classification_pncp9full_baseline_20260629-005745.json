@@ -1,0 +1,488 @@
+{
+  "run_id": "classification_pncp9full_baseline_20260629-005745",
+  "task": "classification",
+  "model": "baseline",
+  "created_at": "2026-06-29T00:58:00.451921+00:00",
+  "text_field": "objeto_html_limpo",
+  "seed": 42,
+  "dataset": {
+    "path": "data/processed/pncp_corpus_df2025.jsonl",
+    "sha256": "8228dab0dcf6141c84295aae0ea18387a275bf5f37102f75d8bb88b30c53aa86",
+    "size_bytes": 16478234,
+    "n_records": 19944
+  },
+  "git_commit": "79063fc",
+  "params": {
+    "ngram_max": 2,
+    "min_df": 2,
+    "max_features": 20000,
+    "C": 1.0,
+    "max_iter": 1000,
+    "class_weight": "balanced",
+    "seed": 42
+  },
+  "labels": [
+    "Saude",
+    "Educacao",
+    "Seguranca",
+    "Saneamento",
+    "Infraestrutura/Obras",
+    "TI/Administracao",
+    "Transporte",
+    "Cultura",
+    "MeioAmbiente",
+    "Indeterminado"
+  ],
+  "label_scheme": "setores",
+  "class_distribution": {
+    "train": {
+      "Saude": 2149,
+      "Educacao": 771,
+      "Seguranca": 609,
+      "Saneamento": 139,
+      "Infraestrutura/Obras": 956,
+      "TI/Administracao": 1291,
+      "Transporte": 344,
+      "Cultura": 768,
+      "MeioAmbiente": 190,
+      "Indeterminado": 6743
+    },
+    "val": {
+      "Saude": 461,
+      "Educacao": 165,
+      "Seguranca": 130,
+      "Saneamento": 30,
+      "Infraestrutura/Obras": 205,
+      "TI/Administracao": 276,
+      "Transporte": 74,
+      "Cultura": 165,
+      "MeioAmbiente": 41,
+      "Indeterminado": 1445
+    },
+    "test": {
+      "Saude": 460,
+      "Educacao": 165,
+      "Seguranca": 130,
+      "Saneamento": 30,
+      "Infraestrutura/Obras": 205,
+      "TI/Administracao": 277,
+      "Transporte": 74,
+      "Cultura": 165,
+      "MeioAmbiente": 41,
+      "Indeterminado": 1445
+    }
+  },
+  "splits": {
+    "train": 13960,
+    "val": 2992,
+    "test": 2992
+  },
+  "metrics": {
+    "val": {
+      "accuracy": 0.8756684491978609,
+      "f1_macro": 0.8131516889758872,
+      "f1_weighted": 0.8769328861944913,
+      "per_class": {
+        "Saude": {
+          "precision": 0.974293059125964,
+          "recall": 0.8221258134490239,
+          "f1": 0.8917647058823529,
+          "support": 461
+        },
+        "Educacao": {
+          "precision": 0.8109756097560976,
+          "recall": 0.806060606060606,
+          "f1": 0.8085106382978723,
+          "support": 165
+        },
+        "Seguranca": {
+          "precision": 0.8571428571428571,
+          "recall": 0.7846153846153846,
+          "f1": 0.8192771084337349,
+          "support": 130
+        },
+        "Saneamento": {
+          "precision": 0.6842105263157895,
+          "recall": 0.8666666666666667,
+          "f1": 0.7647058823529411,
+          "support": 30
+        },
+        "Infraestrutura/Obras": {
+          "precision": 0.8009478672985783,
+          "recall": 0.824390243902439,
+          "f1": 0.8125,
+          "support": 205
+        },
+        "TI/Administracao": {
+          "precision": 0.8239202657807309,
+          "recall": 0.8985507246376812,
+          "f1": 0.8596187175043327,
+          "support": 276
+        },
+        "Transporte": {
+          "precision": 0.7469879518072289,
+          "recall": 0.8378378378378378,
+          "f1": 0.7898089171974523,
+          "support": 74
+        },
+        "Cultura": {
+          "precision": 0.7230769230769231,
+          "recall": 0.8545454545454545,
+          "f1": 0.7833333333333333,
+          "support": 165
+        },
+        "MeioAmbiente": {
+          "precision": 0.62,
+          "recall": 0.7560975609756098,
+          "f1": 0.6813186813186813,
+          "support": 41
+        },
+        "Indeterminado": {
+          "precision": 0.9216366158113731,
+          "recall": 0.9197231833910035,
+          "f1": 0.9206789054381711,
+          "support": 1445
+        }
+      },
+      "labels": [
+        "Saude",
+        "Educacao",
+        "Seguranca",
+        "Saneamento",
+        "Infraestrutura/Obras",
+        "TI/Administracao",
+        "Transporte",
+        "Cultura",
+        "MeioAmbiente",
+        "Indeterminado"
+      ],
+      "confusion_matrix": [
+        [
+          379,
+          7,
+          7,
+          1,
+          20,
+          12,
+          5,
+          5,
+          1,
+          24
+        ],
+        [
+          0,
+          133,
+          1,
+          0,
+          5,
+          7,
+          2,
+          5,
+          0,
+          12
+        ],
+        [
+          0,
+          0,
+          102,
+          1,
+          5,
+          3,
+          1,
+          5,
+          1,
+          12
+        ],
+        [
+          0,
+          0,
+          0,
+          26,
+          0,
+          0,
+          2,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          169,
+          9,
+          3,
+          5,
+          2,
+          16
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          1,
+          248,
+          3,
+          5,
+          4,
+          13
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          62,
+          3,
+          1,
+          8
+        ],
+        [
+          2,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          141,
+          0,
+          20
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          31,
+          8
+        ],
+        [
+          8,
+          21,
+          9,
+          7,
+          10,
+          22,
+          5,
+          25,
+          9,
+          1329
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.8686497326203209,
+      "f1_macro": 0.8160987941521093,
+      "f1_weighted": 0.8701292242461491,
+      "per_class": {
+        "Saude": {
+          "precision": 0.9649595687331537,
+          "recall": 0.7782608695652173,
+          "f1": 0.8616125150421179,
+          "support": 460
+        },
+        "Educacao": {
+          "precision": 0.8035714285714286,
+          "recall": 0.8181818181818182,
+          "f1": 0.8108108108108109,
+          "support": 165
+        },
+        "Seguranca": {
+          "precision": 0.873015873015873,
+          "recall": 0.8461538461538461,
+          "f1": 0.859375,
+          "support": 130
+        },
+        "Saneamento": {
+          "precision": 0.8125,
+          "recall": 0.8666666666666667,
+          "f1": 0.8387096774193549,
+          "support": 30
+        },
+        "Infraestrutura/Obras": {
+          "precision": 0.7934272300469484,
+          "recall": 0.824390243902439,
+          "f1": 0.8086124401913876,
+          "support": 205
+        },
+        "TI/Administracao": {
+          "precision": 0.8052805280528053,
+          "recall": 0.8808664259927798,
+          "f1": 0.8413793103448276,
+          "support": 277
+        },
+        "Transporte": {
+          "precision": 0.6521739130434783,
+          "recall": 0.8108108108108109,
+          "f1": 0.7228915662650602,
+          "support": 74
+        },
+        "Cultura": {
+          "precision": 0.6807511737089202,
+          "recall": 0.8787878787878788,
+          "f1": 0.7671957671957672,
+          "support": 165
+        },
+        "MeioAmbiente": {
+          "precision": 0.7317073170731707,
+          "recall": 0.7317073170731707,
+          "f1": 0.7317073170731707,
+          "support": 41
+        },
+        "Indeterminado": {
+          "precision": 0.9225401256106072,
+          "recall": 0.914878892733564,
+          "f1": 0.9186935371785963,
+          "support": 1445
+        }
+      },
+      "labels": [
+        "Saude",
+        "Educacao",
+        "Seguranca",
+        "Saneamento",
+        "Infraestrutura/Obras",
+        "TI/Administracao",
+        "Transporte",
+        "Cultura",
+        "MeioAmbiente",
+        "Indeterminado"
+      ],
+      "confusion_matrix": [
+        [
+          358,
+          9,
+          7,
+          1,
+          15,
+          12,
+          12,
+          6,
+          2,
+          38
+        ],
+        [
+          0,
+          135,
+          3,
+          0,
+          7,
+          6,
+          0,
+          6,
+          0,
+          8
+        ],
+        [
+          1,
+          0,
+          110,
+          0,
+          7,
+          3,
+          2,
+          2,
+          0,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          26,
+          1,
+          2,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          2,
+          169,
+          9,
+          5,
+          6,
+          1,
+          12
+        ],
+        [
+          2,
+          2,
+          0,
+          1,
+          0,
+          244,
+          2,
+          8,
+          0,
+          18
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          60,
+          3,
+          2,
+          8
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          2,
+          0,
+          145,
+          1,
+          15
+        ],
+        [
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          0,
+          1,
+          30,
+          6
+        ],
+        [
+          10,
+          18,
+          5,
+          2,
+          14,
+          22,
+          11,
+          36,
+          5,
+          1322
+        ]
+      ]
+    }
+  },
+  "artifacts": {
+    "model": "models/classification_pncp9full_baseline_20260629-005745.joblib",
+    "confusion_matrix": "reports/figures/classification_pncp9full_baseline_20260629-005745_confusion.png"
+  }
+}

@@ -38,7 +38,7 @@ Testar a hipótese do guia: *Transformers (BERTimbau) superam baseline clássico
 | `epochs` | 4 (early stopping, patience 2) |
 | `seed` | 42 |
 
-> Tuning futuro (LR, batch, class_weight no loss, etc.): [`hiperparametros_e_melhorias.md`](hiperparametros_e_melhorias.md)
+> Tuning futuro (LR, batch, class_weight no loss, etc.): [`HIPERPARAMETROS-E-MELHORIAS.md`](HIPERPARAMETROS-E-MELHORIAS.md)
 
 **Código:** `src/models/bert_classifier.py` · `scripts/run_train.py --config configs/classification_bert_gpu.yaml`
 

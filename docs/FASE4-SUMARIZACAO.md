@@ -2,7 +2,7 @@
 
 Tarefa à parte da classificação: mesmo corpus, objetivo diferente — um parágrafo legível pra quem não é da área jurídica.
 
-> Classificação: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) · [`metricas_e_decisoes.md`](metricas_e_decisoes.md)
+> Classificação: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) · [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md)
 
 ---
 

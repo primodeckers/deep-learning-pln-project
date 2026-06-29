@@ -9,7 +9,7 @@
 
 **Modelo principal do relatório:** Fase 1 (LogReg) — mesmo protocolo, melhor generalização no teste.
 
-**Comparativo val × teste (por que melhorou/piorou):** [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) · [`metricas_e_decisoes.md`](metricas_e_decisoes.md)
+**Comparativo val × teste (por que melhorou/piorou):** [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) · [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md)
 
 **Runs oficiais:** `experiments/classification_*_20260624-013*.json` · [`experiments/README.md`](../experiments/README.md)
 

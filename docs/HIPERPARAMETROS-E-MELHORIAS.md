@@ -3,7 +3,7 @@
 Notas do grupo para **discutir depois** — o que dá para ajustar hoje no código, o que ainda falta implementar e o que é realista esperar de ganho com o corpus atual (423 editais).
 
 > Contexto: runs oficiais `20260624-*` · decisão atual → LogReg F1 teste **0,740**  
-> Métricas e protocolo: [`metricas_e_decisoes.md`](metricas_e_decisoes.md) · val vs teste: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md)
+> Métricas e protocolo: [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md) · val vs teste: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md)
 
 ---
 
@@ -142,7 +142,7 @@ Grid manual pequeno — comparar **F1 macro na val**, confirmar no teste só no 
 | Mais editais / revisão de labels (Segurança, Educação) | Alto | Alto |
 | Data augmentation (paráfrase, back-translation) | Médio–alto no BERT | Médio |
 | K-fold estratificado (ex. 5×) para métrica estável | Médio (metodologia) | Médio |
-| Trocar `objeto_html` por campo com menos ruído (sem vazamento) | Variável | Já documentado em [`vazamento_de_label.md`](vazamento_de_label.md) |
+| Trocar `objeto_html` por campo com menos ruído (sem vazamento) | Variável | Já documentado em [`VAZAMENTO-DE-LABEL.md`](VAZAMENTO-DE-LABEL.md) |
 
 ---
 
@@ -223,8 +223,8 @@ Referência de mercado: [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEAR
 
 | Documento | Conteúdo |
 |-----------|----------|
-| [`metricas_e_decisoes.md`](metricas_e_decisoes.md) | Glossário, runs oficiais, hiperparâmetros de referência §7 |
+| [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md) | Glossário, runs oficiais, hiperparâmetros de referência §7 |
 | [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) | Por que SVM/BERT caíram val→teste |
 | [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) | Detalhe do pipeline BERT |
-| [`model_card.md`](model_card.md) | Números para slides |
+| [`MODEL-CARD.md`](MODEL-CARD.md) | Números para slides |
 | [`configs/classification.yaml`](../configs/classification.yaml) | Fonte canônica dos defaults |

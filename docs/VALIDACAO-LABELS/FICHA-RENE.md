@@ -1,6 +1,6 @@
 # Validação manual de labels — Renê Estevam Deckers
 
-Revisão humana da qualidade do **label proxy** (órgão → macroárea). Instruções e consolidação do grupo: [`validacao_labels.md`](validacao_labels.md).
+Revisão humana da qualidade do **label proxy** (órgão → macroárea). Instruções e consolidação do grupo: [`VALIDACAO-LABELS.md`](VALIDACAO-LABELS.md).
 
 > **Ficha individual — concluída em 2026-06-18.**
 
@@ -95,4 +95,4 @@ Em 30 editais (seed 42), concordei com o label automático em 25 casos (96,2% so
 
 ## Referências
 
-- [`FASE1-CLASSIFICACAO.md`](../FASE1-CLASSIFICACAO.md) · [`metricas_e_decisoes.md`](../metricas_e_decisoes.md)
+- [`FASE1-CLASSIFICACAO.md`](../FASE1-CLASSIFICACAO.md) · [`METRICAS-E-DECISOES.md`](../METRICAS-E-DECISOES.md)

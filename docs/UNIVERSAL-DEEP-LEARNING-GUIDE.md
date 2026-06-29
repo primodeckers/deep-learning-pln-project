@@ -239,7 +239,7 @@ Práticas comuns em produção de PLN em 2024–2025, mapeadas para o nosso esco
 | Transformer pré-treinado em PT | BERTimbau, Legal-BERT-PT | Sim — BERTimbau |
 | Fine-tuning com Hugging Face | `transformers` + `Trainer` | Sim |
 | Experiment tracking | MLflow (local) + JSON em `experiments/` | Sim — desde Fase 2 |
-| Hiperparâmetros | Grid/random search, Optuna | Manual (suficiente para o prazo); ver [`hiperparametros_e_melhorias.md`](hiperparametros_e_melhorias.md) |
+| Hiperparâmetros | Grid/random search, Optuna | Manual (suficiente para o prazo); ver [`HIPERPARAMETROS-E-MELHORIAS.md`](HIPERPARAMETROS-E-MELHORIAS.md) |
 | Classificação desbalanceada | `class_weight`, focal loss | `class_weight` |
 | Sumarização | T5/mT5, BART, GPT com RAG | mT5 ou prompt LLM (amostra) |
 | Avaliação de resumo | ROUGE + avaliação humana | Sim (ambos) |
@@ -274,7 +274,7 @@ O modelo **não** recebe o órgão como feature — só o texto. O órgão gera 
 
 F1 macro no **teste** é o número que usamos pra comparar modelos. Validação serve pra diagnóstico (e early stopping do BERT), não pra escolher o modelo final.
 
-Glossário e decisão do LogReg: [`metricas_e_decisoes.md`](metricas_e_decisoes.md).  
+Glossário e decisão do LogReg: [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md).  
 Val vs teste nas três fases: [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md).
 
 **Números oficiais (jun/2026, `objeto_html`, seed 42):**
@@ -414,7 +414,7 @@ deep-learning-pln-project/
 │   ├── raw/              # CSV + HTML
 │   ├── interim/          # textos e records extraídos
 │   └── processed/        # corpus JSONL + labels
-├── docs/                 # documentação (+ model_card, métricas)
+├── docs/                 # documentação (+ MODEL-CARD, METRICAS-E-DECISOES)
 ├── experiments/          # JSON por run + mlflow.db (tracking local)
 ├── models/               # checkpoints (gitignored)
 ├── notebooks/            # 01_eda (exploração) · 02_demo (apresentação)
@@ -460,7 +460,7 @@ pytest
 | Mypy | tipos estáticos | `pyproject.toml` → `[tool.mypy]` |
 | Pytest | regressão rápida | `tests/`; corpus real opcional (`skipif`) |
 
-Documentação de resultados: [`model_card.md`](model_card.md), [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
+Documentação de resultados: [`MODEL-CARD.md`](MODEL-CARD.md), [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md).
 
 ### Rastreamento de experimentos (MLflow)
 
@@ -546,7 +546,7 @@ _Ajustar datas conforme calendário real da disciplina._
 | 2026-06-08 | Baseline de sumarização = extrativo por regras (não TextRank puro) | Determinístico, não alucina; cobre objeto/quem/prazo/valor (§7) |
 | 2026-06-18 | Rastreamento com MLflow local + JSON | Comparar baseline vs BERTimbau; versionar corpus por hash SHA-256 |
 | 2026-06-18 | Dev: ruff + mypy + pytest + Makefile + `pyproject.toml` instalável | Qualidade de código e onboarding do grupo; model card e doc de métricas |
-| 2026-06-22 | Validação manual de labels: **4/4 fichas**; média ≈83,2% | Consolidação em `validacao_labels.md` § Síntese |
+| 2026-06-22 | Validação manual de labels: **4/4 fichas**; média ≈83,2% | Consolidação em `VALIDACAO-LABELS.md` § Síntese |
 | 2026-06-23 | Fase 2 BERTimbau — run GPU `222508`; F1 teste ≈0,52 | Abaixo do baseline |
 | 2026-06-24 | TF-IDF + SVM (Fase 3); F1 teste 0,652 | LogReg permanece oficial |
 | 2026-06-24 | Retreino completo runs `20260624-013*`; docs métricas + decisão modelo | LogReg 0,74 · SVM 0,65 · BERT 0,40 |

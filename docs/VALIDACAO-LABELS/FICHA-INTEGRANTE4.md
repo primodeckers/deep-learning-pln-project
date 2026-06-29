@@ -1,7 +1,7 @@
 # Validação manual de labels — Alexandre Hugo
 
 Revisão humana da qualidade do **label proxy** (órgão → macroárea).
-Gabarito e instruções: [`validacao_labels.md`](validacao_labels.md).
+Gabarito e instruções: [`VALIDACAO-LABELS.md`](VALIDACAO-LABELS.md).
 
 > **Ficha individual.** Preencha **Concorda?**, **Label humano** e **Observação** na tabela abaixo.
 
@@ -81,4 +81,4 @@ A validação manual indica que o label proxy órgão → macroárea pode ser ut
 ## Referências
 
 * [`FASE1-CLASSIFICACAO.md`](../FASE1-CLASSIFICACAO.md)
-* [`metricas_e_decisoes.md`](../metricas_e_decisoes.md)
+* [`METRICAS-E-DECISOES.md`](../METRICAS-E-DECISOES.md)

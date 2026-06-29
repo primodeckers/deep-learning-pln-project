@@ -13,7 +13,7 @@ Editais de licitação pública descrevem, em linguagem jurídica e técnica, o 
 Este projeto aplica técnicas de Processamento de Linguagem Natural a **423 editais reais** do DF em 2025, coletados pelo próprio grupo — atendendo à exigência da disciplina de usar dados inéditos, sem bases prontas de plataformas como Kaggle. O trabalho desenvolve duas tarefas complementares sobre o mesmo corpus:
 
 1. **Classificação (tarefa principal):** inferir automaticamente a **macroárea de gasto público** a partir da descrição do objeto da licitação — Saúde, Saneamento, Segurança, Educação, Infraestrutura/Obras ou Administração/Outros.
-2. **Sumarização cidadã (tarefa complementar):** produzir um parágrafo legível com o que está sendo contratado, quem pode participar, prazo de propostas e valor, quando disponível no texto.
+
 
 A escolha conecta PLN a um problema concreto de transparência e acessibilidade no setor público: facilitar a triagem temática de licitações e reduzir a barreira de entrada para quem não domina o jargão administrativo.
 
@@ -155,21 +155,6 @@ Saúde e Saneamento funcionam bem nos três modelos clássicos — palavras como
 
 A diferença confirma que métricas altas com o HTML completo refletem, em grande parte, memorização do órgão — não compreensão semântica do gasto.
 
-### 6.4 Sumarização extrativa
-
-Na amostra de 18 editais:
-
-- **Prazo de propostas extraído:** 15 de 18 (83%)
-- **Valor homologado extraído:** 18 de 18 (100%)
-
-Os três casos sem prazo correspondem, em geral, a dispensas ou HTML sem campo “Entrega da Proposta” — ausência no dado, não erro do extrator.
-
-**Exemplo ilustrativo** (Saúde — insumos odontológicos):
-
-*Objeto original:* “Pregão Eletrônico — Aquisição regular de insumos odontológicos… para atender às necessidades da Secretaria de Saúde DF…”
-
-*Resumo cidadão gerado:* “O órgão Secretaria de Estado de Saúde do Distrito Federal pretende adquirir insumos odontológicos… A contratação ocorre na modalidade Pregão. A participação é aberta a empresas que atendam às exigências do edital. As propostas podem ser entregues a partir de 15/01/2025. O valor homologado foi de R$ 338.828,29.”
-
 ### 6.5 Impacto aplicado
 
 Além das métricas, o projeto permite cruzamentos úteis à transparência: distribuição de licitações por área predita, relação entre área e valor homologado, concentração por modalidade (pregão versus dispensa). A classificação responde *“em que o DF gasta?”*; a sumarização responde *“o que este edital significa para quem quer participar?”* — duas faces do mesmo problema de acessibilidade.
@@ -214,6 +199,32 @@ O projeto demonstrou, na prática, o ciclo completo de um trabalho de PLN aplica
 
 ---
 
+## 5.5 Extensão PNCP DF/2025 (exploratória)
+
+Além dos 423 editais ComprasNet, o grupo montou corpus PNCP com **19.944 compras** (`UF=DF`, `ano=2025`) via `scripts/run_preprocess_pncp.py`. Objetivo: testar escala, taxonomia de **9 setores empíricos** (keyword no objeto) e mitigações para textos vagos.
+
+### Protocolos implementados
+
+| ID | Rótulo | Corpus | F1 macro teste (melhor modelo) |
+|----|--------|--------|-------------------------------|
+| `pncp` | 6 macroáreas (órgão) | 19.944 | **BERT 0,858** |
+| `pncp9` | 9 setores, só keyword | ~10.311 | BERT 0,969 |
+| `pncp9full` | 9 + Indeterminado | 19.944 | BERT 0,970 |
+| `pncp9fb` | fallback órgão | 19.944 | LogReg 0,824 |
+| `pncp9fbi` | fallback + info complementar | 19.944 | **BERT 0,955** |
+
+### Achados principais
+
+1. **Escala muda o veredito BERT vs clássico:** no PNCP honesto por órgão, BERT (0,858) supera LogReg (0,756) — oposto ao corpus 423 (0,40 vs 0,74).
+2. **~48%** das compras não têm keyword setorial no objeto; classe `Indeterminado` é necessária.
+3. **Fallback por órgão** resgata ~853 “escondidas” (órgão nomeado, objeto burocrático).
+4. **Info complementar:** piora modelos lineares (0,824→0,788) mas BERT sobe para 0,955 — valor semântico só emerge com Transformer.
+5. F1 ~0,97 nos protocolos keyword **não invalida** o trabalho, mas exige **declarar acoplamento rótulo↔texto** (regras documentadas em [`REGRAS-E-PROTOCOLOS.md`](REGRAS-E-PROTOCOLOS.md)).
+
+A **entrega oficial da disciplina** permanece o protocolo ComprasNet 423 com LogReg F1 **0,74**. PNCP é extensão analítica documentada.
+
+---
+
 ## 9. Referências
 
 *(Completar formatação ABNT/IEEE no PDF final — mínimo 5 domínio + 5 técnica.)*
@@ -252,4 +263,4 @@ Export CSV (ComprasNet DF 2025)
 
 ---
 
-*Documento consolidado · junho/2026 · runs oficiais de 24/06/2026*
+*Documento consolidado · junho/2026 · runs ComprasNet 24/06/2026 · extensão PNCP 28–29/06/2026*

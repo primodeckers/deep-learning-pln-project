@@ -1,8 +1,8 @@
 """Atualiza amostra no gabarito e nas fichas individuais (Fase 1).
 
 Saídas:
-  - docs/validacao_labels/validacao_labels.md  — gabarito (amostra + consolidação)
-  - docs/validacao_labels/ficha_*.md           — cópia por integrante
+  - docs/VALIDACAO-LABELS/VALIDACAO-LABELS.md  — gabarito (amostra + consolidação)
+  - docs/VALIDACAO-LABELS/FICHA-*.md           — cópia por integrante
 
 Uso:
     python scripts/export_validacao_sample.py
@@ -27,8 +27,8 @@ from src.preprocess.dataset import load_records
 from src.preprocess.labels import AREAS
 
 CORPUS = ROOT / "data" / "processed" / "licitacoes_corpus.jsonl"
-GABARITO = ROOT / "docs" / "validacao_labels" / "validacao_labels.md"
-FICHAS_DIR = ROOT / "docs" / "validacao_labels"
+GABARITO = ROOT / "docs" / "VALIDACAO-LABELS" / "VALIDACAO-LABELS.md"
+FICHAS_DIR = ROOT / "docs" / "VALIDACAO-LABELS"
 PER_AREA = 5
 SEED = 42
 MARKER_START = "<!-- AMOSTRA_INICIO -->"
@@ -144,7 +144,7 @@ def render_ficha_template(
     """Gera ficha vazia a partir do gabarito (usado só ao regerar amostra)."""
     return f"""# Validação manual de labels — {revisor.nome}
 
-Revisão humana da qualidade do **label proxy** (órgão → macroárea). Gabarito e instruções: [`validacao_labels.md`](validacao_labels.md).
+Revisão humana da qualidade do **label proxy** (órgão → macroárea). Gabarito e instruções: [`VALIDACAO-LABELS.md`](VALIDACAO-LABELS.md).
 
 > **Ficha individual.** Preencha **Concorda?**, **Label humano** e **Observação** na tabela abaixo.
 
@@ -190,7 +190,7 @@ _Espaço livre._
 
 ## Referências
 
-- [`FASE1-CLASSIFICACAO.md`](../FASE1-CLASSIFICACAO.md) · [`metricas_e_decisoes.md`](../metricas_e_decisoes.md)
+- [`FASE1-CLASSIFICACAO.md`](../FASE1-CLASSIFICACAO.md) · [`METRICAS-E-DECISOES.md`](../METRICAS-E-DECISOES.md)
 """
 
 
@@ -218,9 +218,9 @@ def main() -> None:
 
     for revisor in REVISORES:
         if revisor.slug == "rene":
-            print(f"  ficha: {FICHAS_DIR / f'ficha_{revisor.slug}.md'} (mantida — já preenchida)")
+            print(f"  ficha: {FICHAS_DIR / f'FICHA-{revisor.slug.upper()}.md'} (mantida — já preenchida)")
             continue
-        path = FICHAS_DIR / f"ficha_{revisor.slug}.md"
+        path = FICHAS_DIR / f"FICHA-{revisor.slug.upper()}.md"
         path.write_text(render_ficha_template(revisor, rows, n, table_ficha), encoding="utf-8")
         print(f"  ficha: {path} (regenerada)")
 

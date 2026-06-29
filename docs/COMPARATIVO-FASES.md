@@ -2,7 +2,7 @@
 
 Notas do grupo para montar relatório e slides. A ideia é explicar o que aconteceu quando comparamos validação e teste nos três classificadores, e por que ficamos com o LogReg da Fase 1.
 
-Runs que usamos: `experiments/classification_*_20260624-013*.json`. Detalhe de cada métrica em [`metricas_e_decisoes.md`](metricas_e_decisoes.md).
+Runs que usamos: `experiments/classification_*_20260624-013*.json`. Detalhe de cada métrica em [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md).
 
 ---
 

@@ -2,7 +2,7 @@
 
 Revisão humana da qualidade do **label proxy** (órgão → macroárea). Mitiga a limitação documentada em [`FASE1-CLASSIFICACAO.md`](../FASE1-CLASSIFICACAO.md) §3.1 e sustenta a discussão de vieses no relatório.
 
-> **Gabarito (amostra fixa).** Cada integrante preenche sua ficha em [`ficha_*.md`](.) — não preencha as colunas de revisão neste arquivo.
+> **Gabarito (amostra fixa).** Cada integrante preenche sua ficha em [`FICHA-*.md`](.) — não preencha as colunas de revisão neste arquivo.
 
 ---
 
@@ -18,10 +18,10 @@ Verificar se o mapeamento automático em `src/preprocess/labels.py` reflete a **
 
 | Integrante | Arquivo |
 |------------|---------|
-| Elisangela Osorio | [`ficha_elisangela.md`](ficha_elisangela.md) |
-| Alexandre Ferreira Ponte | [`ficha_alexandre.md`](ficha_alexandre.md) |
-| Renê Estevam Deckers | [`ficha_rene.md`](ficha_rene.md) |
-| Alexandre Hugo Sampaio Netto | [`ficha_integrante4.md`](ficha_integrante4.md) |
+| Elisangela Osorio | [`FICHA-ELISANGELA.md`](FICHA-ELISANGELA.md) |
+| Alexandre Ferreira Ponte | [`FICHA-ALEXANDRE.md`](FICHA-ALEXANDRE.md) |
+| Renê Estevam Deckers | [`FICHA-RENE.md`](FICHA-RENE.md) |
+| Alexandre Hugo Sampaio Netto | [`FICHA-INTEGRANTE4.md`](FICHA-INTEGRANTE4.md) |
 
 ---
 
@@ -34,7 +34,7 @@ source .venv/Scripts/activate
 python scripts/export_validacao_sample.py
 ```
 
-Atualiza a **amostra** neste gabarito e nas fichas ainda vazias. A ficha já preenchida (`ficha_rene.md`) **não é sobrescrita**.
+Atualiza a **amostra** neste gabarito e nas fichas ainda vazias. A ficha já preenchida (`FICHA-RENE.md`) **não é sobrescrita**.
 
 > **Atenção:** a amostra de 30 editais abaixo foi fixada com o corpus completo. **Não regerar** depois que fichas estiverem preenchidas — senão apaga respostas e pode mudar os IDs sorteados.
 
@@ -44,10 +44,10 @@ Atualiza a **amostra** neste gabarito e nas fichas ainda vazias. A ficha já pre
 
 | Integrante | Arquivo | Status | Taxa (S / S+N) |
 |------------|---------|--------|----------------|
-| Elisangela Osorio | [`ficha_elisangela.md`](ficha_elisangela.md) | **Concluída** (2026-06-21) | **62,5%** (15/24) |
-| Alexandre Ferreira Ponte | [`ficha_alexandre.md`](ficha_alexandre.md) | **Concluída** (2026-06-22) | **95,7%** (22/23) |
-| Renê Estevam Deckers | [`ficha_rene.md`](ficha_rene.md) | **Concluída** (2026-06-18) | **96,2%** (25/26) |
-| Alexandre Hugo | [`ficha_integrante4.md`](ficha_integrante4.md) | **Concluída** (2026-06-19) | **78,3%** (18/23) |
+| Elisangela Osorio | [`FICHA-ELISANGELA.md`](FICHA-ELISANGELA.md) | **Concluída** (2026-06-21) | **62,5%** (15/24) |
+| Alexandre Ferreira Ponte | [`FICHA-ALEXANDRE.md`](FICHA-ALEXANDRE.md) | **Concluída** (2026-06-22) | **95,7%** (22/23) |
+| Renê Estevam Deckers | [`FICHA-RENE.md`](FICHA-RENE.md) | **Concluída** (2026-06-18) | **96,2%** (25/26) |
+| Alexandre Hugo | [`FICHA-INTEGRANTE4.md`](FICHA-INTEGRANTE4.md) | **Concluída** (2026-06-19) | **78,3%** (18/23) |
 
 ---
 
@@ -160,7 +160,7 @@ _Completo — 4 de 4 fichas entregues (Renê 2026-06-18; Alexandre Hugo 2026-06-
 
 **Conclusão:** o mapeamento por órgão é **aceitável** para o escopo do trabalho, com ressalva documentada. Ajuste fino em `AREA_KEYWORDS` (ex.: órgãos com divisão de saúde) é melhoria futura, não bloqueante para o baseline.
 
-Detalhes linha a linha: [`ficha_rene.md`](ficha_rene.md).
+Detalhes linha a linha: [`FICHA-RENE.md`](FICHA-RENE.md).
 
 ### Resultado — Alexandre Ferreira Ponte
 
@@ -178,7 +178,7 @@ Detalhes linha a linha: [`ficha_rene.md`](ficha_rene.md).
 
 **Conclusão:** o label proxy é **aceitável** para o escopo; a fragilidade não está em erros de mapeamento por órgão, mas na perda de granularidade em aquisições transversais — ruído estrutural a contextualizar na matriz de confusão (fronteiras Saúde↔Segurança e Saneamento↔Administração).
 
-Detalhes linha a linha: [`ficha_alexandre.md`](ficha_alexandre.md).
+Detalhes linha a linha: [`FICHA-ALEXANDRE.md`](FICHA-ALEXANDRE.md).
 
 ### Resultado — Elisangela Osorio
 
@@ -190,7 +190,7 @@ Detalhes linha a linha: [`ficha_alexandre.md`](ficha_alexandre.md).
 | Ambíguos (`?`) | 6 |
 | **Taxa** | **62,5%** (15/24, ignorando `?`) |
 
-Revisão mais rigorosa do grupo: marca `N` sempre que o objeto aponta para área diferente da do órgão — CBMDF→`Saude` (4, 12, 22), CAESB→`Administracao/Outros` (8, 19, 28, 29) ou `Infraestrutura/Obras` (9), e SEFAZ→`Educacao` (3). Trata os editais sem `objeto_html` como `?`. Detalhes: [`ficha_elisangela.md`](ficha_elisangela.md).
+Revisão mais rigorosa do grupo: marca `N` sempre que o objeto aponta para área diferente da do órgão — CBMDF→`Saude` (4, 12, 22), CAESB→`Administracao/Outros` (8, 19, 28, 29) ou `Infraestrutura/Obras` (9), e SEFAZ→`Educacao` (3). Trata os editais sem `objeto_html` como `?`. Detalhes: [`FICHA-ELISANGELA.md`](FICHA-ELISANGELA.md).
 
 ### Resultado — Alexandre Hugo
 
@@ -202,7 +202,7 @@ Revisão mais rigorosa do grupo: marca `N` sempre que o objeto aponta para área
 | Ambíguos (`?`) | 7 |
 | **Taxa** | **78,3%** (18/23, ignorando `?`) |
 
-Posição intermediária: marca `N` nos casos de saúde em órgão de segurança (4, 12, 22), TCDF→`Saude` (30) e CAESB divisórias→`Administracao/Outros` (28); deixa TI/serviços da CAESB como `?`. Detalhes: [`ficha_integrante4.md`](ficha_integrante4.md).
+Posição intermediária: marca `N` nos casos de saúde em órgão de segurança (4, 12, 22), TCDF→`Saude` (30) e CAESB divisórias→`Administracao/Outros` (28); deixa TI/serviços da CAESB como `?`. Detalhes: [`FICHA-INTEGRANTE4.md`](FICHA-INTEGRANTE4.md).
 
 ### Síntese para o relatório
 
@@ -226,4 +226,4 @@ As **4 fichas** foram concluídas. A **média das taxas individuais** de concord
 
 - Mapeamento automático: `src/preprocess/labels.py`
 - Guia da Fase 1: [`FASE1-CLASSIFICACAO.md`](../FASE1-CLASSIFICACAO.md)
-- Discussão label proxy: [`metricas_e_decisoes.md`](../metricas_e_decisoes.md)
+- Discussão label proxy: [`METRICAS-E-DECISOES.md`](../METRICAS-E-DECISOES.md)

@@ -1,0 +1,38 @@
+# Classificação PNCP DF/2025 — 9 setores empíricos (keyword no objeto).
+# Corpus: data/processed/pncp_corpus_df2025.jsonl (~20k compras)
+# Apenas registros com ≥1 keyword setorial (~10,3k após filtro).
+#
+# Treino:
+#   python scripts/run_train.py --model baseline --config configs/classification_pncp_9setores.yaml --corpus data/processed/pncp_corpus_df2025.jsonl
+#   python scripts/run_train.py --model svm --config configs/classification_pncp_9setores.yaml --corpus data/processed/pncp_corpus_df2025.jsonl
+#   python scripts/run_train.py --model bertimbau --config configs/classification_pncp_9setores.yaml --corpus data/processed/pncp_corpus_df2025.jsonl
+
+task: classification
+model: baseline
+run_prefix: pncp9
+label_scheme: setores
+filter_unlabeled: true
+text_field: objeto_html_limpo
+seed: 42
+
+val_size: 0.15
+test_size: 0.15
+
+params:
+  ngram_max: 2
+  min_df: 2
+  max_features: 20000
+  C: 1.0
+  max_iter: 1000
+  class_weight: balanced
+
+  svm_kernel: linear
+  svm_probability: true
+
+  model_name: neuralmind/bert-base-portuguese-cased
+  max_length: 512
+  batch_size: 16
+  learning_rate: 2.0e-5
+  epochs: 4
+  early_stopping_patience: 2
+

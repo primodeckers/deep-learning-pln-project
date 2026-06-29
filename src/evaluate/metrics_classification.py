@@ -4,7 +4,7 @@ F1 macro = métrica primária de seleção (classes desbalanceadas). Accuracy e
 F1 weighted são secundárias. ``zero_division=0`` evita erro quando uma classe
 não aparece no conjunto avaliado.
 
-Decisões: ``docs/FASE1-CLASSIFICACAO.md`` §5 e ``docs/metricas_e_decisoes.md``.
+Decisões: ``docs/FASE1-CLASSIFICACAO.md`` §5 e ``docs/METRICAS-E-DECISOES.md``.
 """
 
 from __future__ import annotations

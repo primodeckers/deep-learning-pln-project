@@ -1,0 +1,272 @@
+{
+  "run_id": "classification_svm_20260628-232322",
+  "task": "classification",
+  "model": "svm",
+  "created_at": "2026-06-28T23:23:29.053931+00:00",
+  "text_field": "objeto_html_limpo",
+  "seed": 42,
+  "dataset": {
+    "path": "data/processed/licitacoes_corpus.jsonl",
+    "sha256": "46c6e761ca24bc9ba687a2b60349f7392eb9a7ca2d5d1abf7a78861443f45984",
+    "size_bytes": 1939707,
+    "n_records": 423
+  },
+  "git_commit": "79063fc",
+  "params": {
+    "ngram_max": 2,
+    "min_df": 2,
+    "max_features": 20000,
+    "C": 1.0,
+    "class_weight": "balanced",
+    "svm_kernel": "linear",
+    "svm_probability": true,
+    "seed": 42
+  },
+  "labels": [
+    "Saude",
+    "Saneamento",
+    "Seguranca",
+    "Educacao",
+    "Infraestrutura/Obras",
+    "Administracao/Outros"
+  ],
+  "class_distribution": {
+    "train": {
+      "Saude": 78,
+      "Saneamento": 35,
+      "Seguranca": 40,
+      "Educacao": 12,
+      "Infraestrutura/Obras": 17,
+      "Administracao/Outros": 113
+    },
+    "val": {
+      "Saude": 17,
+      "Saneamento": 7,
+      "Seguranca": 9,
+      "Educacao": 3,
+      "Infraestrutura/Obras": 3,
+      "Administracao/Outros": 25
+    },
+    "test": {
+      "Saude": 17,
+      "Saneamento": 7,
+      "Seguranca": 9,
+      "Educacao": 2,
+      "Infraestrutura/Obras": 4,
+      "Administracao/Outros": 25
+    }
+  },
+  "splits": {
+    "train": 295,
+    "val": 64,
+    "test": 64
+  },
+  "metrics": {
+    "val": {
+      "accuracy": 0.796875,
+      "f1_macro": 0.8064666207602804,
+      "f1_weighted": 0.7907257236876952,
+      "per_class": {
+        "Saude": {
+          "precision": 1.0,
+          "recall": 0.7058823529411765,
+          "f1": 0.8275862068965517,
+          "support": 17
+        },
+        "Saneamento": {
+          "precision": 1.0,
+          "recall": 0.7142857142857143,
+          "f1": 0.8333333333333334,
+          "support": 7
+        },
+        "Seguranca": {
+          "precision": 0.8,
+          "recall": 0.4444444444444444,
+          "f1": 0.5714285714285714,
+          "support": 9
+        },
+        "Educacao": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Infraestrutura/Obras": {
+          "precision": 1.0,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
+          "support": 3
+        },
+        "Administracao/Outros": {
+          "precision": 0.6756756756756757,
+          "recall": 1.0,
+          "f1": 0.8064516129032258,
+          "support": 25
+        }
+      },
+      "labels": [
+        "Saude",
+        "Saneamento",
+        "Seguranca",
+        "Educacao",
+        "Infraestrutura/Obras",
+        "Administracao/Outros"
+      ],
+      "confusion_matrix": [
+        [
+          12,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        [
+          0,
+          5,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          0,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          25
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.8125,
+      "f1_macro": 0.6709935897435897,
+      "f1_weighted": 0.7958984375,
+      "per_class": {
+        "Saude": {
+          "precision": 1.0,
+          "recall": 0.8823529411764706,
+          "f1": 0.9375,
+          "support": 17
+        },
+        "Saneamento": {
+          "precision": 1.0,
+          "recall": 0.8571428571428571,
+          "f1": 0.9230769230769231,
+          "support": 7
+        },
+        "Seguranca": {
+          "precision": 1.0,
+          "recall": 0.4444444444444444,
+          "f1": 0.6153846153846154,
+          "support": 9
+        },
+        "Educacao": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "Infraestrutura/Obras": {
+          "precision": 0.75,
+          "recall": 0.75,
+          "f1": 0.75,
+          "support": 4
+        },
+        "Administracao/Outros": {
+          "precision": 0.6857142857142857,
+          "recall": 0.96,
+          "f1": 0.8,
+          "support": 25
+        }
+      },
+      "labels": [
+        "Saude",
+        "Saneamento",
+        "Seguranca",
+        "Educacao",
+        "Infraestrutura/Obras",
+        "Administracao/Outros"
+      ],
+      "confusion_matrix": [
+        [
+          15,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          6,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          0,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          24
+        ]
+      ]
+    }
+  },
+  "artifacts": {
+    "model": "models/classification_svm_20260628-232322.joblib",
+    "confusion_matrix": "reports/figures/classification_svm_20260628-232322_confusion.png"
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "run_id": "classification_pncp_bertimbau_20260628-233442",
+  "task": "classification",
+  "model": "bertimbau",
+  "created_at": "2026-06-28T23:44:38.924798+00:00",
+  "text_field": "objeto_html_limpo",
+  "seed": 42,
+  "dataset": {
+    "path": "data/processed/pncp_corpus_df2025.jsonl",
+    "sha256": "8228dab0dcf6141c84295aae0ea18387a275bf5f37102f75d8bb88b30c53aa86",
+    "size_bytes": 16478234,
+    "n_records": 19944
+  },
+  "git_commit": "79063fc",
+  "params": {
+    "model_name": "neuralmind/bert-base-portuguese-cased",
+    "max_length": 512,
+    "batch_size": 32,
+    "learning_rate": 2e-05,
+    "epochs": 3,
+    "early_stopping_patience": 1,
+    "seed": 42
+  },
+  "labels": [
+    "Saude",
+    "Saneamento",
+    "Seguranca",
+    "Educacao",
+    "Infraestrutura/Obras",
+    "Administracao/Outros"
+  ],
+  "class_distribution": {
+    "train": {
+      "Saude": 1000,
+      "Saneamento": 202,
+      "Seguranca": 814,
+      "Educacao": 182,
+      "Infraestrutura/Obras": 233,
+      "Administracao/Outros": 11529
+    },
+    "val": {
+      "Saude": 214,
+      "Saneamento": 43,
+      "Seguranca": 175,
+      "Educacao": 39,
+      "Infraestrutura/Obras": 50,
+      "Administracao/Outros": 2471
+    },
+    "test": {
+      "Saude": 214,
+      "Saneamento": 43,
+      "Seguranca": 175,
+      "Educacao": 39,
+      "Infraestrutura/Obras": 50,
+      "Administracao/Outros": 2471
+    }
+  },
+  "splits": {
+    "train": 13960,
+    "val": 2992,
+    "test": 2992
+  },
+  "metrics": {
+    "val": {
+      "accuracy": 0.9592245989304813,
+      "f1_macro": 0.8601056800391028,
+      "f1_weighted": 0.9577382258631789,
+      "per_class": {
+        "Saude": {
+          "precision": 0.9597989949748744,
+          "recall": 0.8925233644859814,
+          "f1": 0.9249394673123487,
+          "support": 214
+        },
+        "Saneamento": {
+          "precision": 0.8974358974358975,
+          "recall": 0.813953488372093,
+          "f1": 0.8536585365853658,
+          "support": 43
+        },
+        "Seguranca": {
+          "precision": 0.9172413793103448,
+          "recall": 0.76,
+          "f1": 0.83125,
+          "support": 175
+        },
+        "Educacao": {
+          "precision": 0.9615384615384616,
+          "recall": 0.6410256410256411,
+          "f1": 0.7692307692307693,
+          "support": 39
+        },
+        "Infraestrutura/Obras": {
+          "precision": 0.8297872340425532,
+          "recall": 0.78,
+          "f1": 0.8041237113402062,
+          "support": 50
+        },
+        "Administracao/Outros": {
+          "precision": 0.9649053627760252,
+          "recall": 0.990287333063537,
+          "f1": 0.9774315957659278,
+          "support": 2471
+        }
+      },
+      "labels": [
+        "Saude",
+        "Saneamento",
+        "Seguranca",
+        "Educacao",
+        "Infraestrutura/Obras",
+        "Administracao/Outros"
+      ],
+      "confusion_matrix": [
+        [
+          191,
+          1,
+          1,
+          0,
+          1,
+          20
+        ],
+        [
+          0,
+          35,
+          0,
+          0,
+          0,
+          8
+        ],
+        [
+          1,
+          0,
+          133,
+          0,
+          2,
+          39
+        ],
+        [
+          0,
+          0,
+          0,
+          25,
+          1,
+          13
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          39,
+          9
+        ],
+        [
+          7,
+          3,
+          9,
+          1,
+          4,
+          2447
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.9598930481283422,
+      "f1_macro": 0.8583485519426826,
+      "f1_weighted": 0.9580752259130635,
+      "per_class": {
+        "Saude": {
+          "precision": 0.9516908212560387,
+          "recall": 0.9205607476635514,
+          "f1": 0.9358669833729216,
+          "support": 214
+        },
+        "Saneamento": {
+          "precision": 0.9090909090909091,
+          "recall": 0.6976744186046512,
+          "f1": 0.7894736842105263,
+          "support": 43
+        },
+        "Seguranca": {
+          "precision": 0.9290780141843972,
+          "recall": 0.7485714285714286,
+          "f1": 0.8291139240506329,
+          "support": 175
+        },
+        "Educacao": {
+          "precision": 0.8888888888888888,
+          "recall": 0.6153846153846154,
+          "f1": 0.7272727272727273,
+          "support": 39
+        },
+        "Infraestrutura/Obras": {
+          "precision": 0.9761904761904762,
+          "recall": 0.82,
+          "f1": 0.8913043478260869,
+          "support": 50
+        },
+        "Administracao/Outros": {
+          "precision": 0.9634146341463414,
+          "recall": 0.991096721974909,
+          "f1": 0.9770596449231996,
+          "support": 2471
+        }
+      },
+      "labels": [
+        "Saude",
+        "Saneamento",
+        "Seguranca",
+        "Educacao",
+        "Infraestrutura/Obras",
+        "Administracao/Outros"
+      ],
+      "confusion_matrix": [
+        [
+          197,
+          0,
+          1,
+          0,
+          0,
+          16
+        ],
+        [
+          0,
+          30,
+          0,
+          0,
+          0,
+          13
+        ],
+        [
+          1,
+          0,
+          131,
+          0,
+          0,
+          43
+        ],
+        [
+          0,
+          0,
+          1,
+          24,
+          1,
+          13
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          41,
+          8
+        ],
+        [
+          8,
+          3,
+          8,
+          3,
+          0,
+          2449
+        ]
+      ]
+    }
+  },
+  "artifacts": {
+    "model": "models/classification_pncp_bertimbau_20260628-233442",
+    "confusion_matrix": "reports/figures/classification_pncp_bertimbau_20260628-233442_confusion.png"
+  }
+}

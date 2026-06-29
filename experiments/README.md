@@ -15,7 +15,7 @@ Retreino completo **2026-06-24** — mesmo `seed=42`, `objeto_html`, corpus `sha
 
 Matrizes: `reports/figures/<run_id>_confusion.png`
 
-**Decisão:** LogReg vence no F1 macro teste → modelo principal do relatório. Ver [`docs/metricas_e_decisoes.md`](../docs/metricas_e_decisoes.md).
+**Decisão:** LogReg vence no F1 macro teste → modelo principal do relatório. Ver [`docs/METRICAS-E-DECISOES.md`](../docs/METRICAS-E-DECISOES.md).
 
 Documentação: [`FASE1`](../docs/FASE1-CLASSIFICACAO.md) · [`FASE2`](../docs/FASE2-CLASSIFICACAO.md) · [`FASE3`](../docs/FASE3-CLASSIFICACAO.md) · [`FASE4`](../docs/FASE4-SUMARIZACAO.md)
 

@@ -17,9 +17,10 @@ Fases 1–3 = **mesmo protocolo** (423 editais, `objeto_html`, split 70/15/15). 
 
 | Notebook | Faz | Não faz |
 |----------|-----|---------|
-| [`01_eda.ipynb`](01_eda.ipynb) | EDA, tabelas estilizadas, vazamento | coleta, treino |
+| [`01_eda.ipynb`](01_eda.ipynb) | EDA corpus ComprasNet DF, vazamento de label | coleta, treino |
+| [`03_eda_pncp.ipynb`](03_eda_pncp.ipynb) | EDA PNCP **DF/2025** (~20k compras) — espelha análises do 01 | coleta, treino, corpus ComprasNet |
 | [`02_demo_classificacao.ipynb`](02_demo_classificacao.ipynb) | Lê JSON das Fases 1–3, matrizes | treino, sumarização |
 
 Regenerar demo: `python notebooks/_build_demo_classificacao.py`
 
-`01_eda.ipynb` é editado diretamente (estilizado). `_build_eda.py` não sobrescreve sem `--force`.
+`01_eda.ipynb` e `03_eda_pncp.ipynb` são editados **diretamente** no Cursor. `_build_eda.py` não sobrescreve `01_eda` sem `--force`.

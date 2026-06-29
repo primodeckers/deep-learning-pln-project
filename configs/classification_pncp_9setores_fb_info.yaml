@@ -1,0 +1,31 @@
+# Fallback órgão + objeto + informacao_complementar (53% das linhas).
+#   python scripts/run_train.py --model baseline --config configs/classification_pncp_9setores_fb_info.yaml --corpus data/processed/pncp_corpus_df2025.jsonl
+
+task: classification
+model: baseline
+run_prefix: pncp9fbi
+label_scheme: setores_fallback_orgao
+include_info_complementar: true
+text_field: objeto_info_limpo
+seed: 42
+
+val_size: 0.15
+test_size: 0.15
+
+params:
+  ngram_max: 2
+  min_df: 2
+  max_features: 20000
+  C: 1.0
+  max_iter: 1000
+  class_weight: balanced
+
+  svm_kernel: linear
+  svm_probability: true
+
+  model_name: neuralmind/bert-base-portuguese-cased
+  max_length: 512
+  batch_size: 16
+  learning_rate: 2.0e-5
+  epochs: 4
+  early_stopping_patience: 2

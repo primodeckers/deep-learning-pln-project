@@ -15,8 +15,13 @@ from pathlib import Path
 
 from sklearn.model_selection import train_test_split
 
-from src.preprocess.clean_objeto import get_text_for_field
+from src.preprocess.clean_objeto import get_text_for_field, texto_objeto_com_info
 from src.preprocess.labels import area_for_orgao
+from src.preprocess.labels_setores import (
+    SETOR_INDETERMINADO,
+    setor_label_for_objeto,
+    setor_label_with_org_fallback,
+)
 
 
 @dataclass
@@ -38,8 +43,42 @@ class Dataset:
     test: Split
 
 
-def load_records(corpus_path: Path) -> list[dict]:
-    """Lê o JSONL e anexa o campo ``area`` (label derivado de ``orgao_csv``)."""
+def _label_for_record(
+    rec: dict,
+    label_scheme: str,
+    *,
+    unlabeled_label: str | None = None,
+    include_info_complementar: bool = False,
+) -> str | None:
+    objeto = texto_objeto_com_info(rec, include_info=include_info_complementar)
+    if label_scheme == "setores_fallback_orgao":
+        label, _ = setor_label_with_org_fallback(objeto, rec.get("orgao_csv", ""))
+        return label
+    if label_scheme == "setores":
+        return setor_label_for_objeto(objeto, unlabeled=unlabeled_label)
+    return area_for_orgao(rec.get("orgao_csv", ""))
+
+
+def load_records(
+    corpus_path: Path,
+    *,
+    label_scheme: str = "orgao",
+    filter_unlabeled: bool = False,
+    unlabeled_label: str | None = None,
+    include_info_complementar: bool = False,
+) -> list[dict]:
+    """Lê o JSONL e anexa o campo ``area`` conforme ``label_scheme``.
+
+    ``orgao`` — macroárea a partir de ``orgao_csv`` (6 classes + fallback).
+    ``setores`` — setor empírico a partir do objeto (9 classes). Sem keyword:
+    omitido se ``filter_unlabeled=True``; senão ``unlabeled_label`` (ex.:
+    ``Indeterminado``) ou erro se não definido.
+    ``setores_fallback_orgao`` — keyword no objeto; se ausente, macroárea do
+    órgão (5 nomeadas); senão ``Indeterminado``. Entrada continua só texto.
+    """
+    if label_scheme == "setores" and not filter_unlabeled and unlabeled_label is None:
+        unlabeled_label = SETOR_INDETERMINADO
+
     records: list[dict] = []
     with corpus_path.open(encoding="utf-8") as f:
         for line in f:
@@ -47,7 +86,29 @@ def load_records(corpus_path: Path) -> list[dict]:
             if not line:
                 continue
             rec = json.loads(line)
-            rec["area"] = area_for_orgao(rec.get("orgao_csv", ""))
+            if label_scheme == "setores_fallback_orgao":
+                objeto = texto_objeto_com_info(rec, include_info=include_info_complementar)
+                area, fonte = setor_label_with_org_fallback(
+                    objeto, rec.get("orgao_csv", "")
+                )
+                rec["area"] = area
+                rec["label_source"] = fonte
+                records.append(rec)
+                continue
+            area = _label_for_record(
+                rec,
+                label_scheme,
+                unlabeled_label=unlabeled_label,
+                include_info_complementar=include_info_complementar,
+            )
+            if area is None:
+                if filter_unlabeled:
+                    continue
+                raise ValueError(
+                    "Registro sem setor detectável com label_scheme='setores'. "
+                    "Use filter_unlabeled=True, unlabeled_label ou include_indeterminado."
+                )
+            rec["area"] = area
             records.append(rec)
     return records
 
@@ -66,9 +127,20 @@ def make_dataset(
     seed: int = 42,
     val_size: float = 0.15,
     test_size: float = 0.15,
+    *,
+    label_scheme: str = "orgao",
+    filter_unlabeled: bool = False,
+    unlabeled_label: str | None = None,
+    include_info_complementar: bool = False,
 ) -> Dataset:
     """Carrega o corpus e devolve as três partições estratificadas por área."""
-    records = load_records(corpus_path)
+    records = load_records(
+        corpus_path,
+        label_scheme=label_scheme,
+        filter_unlabeled=filter_unlabeled,
+        unlabeled_label=unlabeled_label,
+        include_info_complementar=include_info_complementar,
+    )
     labels = [r["area"] for r in records]
 
     # Dois cortes: sklearn não oferece train/val/test numa chamada. Primeiro

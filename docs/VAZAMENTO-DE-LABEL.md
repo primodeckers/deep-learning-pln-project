@@ -2,7 +2,7 @@
 
 Documento para **discussão do grupo**: o que é vazamento de label no nosso projeto, o que já fazemos para contornar, o que não dá para eliminar totalmente e quais experimentos opcionais valem a pena.
 
-> **Relacionados:** [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) §3 · [`metricas_e_decisoes.md`](metricas_e_decisoes.md) · EDA [`notebooks/01_eda.ipynb`](../notebooks/01_eda.ipynb) (Tabela 7) · [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md)
+> **Relacionados:** [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) §3 · [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md) · EDA [`notebooks/01_eda.ipynb`](../notebooks/01_eda.ipynb) (Tabela 7) · [`VALIDACAO-LABELS/VALIDACAO-LABELS.md`](VALIDACAO-LABELS/VALIDACAO-LABELS.md)
 
 ---
 
@@ -252,7 +252,7 @@ _Preencher em reunião — data, quem participou, decisão._
 | Campo de texto no dataset | `src/preprocess/dataset.py` |
 | Config | `configs/classification.yaml` |
 | EDA Tabela 7 | `notebooks/01_eda.ipynb` |
-| Model card | `docs/model_card.md` |
+| Model card | `docs/MODEL-CARD.md` |
 
 ---
 

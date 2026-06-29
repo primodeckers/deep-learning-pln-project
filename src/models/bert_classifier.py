@@ -103,6 +103,15 @@ class BertTextClassifier:
             label2id=self.label2id,
         )
 
+        use_cuda = torch.cuda.is_available()
+        device = torch.device("cuda" if use_cuda else "cpu")
+        if use_cuda:
+            self.model.to(device)
+        print(
+            f"BERTimbau: dispositivo={device}"
+            + (f" ({torch.cuda.get_device_name(0)})" if use_cuda else " (CPU — lento)")
+        )
+
         class _EncDataset(TorchDataset):
             def __init__(
                 self,
@@ -173,6 +182,8 @@ class BertTextClassifier:
             seed=self.seed,
             report_to="none",
             weight_decay=0.01,
+            fp16=use_cuda,
+            dataloader_pin_memory=use_cuda,
         )
 
         callbacks = []

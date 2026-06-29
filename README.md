@@ -15,10 +15,12 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 | [`docs/PROJECT-REQUIREMENTS.md`](docs/PROJECT-REQUIREMENTS.md) | Requisitos oficiais da disciplina |
 | [`docs/UNIVERSAL-DEEP-LEARNING-GUIDE.md`](docs/UNIVERSAL-DEEP-LEARNING-GUIDE.md) | Guia vivo do projeto — escopo, cronograma, decisões |
 | [`docs/DATA-COLLECTION-DECISIONS.md`](docs/DATA-COLLECTION-DECISIONS.md) | Decisões de coleta (CAPTCHA, HTML vs PDF, pipeline) |
-| [`docs/PROPOSALS.md`](docs/PROPOSALS.md) | Propostas de tema/tarefa de PLN (brainstorm do grupo) |
-| [`docs/model_card.md`](docs/model_card.md) | Model card — performance, dados, limitações dos modelos |
-| [`docs/metricas_e_decisoes.md`](docs/metricas_e_decisoes.md) | Métricas, anti-leakage e decisões de avaliação |
-| [`docs/vazamento_de_label.md`](docs/vazamento_de_label.md) | Vazamento de label — mitigações, limiar universal, roteiro para relatório |
+| [`docs/TRABALHO-CONSOLIDADO.md`](docs/TRABALHO-CONSOLIDADO.md) | Relatório narrativo consolidado (ComprasNet + PNCP) |
+| [`docs/REGRAS-E-PROTOCOLOS.md`](docs/REGRAS-E-PROTOCOLOS.md) | Regras de rotulagem, limpeza e protocolos `pncp*` |
+| [`docs/APRESENTACAO-CONTEUDO.md`](docs/APRESENTACAO-CONTEUDO.md) | Roteiro de slides (10 min) |
+| [`docs/MODEL-CARD.md`](docs/MODEL-CARD.md) | Model card — performance, dados, limitações dos modelos |
+| [`docs/METRICAS-E-DECISOES.md`](docs/METRICAS-E-DECISOES.md) | Métricas, anti-leakage e decisões de avaliação |
+| [`docs/VAZAMENTO-DE-LABEL.md`](docs/VAZAMENTO-DE-LABEL.md) | Vazamento de label — mitigações, limiar universal, roteiro para relatório |
 | [`docs/GPU-EQUIPE.md`](docs/GPU-EQUIPE.md) | Fluxo GPU vs CPU — treino BERT no grupo |
 | [`docs/FASE1-CLASSIFICACAO.md`](docs/FASE1-CLASSIFICACAO.md) | Fase 1 — decisões técnicas, padrões e justificativas |
 | [`docs/FASE2-CLASSIFICACAO.md`](docs/FASE2-CLASSIFICACAO.md) | Fase 2 — BERTimbau, comparação baseline, textos para relatório |
@@ -26,8 +28,8 @@ Projeto final de **Deep Learning e PLN** — modalidade PLN no Setor Público (g
 | [`docs/FASE3-CLASSIFICACAO.md`](docs/FASE3-CLASSIFICACAO.md) | Fase 3 — TF-IDF + SVM |
 | [`docs/FASE4-SUMARIZACAO.md`](docs/FASE4-SUMARIZACAO.md) | Fase 4 — sumarização |
 | [`notebooks/README.md`](notebooks/README.md) | Notebooks — EDA e demo (sem treino) |
-| [`docs/validacao_labels/validacao_labels.md`](docs/validacao_labels/validacao_labels.md) | Gabarito da validação manual de labels |
-| [`docs/validacao_labels/`](docs/validacao_labels/) | Ficha individual de cada integrante |
+| [`docs/VALIDACAO-LABELS/VALIDACAO-LABELS.md`](docs/VALIDACAO-LABELS/VALIDACAO-LABELS.md) | Gabarito da validação manual de labels |
+| [`docs/VALIDACAO-LABELS/`](docs/VALIDACAO-LABELS/) | Ficha individual de cada integrante |
 | [`docs/README.md`](docs/README.md) | Índice de todos os arquivos em `docs/` |
 | [`data/raw/README.md`](data/raw/README.md) | Dados brutos — CSV, HTMLs coletados, como reproduzir a coleta |
 
@@ -195,13 +197,16 @@ deactivate
 | Coleta HTML | `data/raw/detalhes/` (423 arquivos) | Concluído |
 | Pré-processamento | `data/processed/licitacoes_corpus.jsonl` (423 registros) | Concluído |
 | Classificação — baseline TF-IDF + LogReg | `experiments/classification_baseline_20260624-013836.json` | Concluído — **modelo principal** (F1 macro teste **0,74**) |
-| Validação manual de labels (proxy) | `docs/validacao_labels/` | Concluído (4/4 fichas — média ≈ 83,2%) |
+| Validação manual de labels (proxy) | `docs/VALIDACAO-LABELS/` | Concluído (4/4 fichas — média ≈ 83,2%) |
 | Classificação — BERTimbau (Fase 2) | `experiments/classification_bertimbau_20260624-013908.json` | Concluído (F1 teste **0,40** — comparativo DL) |
 | Classificação — TF-IDF + SVM (Fase 3) | `experiments/classification_svm_20260624-013851.json` | Concluído (F1 teste **0,65**) — [`FASE3-CLASSIFICACAO.md`](docs/FASE3-CLASSIFICACAO.md) |
 | EDA | `notebooks/01_eda.ipynb` | Concluído |
 | Demo classificação (Fases 1–3) | `notebooks/02_demo_classificacao.ipynb` | Só lê `experiments/` — ver [`notebooks/README.md`](notebooks/README.md) |
 | Sumarização extrativa (Fase 4) | `experiments/summarization_extractive_20260624-013951.json` | Concluído (15/18 prazo, 18/18 valor) — [`FASE4-SUMARIZACAO.md`](docs/FASE4-SUMARIZACAO.md) |
 | Sumarização abstrativa (PTT5) | — | Pendente (Fase 4) |
+| **PNCP DF/2025** — corpus + EDA | `pncp_corpus_df2025.jsonl` · `03_eda_pncp.ipynb` | Concluído (19.944) |
+| **PNCP** — protocolo `pncp` (6 macroáreas) | BERT F1 teste **0,858** | Concluído |
+| **PNCP** — protocolo `pncp9fbi` (9 setores + info) | BERT F1 teste **0,955** | Concluído (exploratório) |
 
 Rodar (ou use `make train-baseline` / `make train-svm` / `make train-summarize`):
 
@@ -213,7 +218,7 @@ jupyter notebook notebooks/01_eda.ipynb     # EDA
 jupyter notebook notebooks/02_demo_classificacao.ipynb  # demo apresentação
 ```
 
-Resultados e decisões metodológicas: [`docs/model_card.md`](docs/model_card.md) e [`docs/metricas_e_decisoes.md`](docs/metricas_e_decisoes.md).
+Resultados e decisões metodológicas: [`docs/MODEL-CARD.md`](docs/MODEL-CARD.md) e [`docs/METRICAS-E-DECISOES.md`](docs/METRICAS-E-DECISOES.md).
 
 ### Rastreamento de experimentos (MLflow)
 

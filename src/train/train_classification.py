@@ -27,6 +27,7 @@ from src.models.bert_classifier import build_bert_classifier
 from src.models.svm_tfidf import build_svm
 from src.preprocess.dataset import Dataset, make_dataset
 from src.preprocess.labels import AREAS
+from src.preprocess.labels_setores import SETORES, SETORES_COM_INDETERMINADO
 from src.utils.experiment_tracking import (
     MlflowHandle,
     corpus_fingerprint,
@@ -88,7 +89,17 @@ def _rel(path: Path) -> str:
         return str(path)
 
 
-def _build_model(model_name: str, params: dict):
+def _resolve_labels(config: dict) -> list[str]:
+    if config.get("labels"):
+        return list(config["labels"])
+    if config.get("label_scheme") in ("setores", "setores_fallback_orgao"):
+        if config.get("filter_unlabeled"):
+            return list(SETORES)
+        return list(SETORES_COM_INDETERMINADO)
+    return list(AREAS)
+
+
+def _build_model(model_name: str, params: dict, label_list: list[str]):
     """Resolve o nome do modelo para um estimador (não treinado)."""
     if model_name == "baseline":
         return build_baseline(
@@ -113,7 +124,7 @@ def _build_model(model_name: str, params: dict):
         )
     if model_name == "bertimbau":
         return build_bert_classifier(
-            label_list=AREAS,
+            label_list=label_list,
             model_name=params.get(
                 "model_name", "neuralmind/bert-base-portuguese-cased"
             ),
@@ -127,10 +138,10 @@ def _build_model(model_name: str, params: dict):
     raise ValueError(f"Modelo desconhecido: {model_name!r}")
 
 
-def _class_distribution(dataset: Dataset) -> dict:
+def _class_distribution(dataset: Dataset, label_list: list[str]) -> dict:
     def dist(labels: list[str]) -> dict:
         c = collections.Counter(labels)
-        return {area: c.get(area, 0) for area in AREAS}
+        return {area: c.get(area, 0) for area in label_list}
 
     return {
         "train": dist(dataset.train.labels),
@@ -151,16 +162,27 @@ def train_classification(
     model_name = config.get("model", "baseline")
     text_field = config.get("text_field", "texto")
     seed = config.get("seed", 42)
+    label_scheme = config.get("label_scheme", "orgao")
+    filter_unlabeled = config.get("filter_unlabeled", False)
+    unlabeled_label = config.get("unlabeled_label")
+    include_info = config.get("include_info_complementar", False)
+    label_list = _resolve_labels(config)
     params = config.get("params", {})
     params.setdefault("seed", seed)
 
-    print(f"Carregando corpus de {corpus_path} (campo de texto: '{text_field}')")
+    print(
+        f"Carregando corpus de {corpus_path} "
+        f"(campo de texto: '{text_field}', labels: {label_scheme})"
+    )
     dataset = make_dataset(
         corpus_path,
         text_field=text_field,
         seed=seed,
         val_size=config.get("val_size", 0.15),
         test_size=config.get("test_size", 0.15),
+        label_scheme=label_scheme,
+        filter_unlabeled=filter_unlabeled,
+        include_info_complementar=include_info,
     )
     print(
         f"  treino={len(dataset.train)}  val={len(dataset.val)}  "
@@ -168,7 +190,11 @@ def train_classification(
     )
 
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
-    run_id = f"classification_{model_name}_{timestamp}"
+    prefix = config.get("run_prefix", "")
+    if prefix:
+        run_id = f"classification_{prefix}_{model_name}_{timestamp}"
+    else:
+        run_id = f"classification_{model_name}_{timestamp}"
     dataset_info = corpus_fingerprint(corpus_path)
     git_commit = git_commit_short()
 
@@ -177,6 +203,7 @@ def train_classification(
         "corpus_path": dataset_info["path"],
         "corpus_n_records": str(dataset_info["n_records"]),
         "text_field": text_field,
+        "label_scheme": label_scheme,
     }
     if git_commit:
         mlflow_tags["git_commit"] = git_commit
@@ -194,7 +221,7 @@ def train_classification(
         tags=mlflow_tags,
     ) as handle:
         print(f"Treinando modelo '{model_name}'...")
-        model = _build_model(model_name, params)
+        model = _build_model(model_name, params, label_list)
         bert_cache = experiments_dir / ".bert_cache" / run_id
         with mlflow.start_span(name="fit", span_type=SpanType.TOOL) as span:
             span.set_inputs({"model": model_name, "n_samples": len(dataset.train)})
@@ -214,7 +241,7 @@ def train_classification(
             span.set_inputs({"split": "val", "n_samples": len(dataset.val)})
             print("\nValidação:")
             val_pred = list(model.predict(dataset.val.texts))
-            val_metrics = compute_metrics(dataset.val.labels, val_pred, AREAS)
+            val_metrics = compute_metrics(dataset.val.labels, val_pred, label_list)
             print(format_metrics(val_metrics))
             span.set_outputs(val_metrics)
 
@@ -222,7 +249,7 @@ def train_classification(
             span.set_inputs({"split": "test", "n_samples": len(dataset.test)})
             print("\nTeste:")
             test_pred = list(model.predict(dataset.test.texts))
-            test_metrics = compute_metrics(dataset.test.labels, test_pred, AREAS)
+            test_metrics = compute_metrics(dataset.test.labels, test_pred, label_list)
             print(format_metrics(test_metrics))
             span.set_outputs(test_metrics)
 
@@ -251,8 +278,9 @@ def train_classification(
             "dataset": dataset_info,
             "git_commit": git_commit,
             "params": _relevant_params(model_name, params),
-            "labels": AREAS,
-            "class_distribution": _class_distribution(dataset),
+            "labels": label_list,
+            "label_scheme": label_scheme,
+            "class_distribution": _class_distribution(dataset, label_list),
             "splits": {
                 "train": len(dataset.train),
                 "val": len(dataset.val),

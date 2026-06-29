@@ -1,54 +1,91 @@
 # Documentação do projeto
 
-Índice da pasta `docs/`. O ponto de entrada principal do repositório é o [`README.md`](../README.md) na raiz.
+Índice canônico da pasta `docs/`. Entrada na raiz: [`README.md`](../README.md).
 
-## Documentos
+---
+
+## Documento principal
 
 | Documento | Descrição |
-|---|---|
-| [`TRABALHO-CONSOLIDADO.md`](TRABALHO-CONSOLIDADO.md) | **Resumo narrativo do trabalho** — texto autossuficiente (contexto → conclusão) |
-| [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md) | Requisitos oficiais da disciplina |
-| [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) | Guia vivo do projeto (preencher em conjunto) |
-| [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md) | Decisões de coleta de dados (CAPTCHA, HTML vs PDF, etc.) |
-| [`PROPOSALS.md`](PROPOSALS.md) | Brainstorm de temas/tarefas de PLN para o projeto |
-| [`model_card.md`](model_card.md) | Model card — performance, dados, limitações |
-| [`metricas_e_decisoes.md`](metricas_e_decisoes.md) | Glossário de métricas, tabela comparativa e **decisão do modelo principal** |
-| [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) | Validação vs teste nas Fases 1–3 — notas do grupo pro relatório |
-| [`hiperparametros_e_melhorias.md`](hiperparametros_e_melhorias.md) | Tuning, pesos e melhoria de métricas — backlog para discussão do grupo |
-| [`GPU-EQUIPE.md`](GPU-EQUIPE.md) | Fluxo GPU vs CPU — quem treina o quê, o que vai pro Git |
-| [`vazamento_de_label.md`](vazamento_de_label.md) | Vazamento de label — mitigações, §9 roteiro para relatório/slides |
+|-----------|-----------|
+| [`TRABALHO-CONSOLIDADO.md`](TRABALHO-CONSOLIDADO.md) | **Relatório narrativo completo** — contexto, dados, metodologia, resultados ComprasNet + extensão PNCP, conclusão |
+| [`REGRAS-E-PROTOCOLOS.md`](REGRAS-E-PROTOCOLOS.md) | **Regras implementadas** — rotulagem, limpeza, protocolos `pncp*` |
+
+---
+
+## Métricas, modelos e avaliação
+
+| Documento | Descrição |
+|-----------|-----------|
+| [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md) | Glossário de métricas, runs oficiais ComprasNet + PNCP, decisão LogReg |
+| [`MODEL-CARD.md`](MODEL-CARD.md) | Model card — performance, dados, limitações |
+| [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) | Validação vs teste (Fases 1–3 ComprasNet) |
+| [`VAZAMENTO-DE-LABEL.md`](VAZAMENTO-DE-LABEL.md) | Vazamento de label — mitigações e roteiro para relatório |
+| [`VALIDACAO-LABELS/VALIDACAO-LABELS.md`](VALIDACAO-LABELS/VALIDACAO-LABELS.md) | Validação humana do label proxy (4/4 fichas, ≈83,2%) |
+
+---
+
+## Fases do pipeline (ComprasNet 423)
+
+| Documento | Descrição |
+|-----------|-----------|
 | [`FASES.md`](FASES.md) | Índice das fases 1–4 |
-| [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) | Fase 1 — TF-IDF + LogReg |
-| [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) | Fase 2 — BERTimbau |
-| [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md) | Fase 3 — TF-IDF + SVM |
-| [`FASE4-SUMARIZACAO.md`](FASE4-SUMARIZACAO.md) | Fase 4 — sumarização cidadã |
-| [`NOTEBOOK-ENTREGA.md`](NOTEBOOK-ENTREGA.md) | Atalho → [`notebooks/README.md`](../notebooks/README.md) |
-| [`../notebooks/README.md`](../notebooks/README.md) | Notebooks: EDA + demo classificação |
-| [`validacao_labels/validacao_labels.md`](validacao_labels/validacao_labels.md) | Gabarito, consolidação e status das fichas |
-| [`validacao_labels/ficha_*.md`](validacao_labels/) | Ficha individual (4/4 preenchidas — média ≈83,2%) |
+| [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) | TF-IDF + LogReg — decisões técnicas + EDA PNCP |
+| [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) | BERTimbau |
+| [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md) | TF-IDF + SVM |
+| [`FASE4-SUMARIZACAO.md`](FASE4-SUMARIZACAO.md) | Sumarização extrativa cidadã |
 
-## Materiais de referência
+---
 
-| Arquivo | Descrição |
-|---|---|
-| [`aula03-04.pdf`](referencias/aula03-04.pdf) | Material de aula |
-
-## Documentação técnica (fora de `docs/`)
+## Apresentação, tuning e operação
 
 | Documento | Descrição |
-|---|---|
-| [`README.md`](../README.md) | Setup, pipeline, ferramentas de dev (ruff, mypy, pytest, Makefile) |
-| [`data/raw/README.md`](../data/raw/README.md) | Dados brutos, pipeline de coleta e estrutura do CSV |
-| [`pyproject.toml`](../pyproject.toml) | Dependências, ruff, mypy e pytest (fonte canônica) |
-| [`Makefile`](../Makefile) | Atalhos: `lint`, `test`, `typecheck`, treino, MLflow UI |
+|-----------|-----------|
+| [`APRESENTACAO-CONTEUDO.md`](APRESENTACAO-CONTEUDO.md) | Roteiro de slides (10 min) |
+| [`HIPERPARAMETROS-E-MELHORIAS.md`](HIPERPARAMETROS-E-MELHORIAS.md) | Tuning e backlog de melhorias |
+| [`GPU-EQUIPE.md`](GPU-EQUIPE.md) | Fluxo GPU vs CPU no grupo |
+| [`NOTEBOOK-ENTREGA.md`](NOTEBOOK-ENTREGA.md) | Atalho → [`notebooks/README.md`](../notebooks/README.md) |
 
-## Ferramentas de desenvolvimento
+---
 
-| Ferramenta | Config | Uso |
-|---|---|---|
-| **Ruff** | `[tool.ruff]` em `pyproject.toml` | `ruff check src tests` · `ruff format src tests` |
-| **Mypy** | `[tool.mypy]` em `pyproject.toml` | `mypy` (analisa só `src/`) |
-| **Pytest** | `[tool.pytest.ini_options]` + `tests/` | `pytest` |
-| **MLflow** | `src/utils/experiment_tracking.py` | Ver guia §10 e `make mlflow-ui` |
+## Projeto e coleta
 
-Instalação: `pip install -r requirements-dev.txt` na raiz do repositório.
+| Documento | Descrição |
+|-----------|-----------|
+| [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md) | Requisitos oficiais da disciplina |
+| [`UNIVERSAL-DEEP-LEARNING-GUIDE.md`](UNIVERSAL-DEEP-LEARNING-GUIDE.md) | Guia vivo do projeto |
+| [`DATA-COLLECTION-DECISIONS.md`](DATA-COLLECTION-DECISIONS.md) | Coleta: CAPTCHA, HTML vs PDF |
+| [`PROPOSALS.md`](PROPOSALS.md) | Brainstorm inicial de temas |
+
+---
+
+## Validação manual (fichas)
+
+| Documento | Integrante |
+|-----------|------------|
+| [`VALIDACAO-LABELS/FICHA-ELISANGELA.md`](VALIDACAO-LABELS/FICHA-ELISANGELA.md) | Elisangela Osorio |
+| [`VALIDACAO-LABELS/FICHA-ALEXANDRE.md`](VALIDACAO-LABELS/FICHA-ALEXANDRE.md) | Alexandre Ferreira Ponte |
+| [`VALIDACAO-LABELS/FICHA-RENE.md`](VALIDACAO-LABELS/FICHA-RENE.md) | Renê Estevam Deckers |
+| [`VALIDACAO-LABELS/FICHA-INTEGRANTE4.md`](VALIDACAO-LABELS/FICHA-INTEGRANTE4.md) | Alexandre Hugo Sampaio Netto |
+
+---
+
+## Referências e materiais
+
+| Caminho | Descrição |
+|---------|-----------|
+| [`referencias/aula03-04.pdf`](referencias/aula03-04.pdf) | Material de aula |
+| [`referencias/bertimbau/`](referencias/bertimbau/) | Artigos BERTimbau |
+
+---
+
+## Fora de `docs/`
+
+| Documento | Descrição |
+|-----------|-----------|
+| [`../README.md`](../README.md) | Setup, pipeline, Makefile |
+| [`../notebooks/README.md`](../notebooks/README.md) | EDA e demo |
+| [`../data/raw/README.md`](../data/raw/README.md) | Dados brutos e coleta |
+| [`../experiments/README.md`](../experiments/README.md) | Registros JSON de runs |
+
+*Convenção de nomes: arquivos `.md` em `docs/` usam **UPPERCASE-WITH-HYPHENS**.*
