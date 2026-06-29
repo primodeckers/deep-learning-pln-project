@@ -36,6 +36,18 @@ Decisão metodológica: [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md) · Re
 
 `texto` (HTML completo) → F1 ≈ 0,88 (vazamento). Ver [`VAZAMENTO-DE-LABEL.md`](VAZAMENTO-DE-LABEL.md).
 
+### Protocolo anti-leakage — `objeto_html_limpo` (20260628)
+
+Mesmo corpus 423, mesmo split/seed, mas campo `objeto_html_limpo` (HTML limpo sem cabeçalho de órgão). Referência para quantificar o impacto do vazamento residual presente em `objeto_html`.
+
+| Modelo | F1 macro (teste) | Δ vs. oficial | Run |
+|--------|-----------------|---------------|-----|
+| TF-IDF + LogReg | 0,726 | −0,014 | `classification_baseline_20260628-232301` |
+| TF-IDF + SVM | 0,671 | +0,019 | `classification_svm_20260628-232322` |
+| BERTimbau | 0,401 | +0,001 | `classification_bertimbau_20260628-232344` |
+
+A queda de ~1,4 p.p. no LogReg confirma vazamento residual pequeno em `objeto_html`. O SVM sobe ligeiramente porque o texto mais limpo reduz ruído que prejudicava a margem do kernel linear. BERT permanece estável — o campo de entrada não era o gargalo.
+
 ---
 
 ## PNCP 19.944 — protocolo honesto (`pncp`)
