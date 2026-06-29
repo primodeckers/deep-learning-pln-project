@@ -22,7 +22,7 @@ O objetivo é construir um **corpus textual** para treinar/avaliar modelos de PL
 | Data | Decisão | Alternativas consideradas | Motivo | Status |
 |---|---|---|---|---|
 | 2026-06-06 | Usar `licitacoes2025.csv` como índice principal | Kaggle, bases prontas | Dados inéditos coletados pelo grupo; exigência da disciplina | Adotado |
-| 2026-06-06 | Tema: PLN sobre licitações públicas (ComprasNet / DF) | Sentimento em notícias, ouvidorias, sumarização de leis | Alinhamento com setor público + dados já disponíveis | Adotado |
+| 2026-06-06 | Tema: PLN sobre licitações públicas (ComprasNet / DF) | Sentimento em notícias, ouvidorias de leis | Alinhamento com setor público + dados já disponíveis | Adotado |
 | 2026-06-06 | Estrutura de pastas `data/raw` → `interim` → `processed` | Tudo na raiz do repo | Padrão ML/DL; separa bruto de processado; reprodutibilidade | Adotado |
 | 2026-06-06 | Coletar **HTML de detalhe** em vez de PDF (fase 1) | PDF via CAPTCHA; PNCP; quebra de CAPTCHA com IA | HTML acessível sem CAPTCHA; script reprodutível; ética acadêmica | Adotado |
 | 2026-06-06 | **Não** automatizar quebra de CAPTCHA | Selenium + OCR/CNN (ex.: projetos no GitHub) | Contra propósito do sistema; risco legal/ético; fora do escopo PLN | Rejeitado |
@@ -32,7 +32,7 @@ O objetivo é construir um **corpus textual** para treinar/avaliar modelos de PL
 | 2026-06-06 | Intervalo de **0,8 s** entre requests HTTP | Sem delay; delay maior | Respeitar servidor público; reduzir risco de bloqueio | Adotado |
 | 2026-06-06 | Gerar `manifest.json` após cada coleta | Só arquivos soltos | Rastreabilidade, auditoria e base para relatório | Adotado |
 | 2026-06-06 | Pré-processamento HTML → corpus JSONL | Processar só no notebook | Pipeline reprodutível via `run_preprocess.py` | Adotado |
-| 2026-06-06 | Volume **423 editais** suficiente para fase 1 | Expandir 2021–2024 (+4 anos) | +4 anos adiado; prazo da disciplina; volume adequado para classificação e sumarização | Adotado |
+| 2026-06-06 | Volume **423 editais** suficiente para fase 1 | Expandir 2021–2024 (+4 anos) | +4 anos adiado; prazo da disciplina; volume adequado para classificação | Adotado |
 
 ---
 
@@ -208,7 +208,7 @@ Estimativa para split **70% / 15% / 15%** estratificado:
 | Risco de mudança portal/lei | Baixo (um export) | Médio (HTML/CSV podem diferir) |
 | Exigência do professor (dados inéditos coletados) | ✅ Atende | ✅ Atende se o grupo coletar |
 
-**Decisão do grupo (2026-06-06):** **não expandir** para 2021–2024 na fase 1. Volume atual é **suficiente** para classificação + sumarização complementar, desde que limitações e desbalanceamento sejam discutidos. Expansão temporal fica como **próximo passo** (seção 8 e relatório), não bloqueio.
+**Decisão do grupo (2026-06-06):** **não expandir** para 2021–2024 na fase 1. Volume atual é **suficiente** para classificação, desde que limitações e desbalanceamento sejam discutidos. Expansão temporal fica como **próximo passo** (seção 8 e relatório), não bloqueio.
 
 ### 6.5 Infraestrutura de treino (local vs cloud)
 
@@ -359,7 +359,7 @@ Ordem **2024 → 2023 → 2022 → 2021**: anos recentes primeiro (HTML mais par
 | # | Pergunta | Impacto |
 |---|---|---|
 | 1 | HTML de detalhe basta ou precisamos de amostra de PDFs? | Define escopo da coleta fase 2 |
-| 2 | Qual tarefa de PLN? (classificação, sumarização, NER?) | Define labels e métricas |
+| 2 | Qual tarefa de PLN? (classificação, NER?) | Define labels e métricas |
 | 3 | Cruzar com PNCP? | Pode adicionar documentos ou metadados |
 | 4 | Filtros no CSV (situação, modalidade, órgão)? | Tamanho e qualidade do corpus |
 | 5 | Expandir corpus para 2021–2024? | **Adiado** na fase 1 (decisão 2026-06-06); retomar se precisar robustez temporal ou classes raras |

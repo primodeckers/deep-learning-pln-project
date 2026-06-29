@@ -2,6 +2,8 @@
 
 Documento de brainstorm do grupo. A ideia é escolher **uma tarefa de PLN** pro projeto final (Modalidade 2 — PLN no Setor Público) e parar de ficar em cima do muro.
 
+**Decisão do grupo (2026-06):** adotamos **Ideia 1** — classificação por área de gasto. A **Ideia 4** (sumarização cidadã) **saiu do escopo**; o repositório trata só das Fases 1–3 de classificação (+ PNCP).
+
 Links úteis:
 
 - Requisitos da disciplina → [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md)
@@ -175,7 +177,9 @@ Não tem “acertou/errou” clássico. É mais análise exploratória. O profes
 
 ---
 
-## Ideia 4 — Resumir edital em linguagem de gente
+## Ideia 4 — Resumir edital em linguagem de gente *(fora do escopo)*
+
+> **Não faz mais parte do projeto.** Mantida aqui só como registro do brainstorm inicial.
 
 ### O problema
 
@@ -222,10 +226,10 @@ Apareceu numa conversa à parte. Não está no brainstorm original, mas vale reg
 
 | Combo | Faz sentido? |
 |---|---|
-| **Ideia 1 sozinha** | Sim — foco claro, entregável |
-| Ideia 1 + gráfico da Ideia 3 | Sim — classificação + um mapa de similaridade no apêndice |
-| Ideia 1 + 5 resumos da Ideia 4 | Sim — se sobrar tempo e alguém curtir prompt/LLM |
-| Ideia 4 sozinha | Arriscado — difícil provar qualidade |
+| **Ideia 1 sozinha** | **Adotada** — foco claro, entregável |
+| Ideia 1 + gráfico da Ideia 3 | Possível complemento futuro |
+| ~~Ideia 1 + 5 resumos da Ideia 4~~ | Descartada — sumarização fora do escopo |
+| Ideia 4 sozinha | Descartada |
 | Ideia 2 sozinha | Só se alguém amar anotação |
 
 ---

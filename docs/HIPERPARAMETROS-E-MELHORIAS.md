@@ -175,7 +175,7 @@ python scripts/run_train.py --task classification
 # model: svm no YAML
 
 # BERT (GPU)
-python scripts/run_train.py --task classification --config configs/classification_bert_gpu.yaml
+python scripts/run_train.py --config configs/classification_bert_gpu.yaml
 ```
 
 Entre runs, alterar só os params do bloco relevante. Comparar JSONs em `experiments/` ou aba Runs do MLflow.

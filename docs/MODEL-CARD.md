@@ -77,17 +77,6 @@ F1 alto (~0,95–0,97) indica reprodução de regras keyword, não generalizaç�
 
 ---
 
-## Sumarização extrativa (Fase 4)
-
-**Run:** `summarization_extractive_20260624-013951` · 18 editais
-
-| Cobertura | Valor |
-|-----------|-------|
-| Com prazo | 15/18 (83%) |
-| Com valor | 18/18 (100%) |
-
----
-
 ## Dados e limitações
 
 - Label proxy — validação humana ≈83,2% ([`VALIDACAO-LABELS/VALIDACAO-LABELS.md`](VALIDACAO-LABELS/VALIDACAO-LABELS.md))

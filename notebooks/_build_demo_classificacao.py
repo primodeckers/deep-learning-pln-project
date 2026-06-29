@@ -1,6 +1,6 @@
 """Gera notebooks/02_demo_classificacao.ipynb — só classificação (Fases 1–3).
 
-Lê experiments/*.json versionados. Não treina. Não inclui sumarização (Fase 4).
+Lê experiments/*.json versionados. Não treina.
 
 Rode: python notebooks/_build_demo_classificacao.py
 """
@@ -13,14 +13,11 @@ import nbformat as nbf
 
 NB_PATH = Path(__file__).resolve().parent / "02_demo_classificacao.ipynb"
 
-
 def md(text: str) -> nbf.NotebookNode:
     return nbf.v4.new_markdown_cell(text.strip("\n"))
 
-
 def code(text: str) -> nbf.NotebookNode:
     return nbf.v4.new_code_cell(text.strip("\n"))
-
 
 cells = [
     md(
@@ -34,8 +31,6 @@ cells = [
 | 1 | TF-IDF + LogReg | `docs/FASE1-CLASSIFICACAO.md` |
 | 2 | BERTimbau | `docs/FASE2-CLASSIFICACAO.md` |
 | 3 | TF-IDF + SVM | `docs/FASE3-CLASSIFICACAO.md` |
-
-**Sumarização (Fase 4)** é outra tarefa → `docs/FASE4-SUMARIZACAO.md` e `make train-summarize`.
 
 **Treinar:** `make train-baseline` · `make train-svm` · `make train-bert`
 """
@@ -75,7 +70,6 @@ def carregar_run(run_id: str) -> dict:
     if not path.is_file():
         raise FileNotFoundError(f"Run não encontrado: {path}")
     return json.loads(path.read_text(encoding="utf-8"))
-
 
 rows = []
 for fase, run_id in REF_RUNS.items():

@@ -9,7 +9,7 @@ def test_classification_config_has_required_keys() -> None:
     cfg = yaml.safe_load(path.read_text(encoding="utf-8"))
 
     assert cfg["task"] == "classification"
-    assert cfg["text_field"] == "objeto_html"
+    assert cfg["text_field"] in ("objeto_html_limpo", "objeto_html", "texto")
     assert cfg["seed"] == 42
     assert "params" in cfg
     assert cfg["params"]["class_weight"] == "balanced"

@@ -11,7 +11,7 @@ Como treinar **BERTimbau** na máquina com placa (ex.: RTX 4090) sem bloquear qu
 | Integrante | Máquina | O que roda |
 |------------|---------|------------|
 | **Quem tem GPU** | CUDA disponível | BERTimbau (`classification_bert_gpu.yaml`), compartilha métricas + opcionalmente pesos |
-| **Demais** | Só CPU | Baseline, EDA, validação labels, slides, sumarização extrativa, docs |
+| **Demais** | Só CPU | Baseline, EDA, validação labels, slides extrativa, docs |
 
 Todos usam o **mesmo repositório** e o **mesmo corpus** (`licitacoes_corpus.jsonl`, 423 editais).
 
@@ -68,7 +68,7 @@ python scripts/run_train.py --config configs/classification_bert_gpu.yaml
 ```bash
 pip install -r requirements.txt   # ou requirements-dev.txt — sem [bert] obrigatório
 
-python scripts/run_train.py --task classification --model baseline
+python scripts/run_train.py --model baseline
 ```
 
 Smoke test BERT em CPU (opcional, **lento**):

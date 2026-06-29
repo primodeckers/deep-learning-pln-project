@@ -1,6 +1,6 @@
 # Conteúdo da apresentação — PLN aplicado a editais de licitação
 
-**Título:** Classificação automática de editais de licitação por área de gasto público + sumarização cidadã (ComprasNet, Distrito Federal, 2025)
+**Título:** Classificação automática de editais de licitação por área de gasto público (ComprasNet, Distrito Federal, 2025)
 **Modalidade:** 2 — PLN no Setor Público · Grupo de 4
 **Integrantes:** Elisangela Osorio · Alexandre Ferreira Ponte · Renê Estevam Deckers · Alexandre Hugo Sampaio Netto
 
@@ -13,10 +13,7 @@ Todo edital de licitação tem um campo **Objeto**: um texto livre, em linguagem
 - **Para o controle social** (cidadão, jornalista, órgão de controle), responder *"quanto o DF gastou em Saúde? E em Obras?"* exige ler centenas de descrições uma a uma — inviável na mão.
 - **Para o pequeno fornecedor**, o jargão ("sistema de registro de preços", "qualificação técnica") afasta exatamente quem o edital deveria alcançar.
 
-O projeto ataca esses dois gargalos de **transparência pública**:
-
-1. **Triagem automática** dos editais por área de gasto (classificação).
-2. **Resumo em linguagem cidadã** do que importa (o que, quem participa, prazo, valor).
+O projeto concentra-se em **triagem automática por área de gasto** (classificação).
 
 ---
 
@@ -25,9 +22,7 @@ O projeto ataca esses dois gargalos de **transparência pública**:
 **Técnica (PLN / Deep Learning / Transformers):**
 
 - **Devlin et al. (2019) — BERT:** fundamenta o fine-tuning de Transformers para classificação textual.
-- **Souza et al. — BERTimbau:** modelo BERT pré-treinado em português brasileiro; justifica usar um modelo PT-BR especializado em vez de multilíngue genérico (artigo *"BERT models for Brazilian Portuguese: pretraining, evaluation and tokenization analysis"*).
-- **Segmentação textual baseada em tópicos em português usando BERTimbau:** apoia dividir editais longos em blocos temáticos (objeto, prazos, julgamento) como etapa para a sumarização.
-- **Raffel et al. (2020) — T5:** referência para sumarização seq2seq (próximo passo abstrativo).
+- **Souza et al. — BERTimbau:** modelo BERT pré-treinado em português brasileiro.
 - **Srivastava et al. (2014) — Dropout** e **Goodfellow, Bengio & Courville (2016), cap. 10:** regularização e modelagem de sequências (contexto teórico de DL).
 - **Material da disciplina (aula 03–04):** guia prático cujo lema é *"depende"* — a escolha do modelo depende do problema, do volume de dados e do diagnóstico treino × validação. Sustenta a decisão de comparar baseline clássico com Transformer.
 
@@ -37,7 +32,6 @@ O projeto ataca esses dois gargalos de **transparência pública**:
 - **Ferreira (2019, UnB):** PLN e classificação de atos de contratos e licitações do **GDF** — mesmo domínio (DF).
 - **Watanabe & Sousa (2023):** aprendizado de máquina para classificação automática de documentos do setor público.
 - **Macedo et al. (2025):** governo aberto e transparência nas capitais — fundamenta o problema (controle social).
-- **Rosado & Dias (2024):** linguagem jurídica acessível (*plain language*) — fundamenta a sumarização cidadã.
 - *Marco legal:* Lei 14.133/2021 (licitações), Lei 12.527/2011 (LAI) + Decreto 8.777/2016 (dados abertos), Lei 15.263/2025 (linguagem simples).
 
 ---
@@ -69,15 +63,15 @@ O projeto ataca esses dois gargalos de **transparência pública**:
 
 **Três modelos comparados:**
 
-
 | Fase               | Modelo                                                  | Configuração-chave                                                              |
 | ------------------ | ------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | 1 (oficial)        | **TF-IDF + Regressão Logística**                        | n-grama até 2, `min_df=2`, `max_features=20k`, `C=1.0`, `class_weight=balanced` |
 | 3 (comparativo)    | TF-IDF + **SVM linear**                                 | mesmo vetorizador, `class_weight=balanced`                                      |
 | 2 (comparativo DL) | **BERTimbau** (`neuralmind/bert-base-portuguese-cased`) | `max_len=512`, `batch=16`, `lr=2e-5`, 4 épocas + early stopping; GPU RTX 4090   |
 
-
 **Avaliação e rastreamento:** F1 macro (métrica primária, por causa do desbalanceamento), F1 por classe, matriz de confusão; cada run gravado em JSON + MLflow com hash do corpus e commit Git.
+
+**Extensão PNCP (~20 mil compras):** protocolos `pncp`, `pncp9`, `pncp9full`, `pncp9fb`, `pncp9fbi` — roteiro falado do slide: [`ROTEIRO-FAMILIA-PROTOCOLOS-PNCP.md`](ROTEIRO-FAMILIA-PROTOCOLOS-PNCP.md). Regras: [`REGRAS-E-PROTOCOLOS.md`](REGRAS-E-PROTOCOLOS.md) §10.
 
 ---
 
@@ -95,13 +89,11 @@ Separamos **64 editais** que o modelo **nunca viu** (conjunto de teste). Para ca
 
 ### Classificação — comparação dos 3 modelos (teste, 64 editais)
 
-
 | Modelo                            | F1 macro | Accuracy | Leitura simples                                                                                              |
 | --------------------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------ |
 | **TF-IDF + LogReg** *(escolhido)* | **0,74** | 0,80     | **Venceu.** Modelo simples, estável, acerta bem nas áreas com mais exemplos                                  |
 | TF-IDF + SVM                      | 0,65     | 0,80     | Mesma accuracy, mas pior F1 — se adaptou demais aos 64 editais de validação                                  |
 | BERTimbau                         | 0,40     | 0,69     | **Perdeu.** Rede neural grande com pouco treino (~295 editais) — chutou quase tudo como Administração/Outros |
-
 
 **Por que escolhemos o LogReg e não o SVM?** Os dois tiveram accuracy parecida (~80%), mas o SVM foi melhor na validação (F1 0,80) e pior no teste (0,65). O LogReg manteve o mesmo desempenho nos dois (0,74) — sinal de que **generaliza melhor**.
 
@@ -113,7 +105,6 @@ Separamos **64 editais** que o modelo **nunca viu** (conjunto de teste). Para ca
 
 ### Onde o LogReg acerta e onde erra (teste)
 
-
 | Área                 | Editais no teste | F1   | O que isso quer dizer                                                                                                    |
 | -------------------- | ---------------- | ---- | ------------------------------------------------------------------------------------------------------------------------ |
 | Saneamento           | 7                | 1,00 | Acertou **todos**                                                                                                        |
@@ -122,22 +113,6 @@ Separamos **64 editais** que o modelo **nunca viu** (conjunto de teste). Para ca
 | Educação             | 2                | 0,67 | Só **2 editais** no teste — número pouco confiável                                                                       |
 | Infraestrutura/Obras | 4                | 0,60 | Razoável, mas poucos exemplos                                                                                            |
 | Segurança            | 9                | 0,46 | **Pior resultado** — confunde com Saúde (ex.: Bombeiros comprando material clínico; rótulo veio do órgão, não do objeto) |
-
-
----
-
-### Sumarização extrativa (tarefa separada — 18 editais de exemplo)
-
-O sistema **não reescreve** o edital; **puxa campos fixos** do HTML (o quê, prazo, valor).
-
-
-| Campo extraído                | Resultado                   |
-| ----------------------------- | --------------------------- |
-| Prazo de entrega de propostas | **15 de 18** editais (83%)  |
-| Valor homologado              | **18 de 18** editais (100%) |
-
-
-Limitação: quando o prazo não está em formato reconhecível no HTML, a extração falha — daí os 3 casos sem prazo.
 
 ---
 
@@ -164,7 +139,6 @@ Com **423 editais** e classes **desbalanceadas**, o **modelo clássico simples s
 - **Label proxy** por órgão (~83% de concordância humana): erros estruturais (ex.: Bombeiros com objeto clínico) geram confusão Segurança ↔ Saúde.
 - **Vazamento residual** (~49%) mesmo em `objeto_html` — optou-se conscientemente pela métrica honesta em vez do número inflado de ~0,88.
 - Cobertura só **DF/2025** — não generaliza para o Brasil nem para outros anos.
-- Sumarização extrativa **não parafraseia** (só extrai campos), mas em troca **não alucina** prazo nem valor — vantagem sobre um LLM.
 
 ---
 
@@ -172,7 +146,7 @@ Com **423 editais** e classes **desbalanceadas**, o **modelo clássico simples s
 
 1. **Dados e pipeline inéditos e reprodutíveis** de transparência pública (ComprasNet DF 2025): coleta ética (sem CAPTCHA), corpus versionado com hash, rastreamento de experimentos.
 2. **Evidência empírica com rigor metodológico:** num corpus pequeno, um baseline clássico bem construído (TF-IDF + LogReg, **F1 0,74**) pode **superar** um Transformer (BERTimbau, 0,40) — desde que se controle **vazamento de label**, se reporte o **teste** (não a validação) e se valide o rótulo com humanos.
-3. **Ferramenta aplicada:** dado um edital, o sistema entrega **área de gasto + resumo cidadão**, conectando o modelo a um problema real de controle social.
+3. **Ferramenta aplicada:** dado um edital, o sistema infere **área de gasto**, apoiando triagem e controle social.
 
 > A contribuição não é "a melhor métrica", e sim **explicar o que a métrica significa, por que ela importa e o cuidado metodológico** por trás dela.
 
@@ -180,12 +154,10 @@ Com **423 editais** e classes **desbalanceadas**, o **modelo clássico simples s
 
 ## 8. Próximos passos — melhorias e escala
 
-- **Expandir o corpus no tempo (2021–2024):** ~2.000–2.500 editais → classes raras mais estáveis e teste de **robustez temporal** (treinar 2021–24, testar só 2025).
-- **Enriquecer com o PNCP** (API oficial, sem CAPTCHA) para cruzar/validar documentos e metadados.
-- **Sumarização abstrativa** com PTT5/mT5 + avaliação por **ROUGE** e nota humana (1–5), comparando com o extrativo.
-- **Reduzir a classe "Outros"** revisando o mapeamento órgão→área (ganho sem coletar mais dados).
-- **Diferencial aplicado:** cruzar os erros e as áreas previstas com **valor homologado** e **modalidade** para mapear *onde o DF gasta*.
-- **Escala/produto:** expor a triagem como serviço/API para portais de transparência.
+- **Expandir o corpus no tempo (2021–2024):** classes raras mais estáveis e teste de **robustez temporal**.
+- **Enriquecer com o PNCP** (já iniciado — 19.944 compras DF/2025).
+- **Reduzir a classe "Outros"** revisando o mapeamento órgão→área.
+- **Diferencial aplicado:** cruzar áreas previstas com **valor homologado** e **modalidade**.
 
 ---
 
@@ -195,9 +167,8 @@ Com **423 editais** e classes **desbalanceadas**, o **modelo clássico simples s
 
 1. DEVLIN, J. et al. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. **NAACL**, 2019.
 2. SOUZA, F.; NOGUEIRA, R.; LOTUFO, R. BERTimbau: Pretrained BERT Models for Brazilian Portuguese. **BRACIS**, 2020.
-3. RAFFEL, C. et al. Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer (T5). **JMLR**, 2020.
-4. SRIVASTAVA, N. et al. Dropout: A Simple Way to Prevent Neural Networks from Overfitting. **JMLR**, 2014.
-5. GOODFELLOW, I.; BENGIO, Y.; COURVILLE, A. **Deep Learning**, cap. 10 (modelagem de sequências). MIT Press, 2016.
+3. SRIVASTAVA, N. et al. Dropout: A Simple Way to Prevent Neural Networks from Overfitting. **JMLR**, 2014.
+4. GOODFELLOW, I.; BENGIO, Y.; COURVILLE, A. **Deep Learning**, cap. 10 (modelagem de sequências). MIT Press, 2016.
 
 **Domínio (licitações, transparência, setor público, linguagem cidadã):**
 

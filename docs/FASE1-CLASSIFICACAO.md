@@ -302,20 +302,7 @@ Mesma accuracy no teste (~80%), mas F1 macro caiu de **0,80 → 0,65**. Ele acer
 
 ---
 
-### 5.5 Bloco D — Sumarização extrativa (tarefa separada, Fase 4)
-
-Amostra: **18** editais estratificados. Não usa F1.
-
-| Campo extraído | Resultado |
-|----------------|-----------|
-| Prazo de entrega | **15/18** (83%) |
-| Valor homologado | **18/18** (100%) |
-
-Extrai campos do HTML; não reescreve o edital (não alucina, mas também não parafraseia).
-
----
-
-### 5.6 Conclusões em uma frase cada
+### 5.5 Conclusões em uma frase cada
 
 1. **Dados:** 423 editais HTML para treinar; PNCP DF confirma desbalanceamento e mostra escala ~47× maior.
 2. **Entrada:** `objeto_html` porque vazamento cai de ~97% para ~49%.
@@ -366,7 +353,7 @@ pip install -r requirements-dev.txt
 # corpus HTML (treino oficial)
 python scripts/run_preprocess.py
 
-python scripts/run_train.py --task classification --model baseline
+python scripts/run_train.py --model baseline
 
 # EDA PNCP DF (exploratório)
 jupyter notebook notebooks/03_eda_pncp.ipynb
@@ -385,7 +372,7 @@ jupyter notebook notebooks/03_eda_pncp.ipynb
 - **Treino oficial pequeno (423 HTML)** — F1 de classes raras instável; PNCP DF mostra que o problema de escala é real (~20 mil), mas ainda desbalanceado.
 - **Label proxy por órgão** — válido em ~83% na amostra manual; PNCP amplia o mesmo viés estrutural.
 - **Dois tipos de texto** — `objeto_html` (rico, HTML) vs `objeto_compra` PNCP (curto); comparar F1 entre fontes exige harmonizar entrada.
-- **PNCP ≠ edital integral** — metadado PNCP não substitui HTML/PDF para sumarização cidadã.
+- **PNCP ≠ edital integral** — metadado PNCP não substitui HTML/PDF para análise textual detalhada.
 - **Mix modal** — PNCP DF tem mais dispensa/inexigibilidade que o export ComprasNet.
 - **Só DF/2025** — não generaliza para outros estados/anos sem retreino.
 

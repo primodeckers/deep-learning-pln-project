@@ -29,11 +29,10 @@
 
 | Documento | Descrição |
 |-----------|-----------|
-| [`FASES.md`](FASES.md) | Índice das fases 1–4 |
+| [`FASES.md`](FASES.md) | Índice das fases 1–3 |
 | [`FASE1-CLASSIFICACAO.md`](FASE1-CLASSIFICACAO.md) | TF-IDF + LogReg — decisões técnicas + EDA PNCP |
 | [`FASE2-CLASSIFICACAO.md`](FASE2-CLASSIFICACAO.md) | BERTimbau |
 | [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md) | TF-IDF + SVM |
-| [`FASE4-SUMARIZACAO.md`](FASE4-SUMARIZACAO.md) | Sumarização extrativa cidadã |
 
 ---
 
@@ -41,7 +40,9 @@
 
 | Documento | Descrição |
 |-----------|-----------|
-| [`APRESENTACAO-CONTEUDO.md`](APRESENTACAO-CONTEUDO.md) | Roteiro de slides (10 min) |
+| [`APRESENTACAO-CONTEUDO.md`](APRESENTACAO-CONTEUDO.md) | Conteúdo ampliado da apresentação |
+| [`roteiro_10min.md`](roteiro_10min.md) | **Roteiro falado 10 min** — alinhado aos critérios da disciplina |
+| [`ROTEIRO-FAMILIA-PROTOCOLOS-PNCP.md`](ROTEIRO-FAMILIA-PROTOCOLOS-PNCP.md) | Roteiro falado — slide família `pncp*` (2–3 min) |
 | [`HIPERPARAMETROS-E-MELHORIAS.md`](HIPERPARAMETROS-E-MELHORIAS.md) | Tuning e backlog de melhorias |
 | [`GPU-EQUIPE.md`](GPU-EQUIPE.md) | Fluxo GPU vs CPU no grupo |
 | [`NOTEBOOK-ENTREGA.md`](NOTEBOOK-ENTREGA.md) | Atalho → [`notebooks/README.md`](../notebooks/README.md) |

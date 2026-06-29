@@ -12,22 +12,21 @@ Roteiro do grupo — do problema à apresentação. Vai sendo atualizado conform
 
 | Campo | Valor |
 |---|---|
-| **Título provisório** | Classificação de editais por área de gasto + resumos em linguagem cidadã (ComprasNet DF 2025) |
+| **Título provisório** | Classificação de editais por área de gasto (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | Classificação: Fases 1–3 rodadas (LogReg · BERT · SVM). Sumarização extrativa (Fase 4) com baseline pronto. |
+| **Status** | Classificação: Fases 1–3 rodadas (LogReg · BERT · SVM). PNCP DF/2025 em andamento. |
 | **Última atualização** | 2026-06-24 |
 
-### Decisão de escopo (Ideia 1 + Ideia 4)
+### Escopo do projeto
 
-O grupo adota **duas tarefas complementares** sobre o mesmo corpus:
+O grupo concentra-se em **classificar editais por área de gasto** (6 macroáreas no ComprasNet; 9 setores no PNCP).
 
 | Papel | Tarefa | Tipo de modelo | Entrega principal |
 |---|---|---|---|
-| **Principal** | Classificar edital por **área de gasto** (6 macroáreas) | TF-IDF + LogReg (oficial) · SVM · BERT | F1 no teste, matriz de confusão — ver [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) |
-| **Complemento** | **Resumir** edital em linguagem acessível ao cidadão | Sumarização | 5–10 exemplos antes/depois + avaliação humana |
+| **Principal** | Classificar edital por **área de gasto** | TF-IDF + LogReg (oficial) · SVM · BERT | F1 no teste, matriz de confusão — ver [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md) |
 
-A classificação responde *"em que o DF gasta?"*; a sumarização responde *"o que esse edital significa pra quem não é especialista?"*. Na apresentação, a demo de resumo ilustra o impacto aplicado; as métricas vêm da classificação.
+A classificação responde *"em que o DF gasta?"* — triagem automática para controle social e análise de gasto público.
 
 ### Integrantes
 
@@ -60,7 +59,7 @@ A classificação responde *"em que o DF gasta?"*; a sumarização responde *"o 
 
 ### 1.4 Escopo
 
-**Dentro:** corpus ComprasNet DF 2025, classificação em 6 macroáreas, sumarização de amostra representativa, comparação de modelos, análise crítica.
+**Dentro:** corpus ComprasNet DF 2025, classificação em 6 macroáreas de amostra representativa, comparação de modelos, análise crítica.
 
 **Fora:** PDF com CAPTCHA, licitações fora do DF/2025, bases prontas (Kaggle), quebra automatizada de CAPTCHA.
 
@@ -68,7 +67,7 @@ A classificação responde *"em que o DF gasta?"*; a sumarização responde *"o 
 
 ## 2. Fluxo do Learning (adaptado à aula)
 
-O professor define o ciclo: **Problema → Dados → Modelo → Avaliação → Decisão**. Nosso projeto percorre esse fluxo duas vezes (classificação e sumarização), compartilhando a base de dados.
+O professor define o ciclo: **Problema → Dados → Modelo → Avaliação → Decisão**. Nosso projeto percorre esse fluxo na **classificação por área de gasto**.
 
 ```
                     ┌─────────────────────────────────────┐
@@ -100,7 +99,7 @@ O professor define o ciclo: **Problema → Dados → Modelo → Avaliação → 
 
 ## 3. Guia universal de Rede Neural — aplicado ao nosso PLN
 
-O material [`aula03-04.pdf`](referencias/aula03-04.pdf) propõe um guia prático cujo lema é **"depende"** — cada escolha depende do problema, do volume de dados e do diagnóstico treino vs validação. Abaixo traduzimos cada bloco para **texto + classificação + sumarização**.
+O material [`aula03-04.pdf`](referencias/aula03-04.pdf) propõe um guia prático cujo lema é **"depende"** — cada escolha depende do problema, do volume de dados e do diagnóstico treino vs validação. Abaixo traduzimos cada bloco para **classificação textual**.
 
 ### 3.1 Dados: split, normalização e volume
 
@@ -196,31 +195,16 @@ Mesmo protocolo das Fases 1 e 2 (`objeto_html`, split 70/15/15, `seed=42`).
 2. Comparar F1 macro teste: LogReg vs SVM vs BERT
 3. Documentar em [`FASE3-CLASSIFICACAO.md`](FASE3-CLASSIFICACAO.md)
 
-**Script alvo:** `scripts/run_train.py --task classification --model svm`
+**Script alvo:** `scripts/run_train.py --model svm`
 
-### Fase 4 — Sumarização (complemento — outra tarefa)
-
-1. **Baseline extrativa:** TextRank ou lead-3 frases do objeto + datas via regex
-2. **Modelo abstrativo (escolher um):**
-   - Opção A: fine-tune `unicamp-dl/ptt5-base-portuguese-vocab` (seq2seq)
-   - Opção B: prompt estruturado em LLM (5–10 editais piloto; documentar prompt)
-3. Gerar resumos para **mesma amostra de 20 editais** (estratificada por área)
-4. Avaliação:
-   - ROUGE-1 / ROUGE-L (automática, referência fraca)
-   - **Escala humana 1–5** (clareza, correção, completude) — 2 integrantes, média
-   - Contar **alucinações** (prazo/valor inventado)
-5. Selecionar **3 exemplos** para slide antes/depois
-
-**Script alvo:** `scripts/run_train.py --task summarization` · ver [`FASE4-SUMARIZACAO.md`](FASE4-SUMARIZACAO.md)
-
-### Fase 5 — Análise aplicada e integração
+### Fase 4 — Análise aplicada e integração
 
 1. Gráfico: distribuição de valor homologado por área predita
-2. Opcional: resumir os 5 editais **mais mal classificados** (liga tarefa 1 e 4)
+2. Resumir os editais **mais mal classificados** (análise de erros)
 3. Redigir limitações: label proxy, corpus HTML vs PDF, desbalanceamento de classes
 4. Registrar experimentos em `experiments/` (JSON + MLflow em `experiments/mlflow.db`)
 
-### Fase 6 — Entrega e apresentação
+### Fase 5 — Entrega e apresentação
 
 1. Atualizar README com comandos de execução
 2. Montar slides (10 min) — roteiro na seção 8
@@ -241,8 +225,6 @@ Práticas comuns em produção de PLN em 2024–2025, mapeadas para o nosso esco
 | Experiment tracking | MLflow (local) + JSON em `experiments/` | Sim — desde Fase 2 |
 | Hiperparâmetros | Grid/random search, Optuna | Manual (suficiente para o prazo); ver [`HIPERPARAMETROS-E-MELHORIAS.md`](HIPERPARAMETROS-E-MELHORIAS.md) |
 | Classificação desbalanceada | `class_weight`, focal loss | `class_weight` |
-| Sumarização | T5/mT5, BART, GPT com RAG | mT5 ou prompt LLM (amostra) |
-| Avaliação de resumo | ROUGE + avaliação humana | Sim (ambos) |
 | MLOps / deploy | FastAPI + modelo serializado | Fora do escopo (mencionar como próximo passo) |
 | RAG sobre documentos | Embeddings + busca + LLM | Fora do escopo (citável na discussão) |
 | Data versioning | DVC | Opcional; Git + manifestos já documentados |
@@ -304,51 +286,7 @@ configs/
 
 ---
 
-## 7. Tarefa complementar — sumarização cidadã
-
-### 7.1 Formato do resumo
-
-Parágrafo de 3–5 frases respondendo:
-
-1. O que está sendo contratado?
-2. Quem pode participar?
-3. Qual o prazo para propostas?
-4. Valor estimado (se constar no texto)?
-
-> ✅ **Baseline extrativo implementado** — [`src/summarize/extractive.py`](../src/summarize/extractive.py).
-> Extrai os 4 campos por regras/regex (objeto, ME/EPP, data de entrega, valor homologado)
-> e monta o parágrafo. É **determinístico → não alucina** prazo/valor (vantagem sobre o LLM).
-> Rodar: `python scripts/run_train.py --task summarization --model extractive`.
-> Saídas: amostra estratificada de 18 editais, exemplos antes/depois em
-> [`reports/slides/resumos_exemplos.md`](../reports/slides/resumos_exemplos.md).
-> Cobertura medida: prazo 15/18, valor 18/18 (dispensas costumam não ter "Entrega da Proposta").
-
-### 7.2 Pipeline recomendado
-
-```
-Texto do edital
-    → baseline extrativo (TextRank)
-    → mT5 fine-tuned OU LLM com prompt fixo
-    → revisão humana (20 amostras)
-    → 3 exemplos para slides
-```
-
-### 7.3 Cuidados (uso responsável)
-
-- LLM pode **inventar** prazo ou valor — contar alucinações e incluir disclaimer nos slides
-- Não usar resumo como única fonte legal; é ferramenta de **acessibilidade**, não substituto do edital
-
-### 7.4 Integração com a classificação
-
-Na apresentação, mostrar fluxo:
-
-> Edital → **área predita** (Saúde) + **resumo cidadã** (1 parágrafo)
-
-Isso materializa o diferencial aplicado exigido pela disciplina.
-
----
-
-## 8. Referencial teórico
+## 7. Referencial teórico
 
 Mínimo: **5 artigos de domínio** + **5 de técnica** (ver requisitos).
 
@@ -368,7 +306,7 @@ Mínimo: **5 artigos de domínio** + **5 de técnica** (ver requisitos).
 |---|---|---|
 | 1 | Devlin et al. (2019) BERT | Fine-tuning classificação |
 | 2 | Souza et al. BERTimbau | Modelo em português |
-| 3 | Raffel et al. (2020) T5 | Sumarização seq2seq |
+| 3 | Raffel et al. (2020) T5 | Contexto seq2seq (referência geral) |
 | 4 | Goodfellow, Bengio & Courville (2016) Cap. 10 | Sequências / RNN (contexto aula) |
 | 5 | Srivastava et al. (2014) Dropout | Regularização |
 
@@ -391,7 +329,7 @@ Campos principais do JSONL: `texto`, `objeto_html`, `orgao_csv`, `tipo`, `modali
 
 ### Volume: é suficiente?
 
-**Sim, para o escopo do trabalho** (classificação em 6 áreas + sumarização em amostra). **Não** é um corpus grande para deep learning — esperar F1 irregular em classes pequenas (Educação ~17, Infra ~24) e documentar isso na discussão.
+**Sim, para o escopo do trabalho** (classificação em 6 áreas). **Não** é um corpus grande para deep learning — esperar F1 irregular em classes pequenas (Educação ~17, Infra ~24) e documentar isso na discussão.
 
 | Pergunta | Resposta curta |
 |---|---|
@@ -437,12 +375,11 @@ pip install -r requirements-dev.txt   # runtime + pytest, ruff, mypy
 
 python scripts/run_collect.py       # já executado
 python scripts/run_preprocess.py    # já executado
-python scripts/run_train.py --task classification --model baseline
-python scripts/run_train.py --task classification --model bertimbau
-python scripts/run_train.py --task summarization --model extractive
+python scripts/run_train.py --model baseline
+python scripts/run_train.py --model bertimbau
 ```
 
-Atalhos equivalentes: `make train-baseline`, `make train-summarize`, `make mlflow-ui` (requer `make` no PATH).
+Atalhos equivalentes: `make train-baseline`, ``, `make mlflow-ui` (requer `make` no PATH).
 
 ### Qualidade de código
 
@@ -464,7 +401,7 @@ Documentação de resultados: [`MODEL-CARD.md`](MODEL-CARD.md), [`METRICAS-E-DEC
 
 ### Rastreamento de experimentos (MLflow)
 
-Implementado em [`src/utils/experiment_tracking.py`](../src/utils/experiment_tracking.py) e chamado por `train_classification` / `run_summarization`.
+Implementado em [`src/utils/experiment_tracking.py`](../src/utils/experiment_tracking.py) e chamado por `train_classification`.
 
 **O que cada run registra**
 
@@ -484,7 +421,7 @@ Implementado em [`src/utils/experiment_tracking.py`](../src/utils/experiment_tra
 **Comandos**
 
 ```bash
-python scripts/run_train.py --task classification --model baseline
+python scripts/run_train.py --model baseline
 
 # UI local (após pelo menos uma run)
 mlflow ui --backend-store-uri sqlite:///experiments/mlflow.db
@@ -507,13 +444,13 @@ Rascunho de slides — ajustar com o grupo.
 | 1–2 | Dados | ComprasNet HTML, corpus JSONL, label proxy |
 | 2–3 | Metodologia | TF-IDF + LogReg, depois SVM e BERT no mesmo split |
 | 3–5 | Resultados | Tabela: LogReg 0,74 · SVM 0,65 · BERT 0,40 (teste). Matrizes. Val vs teste |
-| 5–6 | Demo sumarização | 1 edital: área predita + resumo cidadã |
+| 5–6 | Demo classificação | 1 edital: área predita + matriz de confusão |
 | 6–7 | Impacto | Transparência de gasto; quem se beneficia |
 | 7–8 | Limitações | Proxy, corpus pequeno, `objeto_html` vs vazamento |
 | 8–9 | Conclusão | LogReg ficou; BERT não venceu neste volume |
-| 9–10 | Próximos passos | Mais dados, sumarização abstrativa, etc. |
+| 9–10 | Próximos passos | PNCP, mais dados, revisão de labels |
 
-Frase que costumamos usar: *"PLN ajuda a classificar gasto e resumir edital pro cidadão — com limites que a gente documentou."*
+Frase que costumamos usar: *"PLN ajuda a classificar gasto público por área — com limites que a gente documentou."*
 
 ---
 
@@ -523,8 +460,7 @@ Frase que costumamos usar: *"PLN ajuda a classificar gasto e resumir edital pro 
 |---|---|
 | 1 | Labels + baseline TF-IDF + início bibliografia |
 | 2 | Fine-tuning BERTimbau + análise de erros |
-| 3 | Sumarização (baseline + modelo) + avaliação humana |
-| 4 | Gráficos, slides, redação, ensaio |
+| 3 | Gráficos, slides, redação, ensaio |
 
 _Ajustar datas conforme calendário real da disciplina._
 
@@ -537,13 +473,12 @@ _Ajustar datas conforme calendário real da disciplina._
 | 2026-06-06 | Tema: PLN em licitações ComprasNet DF 2025 | Setor público + dados inéditos |
 | 2026-06-06 | Coleta HTML (não PDF) | Sem CAPTCHA; reprodutível |
 | 2026-06-06 | Corpus JSONL pronto (423 registros) | Pipeline preprocess |
-| 2026-06-06 | **Ideia 1 principal + Ideia 4 complemento** | Métricas sólidas + impacto na apresentação |
+| 2026-06-06 | **Classificação por área de gasto** como tarefa principal | Métricas sólidas + impacto na apresentação |
 | 2026-06-06 | Labels via mapeamento órgão → macroárea | Viável no prazo; validação amostral |
 | 2026-06-06 | Volume 423 (2025) suficiente; sem coleta 2021–2024 na fase 1 | Prazo + limitações documentadas |
 | 2026-06-08 | Fase 1 implementada: labels (6 áreas) + split estratificado 70/15/15 (seed 42) + baseline TF-IDF/LogReg | Pipeline `run_train.py` funcional; métricas reais |
 | 2026-06-08 | Entrada honesta = `objeto_html` (não `texto`) | `texto` repete o nome do órgão → vazamento de label (§6.1) |
 | 2026-06-08 | EDA em `notebooks/01_eda.ipynb` | Vazamento quantificado: órgão em 97% dos `texto` vs 49% dos `objeto_html` |
-| 2026-06-08 | Baseline de sumarização = extrativo por regras (não TextRank puro) | Determinístico, não alucina; cobre objeto/quem/prazo/valor (§7) |
 | 2026-06-18 | Rastreamento com MLflow local + JSON | Comparar baseline vs BERTimbau; versionar corpus por hash SHA-256 |
 | 2026-06-18 | Dev: ruff + mypy + pytest + Makefile + `pyproject.toml` instalável | Qualidade de código e onboarding do grupo; model card e doc de métricas |
 | 2026-06-22 | Validação manual de labels: **4/4 fichas**; média ≈83,2% | Consolidação em `VALIDACAO-LABELS.md` § Síntese |

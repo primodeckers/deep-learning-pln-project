@@ -28,17 +28,6 @@ Anotações do grupo sobre o que medimos, como ler os números e por que o relat
 
 **Por que não só accuracy?** Com 25/64 exemplos de teste em Administração/Outros, um modelo que **sempre** prevê essa classe teria accuracy ≈ 39% só nessa classe, mas o padrão real é pior: mascaramos falhas em Educação (2 exemplos) e Segurança (9).
 
-### Sumarização extrativa (Fase 4)
-
-| Métrica | Significado |
-|---------|-------------|
-| `com_prazo` / `total` | Quantos resumos extraíram data de entrega de propostas (regex) |
-| `com_valor` / `total` | Quantos extraíram valor homologado |
-| ROUGE-L | **Previsto** — overlap com referência fraca; ainda não implementado |
-| Avaliação humana 1–5 | **Previsto** — clareza, completude, fidelidade |
-
-O extrativo **não** tem F1 — sucesso = cobertura de campos + qualidade qualitativa nos exemplos.
-
 ---
 
 ## 2. Protocolo experimental (igual para todos os classificadores)
@@ -65,7 +54,6 @@ Retreino de jun/2026 (`20260624-*`). Critério: F1 macro no **teste**.
 | 1 | TF-IDF + LogReg | `classification_baseline_20260624-013836` | **0,740** | Principal |
 | 3 | TF-IDF + SVM | `classification_svm_20260624-013851` | 0,652 | Comparativo |
 | 2 | BERTimbau | `classification_bertimbau_20260624-013908` | 0,400 | Comparativo |
-| 4 | Sumarização extrativa | `summarization_extractive_20260624-013951` | — | Outra tarefa |
 
 ### LogReg em vez de SVM
 
@@ -155,21 +143,7 @@ Mesmo vetorizador; `kernel=linear`, `probability=true`, `class_weight=balanced`.
 
 ---
 
-## 8. Sumarização (Fase 4)
-
-**Run:** `summarization_extractive_20260624-013951`  
-**Amostra:** 18 editais estratificados por área
-
-| Cobertura | Valor |
-|-----------|-------|
-| Com prazo extraído | **15/18** (83%) |
-| Com valor extraído | **18/18** (100%) |
-
-Dispensas e editais sem campo “Entrega da Proposta” explicam prazos ausentes — não é falha do modelo, é ausência no HTML.
-
----
-
-## 9. Rastreamento (JSON + MLflow)
+## 8. Rastreamento (JSON + MLflow)
 
 Cada treino gera:
 

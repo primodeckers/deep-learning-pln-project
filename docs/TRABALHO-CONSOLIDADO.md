@@ -1,142 +1,158 @@
-# Classificação de editais por área de gasto e sumarização em linguagem cidadã — Distrito Federal, 2025
+# Classificação de editais por área de gasto — Distrito Federal, 2025
 
 **Projeto Final — Deep Learning e PLN · Modalidade 2: PLN no Setor Público**
 
 **Integrantes:** Elisangela Osorio · Alexandre Ferreira Ponte · Renê Estevam Deckers · Alexandre Hugo Sampaio Netto
 
+**Documentação complementar:** [`README.md`](README.md) · [`REGRAS-E-PROTOCOLOS.md`](REGRAS-E-PROTOCOLOS.md) · [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md) · [`MODEL-CARD.md`](MODEL-CARD.md)
+
 ---
 
 ## 1. Contexto e problema
 
-Editais de licitação pública descrevem, em linguagem jurídica e técnica, o que o governo pretende comprar ou contratar. No Distrito Federal, centenas desses documentos são publicados todo ano no portal ComprasNet. Para um cidadão, um pequeno empresário ou um órgão de controle, ler cada edital manualmente para responder perguntas como *“em que áreas o governo está gastando?”* ou *“o que este edital significa na prática?”* é inviável.
+Editais de licitação pública descrevem, em linguagem jurídica e técnica, o que o governo pretende comprar ou contratar. No Distrito Federal, centenas desses documentos são publicados todo ano no portal ComprasNet — e dezenas de milhares de compras aparecem no Portal Nacional de Contratações Públicas (PNCP). Para um cidadão, um pequeno empresário ou um órgão de controle, ler cada descrição manualmente para responder *“em que áreas o governo está gastando?”* ou *“o que esta compra significa na prática?”* é inviável.
 
-Este projeto aplica técnicas de Processamento de Linguagem Natural a **423 editais reais** do DF em 2025, coletados pelo próprio grupo — atendendo à exigência da disciplina de usar dados inéditos, sem bases prontas de plataformas como Kaggle. O trabalho desenvolve duas tarefas complementares sobre o mesmo corpus:
+Este projeto aplica técnicas de Processamento de Linguagem Natural a **dados inéditos coletados pelo grupo** (sem bases prontas de plataformas como Kaggle), com foco em **classificação automática de macroárea ou setor de gasto** a partir da descrição do objeto da licitação/compra.
 
-1. **Classificação (tarefa principal):** inferir automaticamente a **macroárea de gasto público** a partir da descrição do objeto da licitação — Saúde, Saneamento, Segurança, Educação, Infraestrutura/Obras ou Administração/Outros.
-
-
-A escolha conecta PLN a um problema concreto de transparência e acessibilidade no setor público: facilitar a triagem temática de licitações e reduzir a barreira de entrada para quem não domina o jargão administrativo.
+A escolha conecta PLN a transparência no setor público: triagem temática de licitações para responder *“em que áreas o governo está gastando?”*.
 
 ---
 
 ## 2. Justificativa
 
-O tema é relevante em três dimensões. **Na dimensão aplicada**, licitações são instrumento central de execução orçamentária; automatizar sua leitura apoia fiscalização, jornalismo de dados e participação de micro e pequenas empresas. **Na dimensão técnica**, o corpus permite comparar, no mesmo protocolo experimental, um baseline clássico (TF-IDF), um classificador SVM e um Transformer em português (BERTimbau) — respondendo empiricamente se, com ~423 documentos, o deep learning supera métodos mais simples. **Na dimensão social**, resumos em linguagem acessível ilustram como a IA pode servir ao cidadão, e não apenas gerar métricas.
+**Dimensão aplicada:** licitações são instrumento central de execução orçamentária; automatizar sua leitura apoia fiscalização, jornalismo de dados e participação de micro e pequenas empresas.
 
-A hipótese inicial era que o BERTimbau, por capturar contexto semântico, superaria TF-IDF + Regressão Logística. Os experimentos mostraram o contrário neste volume de dados — o que, por si só, é um achado metodológico relevante para o relatório.
+**Dimensão técnica:** o corpus ComprasNet (423 editais) permite comparar TF-IDF + LogReg, SVM e BERTimbau no **mesmo protocolo** — respondendo se, com poucos dados, deep learning supera métodos clássicos. A extensão PNCP (~20 mil compras) testa se **escala** e **taxonomias alternativas** (9 setores empíricos) invertem esse veredito.
+
+A hipótese inicial era que o BERTimbau superaria TF-IDF + LogReg. Nos 423 editais **não se confirmou**; no PNCP em escala grande, **sim** — achado metodológico central do trabalho.
 
 ---
 
 ## 3. Referencial teórico
 
-O trabalho se apoia em duas linhas de literatura, conforme exigido pela disciplina (mínimo cinco referências de domínio e cinco de técnica, citadas no corpo do texto).
+**Domínio:** contratações públicas (Lei 14.133/2021), ComprasNet, PNCP; classificação temática de gastos; acessibilidade de informação pública.
 
-**Domínio:** contratações públicas e transparência (Lei 14.133/2021, ComprasNet, Portal Nacional de Contratações Públicas); classificação temática de gastos governamentais; acessibilidade de informação pública para cidadãos e pequenos fornecedores.
+**Técnica:** TF-IDF e classificadores lineares; fine-tuning BERTimbau (Souza et al.); F1 macro em classes desbalanceadas; vazamento de label e label proxy em PLN supervisionado.
 
-**Técnica:** representação sparse de texto (TF-IDF) e classificadores lineares; fine-tuning de Transformers para português brasileiro (BERTimbau, Souza et al.); métricas para classificação multiclasse desbalanceada (F1 macro); sumarização extrativa versus abstrativa; diagnóstico de viés-variância e vazamento de label (*label leakage*) em tarefas de PLN supervisionado.
-
-Essas referências fundamentam decisões concretas do projeto: usar F1 macro em vez de accuracy isolada; incluir baseline clássico antes do Transformer; evitar o HTML completo como entrada por vazamento de label; preferir sumarização extrativa inicialmente, para não inventar prazos ou valores.
+Decisões derivadas: F1 macro como métrica primária; baseline clássico antes do Transformer; entrada `objeto_html` (não HTML completo) para reduzir vazamento.
 
 ---
 
 ## 4. Dados
 
-### 4.1 Fonte e coleta
-
-Os dados vêm do **ComprasNet** (http://www.comprasnet.gov.br/). O grupo exportou um CSV com licitações do **Distrito Federal em 2025** (437 linhas). A coluna *Edital* contém URLs para páginas de detalhe de cada licitação.
-
-A coleta textual seguiu duas etapas reprodutíveis:
-
-1. **Download das páginas HTML** de detalhe — 423 URLs únicas (14 duplicatas no CSV). Intervalo de 0,8 segundo entre requisições para respeitar o servidor público. Nenhum erro HTTP.
-2. **Extração e normalização** do texto: parsing do HTML, conversão de Latin-1 para UTF-8, geração de um corpus estruturado com 423 registros.
-
-**Por que HTML e não PDF?** O botão de download de PDF no ComprasNet exige CAPTCHA (validação anti-robô). Automatizar centenas de PDFs exigiria contorno antiético do sistema — rejeitado pelo grupo. O HTML de detalhe traz órgão, objeto, itens e metadados suficientes para PLN, sem CAPTCHA.
-
-### 4.2 Volume e características
+### 4.1 ComprasNet — corpus principal (entrega oficial)
 
 | Aspecto | Valor |
 |---------|------:|
-| Editais únicos | 423 |
-| Período | DF, 2025 |
-| Material / Serviço | 320 / 103 (76% / 24%) |
-| Tamanho do objeto (texto) | mediana ~1.600 caracteres; média ~3.400; máximo ~41.300 |
-| Modalidade predominante | Pregão eletrônico (278); dispensa (134) |
+| Fonte | [ComprasNet](http://www.comprasnet.gov.br/) — CSV DF 2025 (437 linhas → **423 URLs** únicas) |
+| Coleta | HTML de detalhe (sem CAPTCHA; PDF exige CAPTCHA — rejeitado por ética) |
+| Corpus | `licitacoes_corpus.jsonl` — **423 registros** |
+| Material / Serviço | 320 / 103 |
+| Mediana do objeto | ~1.600 caracteres |
+| Modalidade | Pregão (278) · Dispensa (134) |
+
+Pipeline: `run_collect.py` → `run_preprocess.py` (delay 0,8 s entre requisições).
+
+### 4.2 PNCP — extensão exploratória
+
+| Aspecto | Valor |
+|---------|------:|
+| Fonte | PNCP / Compras.gov.br — `comprasGOV-anual-VW_FT_PNCP_COMPRA-2025.xls` |
+| Filtro | UF = **DF**, ano = **2025** |
+| Corpus | `pncp_corpus_df2025.jsonl` — **19.944 compras** |
+| Campo principal | `objeto_compra` (mediana ~32 palavras vs ~239 no HTML ComprasNet) |
+| Modalidade dominante | Inexigibilidade (~39%) — perfil distinto do ComprasNet |
+| Info complementar | Presente em ~53% das linhas |
+
+Pipeline: `scripts/run_preprocess_pncp.py` · EDA: `notebooks/03_eda_pncp.ipynb`.
 
 ### 4.3 Rotulagem (labels)
 
-Não houve tempo para rotular manualmente os 423 editais. O **rótulo proxy** vem do nome do órgão comprador no CSV: palavras-chave mapeiam cada órgão a uma das seis macroáreas (ex.: Secretaria de Saúde → Saúde; CAESB → Saneamento; Bombeiros → Segurança).
+**ComprasNet e protocolo `pncp`:** rótulo **proxy** por **órgão → 6 macroáreas** (Saúde, Saneamento, Segurança, Educação, Infraestrutura/Obras, Administração/Outros). Palavras-chave no nome do órgão; primeira match vence. O classificador **não recebe o órgão como feature**.
 
-Distribuição aproximada: Administração/Outros 176 · Saúde 106 · Segurança 51 · Saneamento 49 · Infraestrutura/Obras 24 · Educação 17.
+**Protocolos `pncp9*`:** taxonomia de **9 setores empíricos** (keyword no objeto) + classe **`Indeterminado`**, com variantes:
 
-O classificador **não recebe o nome do órgão como entrada** — apenas o texto do objeto. Caso contrário, o modelo faria lookup de metadados, não PLN.
+- **`pncp9`:** só registros com keyword (~10,3 mil)
+- **`pncp9full`:** todos; sem keyword → Indeterminado
+- **`pncp9fb`:** fallback — sem keyword, usa macroárea do órgão (5 homônimas)
+- **`pncp9fbi`:** idem + **informação complementar** no rótulo e no texto
 
-Para avaliar a qualidade desse proxy, os quatro integrantes revisaram **30 editais** sorteados (estratificados por área). A concordância média com o label automático foi de **≈83%** (variando de 62% a 96% entre revisores). Conclusão: rotulagem fraca aceitável para baseline acadêmico, mas limitação a declarar na discussão.
+Regras completas: [`REGRAS-E-PROTOCOLOS.md`](REGRAS-E-PROTOCOLOS.md).
+
+**Validação humana (ComprasNet):** 30 editais, 4/4 fichas → concordância média **≈83,2%** ([`VALIDACAO-LABELS/VALIDACAO-LABELS.md`](VALIDACAO-LABELS/VALIDACAO-LABELS.md)).
 
 ### 4.4 Limitações dos dados
 
-- Corpus **pequeno** para fine-tuning de Transformer (~295 exemplos de treino).
-- **Desbalanceamento**: Educação e Infraestrutura têm poucos exemplos; no conjunto de teste, Educação tem apenas 2 editais.
-- Documento = **HTML de detalhe**, não PDF integral; o campo Objeto do CSV pode estar truncado.
-- Escopo **geográfico e temporal restrito** (só DF 2025) — generalização não testada.
-- Coleta datada: links podem expirar; o CSV versionado e o script de download garantem reprodutibilidade.
+- ComprasNet: corpus **pequeno** (~295 treino); Educação com **2 exemplos no teste**; HTML ≠ PDF integral.
+- PNCP: textos **curtos e burocráticos** (~48% sem keyword setorial); rótulos derivados de regras, não anotação manual.
+- Ambos: escopo **DF/2025**; vazamento lexical residual (~49% em `objeto_html` ComprasNet).
 
 ---
 
 ## 5. Metodologia
 
-### 5.1 Análise exploratória
+### 5.1 Análise exploratória e vazamento de label
 
-Antes do treino, foi feita análise exploratória sobre os 423 editais: distribuição por área, órgão, modalidade, tamanho de texto, material versus serviço, e comparação entre campos de entrada possíveis. Um achado crítico: o HTML completo (`texto`) repete o nome do órgão em **≈97%** dos casos em que a keyword da área aparece — porque o label veio justamente do órgão. Usar esse campo inflaria artificialmente a performance (F1 macro ≈ 0,88). O campo **`objeto_html`** (só a descrição da compra) reduz esse vazamento para **≈49%** e foi adotado como **entrada oficial** do classificador, com F1 macro ≈ 0,74 — número mais honesto, embora ainda com vazamento residual.
+No ComprasNet, o HTML completo (`texto`) repete o órgão em **≈97%** dos casos onde a keyword da área aparece → F1 inflado **≈0,88**. O campo **`objeto_html`** reduz vazamento para **≈49%** → F1 honesto **≈0,74**. Limpeza adicional (`objeto_html_limpo`) remove boilerplate e nome do órgão copiado no texto.
 
-Dois conceitos distintos: **vazamento de label** (informação do rótulo aparece no texto de entrada) e **label proxy** (rótulo derivado do órgão, não anotado humanamente). Mitigar um não resolve o outro.
+Dois conceitos distintos: **vazamento de label** (pista do rótulo no input) vs **label proxy** (rótulo derivado do órgão, não anotado). Ver [`VAZAMENTO-DE-LABEL.md`](VAZAMENTO-DE-LABEL.md).
 
-### 5.2 Protocolo experimental (classificação)
-
-Todos os classificadores compartilharam o mesmo protocolo:
+### 5.2 Protocolo experimental — ComprasNet 423
 
 | Decisão | Valor |
 |---------|-------|
-| Entrada | Texto do objeto (`objeto_html`) |
-| Partição | 70% treino / 15% validação / 15% teste, estratificada por área |
-| Tamanhos | 295 treino · 64 validação · 64 teste |
-| Seed | 42 (mesmas partições nos três modelos) |
-| Métrica primária | **F1 macro no conjunto de teste** |
-| Critério de escolha | Melhor F1 no **teste**, nunca só na validação |
+| Entrada oficial | `objeto_html` |
+| Partição | 70% / 15% / 15%, estratificada, **seed 42** |
+| Tamanhos | 295 treino · 64 val · 64 teste |
+| Métrica primária | **F1 macro no teste** |
+| Seleção | Desenvolvimento olha val; **relatório reporta teste** |
 
-F1 macro calcula a média do F1 de cada classe com peso igual — adequado quando Saúde e Administração dominam o corpus, mas Educação tem só 2 exemplos no teste. Accuracy sozinha seria enganosa: 79% de acertos pode esconder F1 zero em classes raras.
+### 5.3 Modelos (Fases 1–3)
 
-### 5.3 Modelos treinados
+| Fase | Modelo | Configuração-chave |
+|------|--------|-------------------|
+| 1 (oficial) | **TF-IDF + LogReg** | n-grama 2, 20k features, `C=1.0`, `class_weight=balanced` |
+| 2 (comparativo DL) | **BERTimbau** | `max_len=512`, batch 16, lr 2e-5, 4 épocas, early stopping; GPU RTX 4090, fp16 |
+| 3 (comparativo) | TF-IDF + **SVM linear** | Mesmo vetorizador da Fase 1 |
 
-**Fase 1 — TF-IDF + Regressão Logística (modelo principal):** vetorização TF-IDF (unigramas e bigramas, até 20.000 features, `min_df=2`), classificador com `class_weight=balanced` e regularização L2 (`C=1.0`). Baseline clássico, rápido e interpretável.
+### 5.4 Extensão PNCP — protocolos e benchmark
 
-**Fase 2 — BERTimbau (comparativo de deep learning):** fine-tuning de `neuralmind/bert-base-portuguese-cased`, `max_length=512`, batch 16, learning rate 2e-5, até 4 épocas com early stopping (patience 2). Treinado em GPU (RTX 4090).
+Mesmo split 70/15/15 · seed 42 · entrada `objeto_html_limpo` ou `objeto_info_limpo` conforme protocolo.
 
-**Fase 3 — TF-IDF + SVM linear (comparativo clássico):** mesmo vetorizador da Fase 1; kernel linear, `class_weight=balanced`.
+| ID | Config | Descrição |
+|----|--------|-----------|
+| `pncp` | `classification_pncp.yaml` | 6 macroáreas por órgão — **referência honesta em escala** |
+| `pncp9` | `classification_pncp_9setores.yaml` | 9 setores; filtra sem keyword |
+| `pncp9full` | `classification_pncp_9setores_full.yaml` | 9 + Indeterminado |
+| `pncp9fb` | `classification_pncp_9setores_fb.yaml` | Fallback órgão |
+| `pncp9fbi` | `classification_pncp_9setores_fb_info.yaml` | Fallback + info complementar |
 
-**Fase 4 — Sumarização extrativa (complementar):** regras e expressões regulares extraem objeto, modalidade, tipo de participante, prazo e valor homologado. Amostra de 18 editais estratificados por área. Escolhido por ser determinístico — não inventa prazos nem valores, ao contrário de modelos generativos que poderiam alucinar.
+Benchmark de coortes difíceis: `scripts/run_benchmark_pncp_dificeis.py` — separa compras com keyword, “escondidas” (~853) e admin genérico.
 
-### 5.4 Avaliação e reprodutibilidade
+### 5.5 Reprodutibilidade
 
-Cada treino gera registro com métricas, hash do corpus e commit Git. Matrizes de confusão foram geradas para os três classificadores. O conjunto de teste não foi usado para escolher hiperparâmetros — apenas para o número final do relatório.
+Cada treino gera `experiments/<run_id>.json` (métricas, hash do corpus, commit Git) + MLflow local. Matrizes de confusão em `reports/figures/`.
 
 ---
 
 ## 6. Resultados
 
-### 6.1 Classificação — comparativo geral
+### 6.1 ComprasNet 423 — comparativo geral (teste)
 
-| Modelo | F1 validação | F1 teste | Accuracy teste |
-|--------|-------------:|---------:|---------------:|
+| Modelo | F1 val | F1 teste | Accuracy teste |
+|--------|-------:|---------:|---------------:|
 | **TF-IDF + LogReg** | 0,743 | **0,740** | 0,797 |
 | TF-IDF + SVM | 0,797 | 0,652 | 0,797 |
 | BERTimbau | 0,559 | 0,400 | 0,688 |
 
-O **LogReg** foi escolhido como modelo principal: melhor F1 macro no teste e estabilidade entre validação e teste (queda de apenas 0,003). O **SVM** parecia superior na validação (0,797) mas caiu para 0,652 no teste — sinal de ajuste excessivo aos 64 editais de validação. O **BERT** teve gap ainda maior (0,559 → 0,400) e praticamente ignorou classes minoritárias no teste.
+**Decisão:** LogReg como modelo principal — melhor F1 no teste e estabilidade val≈teste. SVM overfitou na validação (64 exemplos). BERT colapsou em classes raras.
 
-### 6.2 Desempenho por classe (teste)
+Runs: `classification_*_20260624-013*`.
 
-| Área | Exemplos no teste | LogReg | SVM | BERT |
-|------|------------------:|-------:|----:|-----:|
+### 6.2 ComprasNet — F1 por classe (teste)
+
+| Área | n | LogReg | SVM | BERT |
+|------|--:|-------:|----:|-----:|
 | Saúde | 17 | 0,90 | 0,90 | 0,88 |
 | Saneamento | 7 | 1,00 | 1,00 | 0,80 |
 | Segurança | 9 | 0,46 | 0,46 | 0,00 |
@@ -144,123 +160,138 @@ O **LogReg** foi escolhido como modelo principal: melhor F1 macro no teste e est
 | Infraestrutura/Obras | 4 | 0,60 | 0,75 | 0,00 |
 | Administração/Outros | 25 | 0,81 | 0,80 | 0,73 |
 
-Saúde e Saneamento funcionam bem nos três modelos clássicos — palavras como “medicamentos”, “insumos hospitalares” ou “abastecimento de água” discriminam bem. Segurança confunde-se frequentemente com Administração/Outros quando o texto do objeto não menciona polícia ou bombeiros. Educação, com apenas 2 exemplos no teste, produz F1 instável: um erro já derruba a métrica. O BERT colapsou nas classes raras e convergiu para prever Administração/Outros (recall 0,96 nessa classe).
-
 ### 6.3 Vazamento de label — contraste de entradas
 
-| Campo de entrada | F1 macro (teste) | Keywords da área no texto |
-|------------------|------------------|---------------------------|
-| HTML completo | ≈ 0,88 | ≈ 97% |
-| **Objeto da licitação** | **≈ 0,74** | ≈ 49% |
+| Campo | F1 macro (teste) | Vazamento lexical |
+|-------|------------------:|-------------------|
+| `texto` (HTML completo) | ≈ 0,88 | ≈ 97% |
+| **`objeto_html`** | **≈ 0,74** | ≈ 49% |
+| `objeto_html_limpo` | marginal vs objeto | ≈ 47% |
 
-A diferença confirma que métricas altas com o HTML completo refletem, em grande parte, memorização do órgão — não compreensão semântica do gasto.
+### 6.4 PNCP DF/2025 — resultados por protocolo (F1 macro teste)
+
+#### Protocolo honesto — 6 macroáreas por órgão (`pncp`)
+
+| Modelo | F1 teste | Accuracy |
+|--------|----------|----------|
+| LogReg | 0,756 | 0,926 |
+| SVM | 0,783 | 0,939 |
+| **BERTimbau** | **0,858** | 0,960 |
+
+Com ~20 mil exemplos, **BERT supera baselines** — inverso ao corpus 423.
+
+#### Protocolos 9 setores (exploratórios)
+
+| Protocolo | LogReg | SVM | BERT | Nota |
+|-----------|-------:|----:|-----:|------|
+| `pncp9` (filtrado, ~10,3k) | 0,857 | 0,877 | **0,969** | Só keyword |
+| `pncp9full` (19,9k) | 0,816 | 0,862 | **0,970** | + Indeterminado |
+| `pncp9fb` | **0,824** | — | — | Fallback órgão, só objeto |
+| `pncp9fbi` | 0,788 | 0,829 | **0,955** | + info complementar |
+
+**Interpretação dos F1 altos (~0,95–0,97):** refletem reprodução das **regras de keyword** e, em `pncp9fbi`, **acoplamento rótulo↔texto** (info entra nos dois). Não invalidam o trabalho, mas exigem transparência — distintos do protocolo honesto `pncp` (0,858).
+
+**Info complementar:** piora LogReg (0,824→0,788) mas **dispara BERT** (0,829→0,955) — sinal semântico só emerge com Transformer.
+
+**Coortes PNCP:** ~48% sem keyword no objeto; ~853 “escondidas” (órgão setorial, objeto burocrático); benchmark documentado em `reports/benchmark_pncp_casos_dificeis.json`.
 
 ### 6.5 Impacto aplicado
 
-Além das métricas, o projeto permite cruzamentos úteis à transparência: distribuição de licitações por área predita, relação entre área e valor homologado, concentração por modalidade (pregão versus dispensa). A classificação responde *“em que o DF gasta?”*; a sumarização responde *“o que este edital significa para quem quer participar?”* — duas faces do mesmo problema de acessibilidade.
+- **ComprasNet:** triagem automática por macroárea de gasto.
+- **PNCP:** escala permite cruzar área/setor com valor homologado e modalidade; base para jornalismo de dados e controle social em DF/2025.
 
 ---
 
 ## 7. Discussão
 
-### 7.1 Interpretação dos resultados
+### 7.1 Dois corpora, dois vereditos sobre BERT
 
-O baseline TF-IDF + LogReg venceu não por acaso, mas por adequação ao **tamanho do corpus**. Com ~295 exemplos de treino e seis classes, um modelo com dezenas de milhões de parâmetros (BERT) tende a overfitting — especialmente nas classes com dezenas de exemplos. Termos discriminativos no objeto (“medicamentos antimetabólitos”, “tubos de PVC”, “combustível”) são capturados eficientemente por TF-IDF. O `class_weight=balanced` mitigou parcialmente o desbalanceamento sem destabilizar a generalização.
+| Corpus | n treino | BERT F1 teste | LogReg F1 teste | Lição |
+|--------|----------|---------------|-----------------|-------|
+| ComprasNet | ~295 | 0,40 | **0,74** | Poucos dados → clássico ganha |
+| PNCP (`pncp`) | ~14.000 | **0,858** | 0,756 | Escala → Transformer ganha |
 
-A lição do SVM é metodológica: **validação alta não garante teste alto** quando o conjunto de validação tem apenas 64 exemplos e classes raras com 2–3 amostras. Educação teve F1 1,0 na validação (3 exemplos, todos corretos) e F1 0,0 no teste (2 exemplos, ambos errados).
+O resultado do projeto **depende do volume e do protocolo** — alinhado ao lema “depende” da disciplina.
 
 ### 7.2 Limitações e vieses
 
-- **Label proxy:** um edital de material hospitalar comprado por órgão de segurança recebe label errado — explica confusões Segurança ↔ Saúde.
-- **Volume insuficiente** para conclusões robustas sobre Educação e Infraestrutura.
-- **Vazamento residual** (~49%) ainda permite que keywords do órgão apareçam no objeto.
-- **HTML ≠ edital oficial completo** — cláusulas longas podem estar ausentes.
-- **Fine-tuning não determinístico:** retreinos do BERT variaram (teste entre 0,40 e 0,52) mesmo com mesmo seed de split.
-- **Sumarização extrativa** não parafraseia — o texto ainda pode ser denso; modelos abstrativos exigiriam avaliação humana rigorosa.
+- **Label proxy** (~83% concordância humana): erros estruturais (Bombeiros + objeto clínico → label Segurança).
+- **Classes raras** no ComprasNet: F1 instável (Educação n=2 no teste).
+- **Vazamento residual** e **acoplamento rótulo↔texto** nos protocolos `pncp9*`.
+- **PNCP ≠ ComprasNet:** textos curtos, inexigibilidade dominante, perfil burocrático.
 
 ### 7.3 Uso responsável
 
-O classificador **não substitui** análise jurídica ou decisão administrativa. Resumos automatizados devem ser verificados contra o edital original. O grupo **não contornou** o CAPTCHA do ComprasNet — decisão ética alinhada ao uso responsável de IA exigido pela disciplina.
+Classificador **não substitui** análise jurídica. CAPTCHA do ComprasNet **não foi contornado**. Métricas altas em protocolos keyword devem ser lidas como **reprodução de regras**, não garantia de generalização em produção.
 
 ---
 
 ## 8. Conclusão
 
-O projeto demonstrou, na prática, o ciclo completo de um trabalho de PLN aplicado ao setor público: identificação de problema real, coleta reprodutível de dados, implementação de múltiplos modelos, avaliação com métricas adequadas e interpretação crítica dos resultados.
+O projeto percorreu o ciclo completo de PLN aplicado ao setor público: problema real, coleta ética, múltiplos modelos, métricas adequadas e interpretação crítica.
 
 **Principais aprendizados:**
 
-1. Foi possível classificar editais do ComprasNet (DF 2025) em seis macroáreas de gasto com **F1 macro 0,74** no teste, usando TF-IDF + Regressão Logística sobre a descrição do objeto.
-2. A hipótese de superioridade do BERTimbau **não se confirmou** neste corpus (F1 teste 0,40); o deep learning não é automaticamente superior quando os dados são escassos e desbalanceados.
-3. A transparência metodológica — proxy de label validado (~83%), vazamento documentado, comparação honesta de três arquiteturas — é tão importante quanto a métrica final.
-4. A sumarização extrativa complementa o trabalho com resumos legíveis e verificáveis, ilustrando impacto social sem risco de alucinação.
+1. **Entrega oficial (ComprasNet 423):** TF-IDF + LogReg classifica editais em 6 macroáreas com **F1 macro 0,74** no teste, superando SVM (0,65) e BERT (0,40) neste volume.
+2. **Extensão PNCP (~20 mil):** BERT atinge **F1 0,858** no protocolo honesto por órgão; protocolos de 9 setores mostram que **escala + contexto semântico** mudam o jogo frente a TF-IDF.
+3. **~48%** das compras PNCP são lexicalmente vagas — taxonomia com `Indeterminado` e fallback orgânico são necessários; info complementar ajuda BERT, atrapalha modelos lineares.
+4. **Transparência metodológica** (proxy validado, vazamento documentado, val vs teste) é tão importante quanto a métrica.
 
-**Próximos passos:** expandir o corpus para anos anteriores (2021–2024) e estabilizar classes raras; corrigir labels com anotação manual parcial; experimentar sumarização abstrativa (mT5) com avaliação humana; cruzar área predita com valor homologado e geografia para insights de política pública.
-
----
-
-## 5.5 Extensão PNCP DF/2025 (exploratória)
-
-Além dos 423 editais ComprasNet, o grupo montou corpus PNCP com **19.944 compras** (`UF=DF`, `ano=2025`) via `scripts/run_preprocess_pncp.py`. Objetivo: testar escala, taxonomia de **9 setores empíricos** (keyword no objeto) e mitigações para textos vagos.
-
-### Protocolos implementados
-
-| ID | Rótulo | Corpus | F1 macro teste (melhor modelo) |
-|----|--------|--------|-------------------------------|
-| `pncp` | 6 macroáreas (órgão) | 19.944 | **BERT 0,858** |
-| `pncp9` | 9 setores, só keyword | ~10.311 | BERT 0,969 |
-| `pncp9full` | 9 + Indeterminado | 19.944 | BERT 0,970 |
-| `pncp9fb` | fallback órgão | 19.944 | LogReg 0,824 |
-| `pncp9fbi` | fallback + info complementar | 19.944 | **BERT 0,955** |
-
-### Achados principais
-
-1. **Escala muda o veredito BERT vs clássico:** no PNCP honesto por órgão, BERT (0,858) supera LogReg (0,756) — oposto ao corpus 423 (0,40 vs 0,74).
-2. **~48%** das compras não têm keyword setorial no objeto; classe `Indeterminado` é necessária.
-3. **Fallback por órgão** resgata ~853 “escondidas” (órgão nomeado, objeto burocrático).
-4. **Info complementar:** piora modelos lineares (0,824→0,788) mas BERT sobe para 0,955 — valor semântico só emerge com Transformer.
-5. F1 ~0,97 nos protocolos keyword **não invalida** o trabalho, mas exige **declarar acoplamento rótulo↔texto** (regras documentadas em [`REGRAS-E-PROTOCOLOS.md`](REGRAS-E-PROTOCOLOS.md)).
-
-A **entrega oficial da disciplina** permanece o protocolo ComprasNet 423 com LogReg F1 **0,74**. PNCP é extensão analítica documentada.
+**Próximos passos:** anos anteriores (2021–2024); info complementar **condicional** (só quando objeto vago); anotação manual parcial de labels.
 
 ---
 
 ## 9. Referências
 
-*(Completar formatação ABNT/IEEE no PDF final — mínimo 5 domínio + 5 técnica.)*
+*(Completar ABNT/IEEE no PDF final — mínimo 5 domínio + 5 técnica.)*
 
-**Domínio:** Lei nº 14.133/2021 (Nova Lei de Licitações); Portal ComprasNet; Portal Nacional de Contratações Públicas (PNCP); literatura sobre transparência e classificação temática de gastos públicos; acessibilidade de informação governamental.
+**Domínio:** Lei 14.133/2021; ComprasNet; PNCP; transparência e classificação temática de gastos; linguagem cidadã (Rosado & Dias, 2024); IA em licitações (Souto et al., 2025).
 
-**Técnica:** Souza et al. — BERT models for Brazilian Portuguese (BERTimbau); Devlin et al. — BERT; Pedregosa et al. — scikit-learn; Manning & Schütze — Foundations of Statistical NLP; artigos sobre F1 em classificação desbalanceada; Mani & Maybury — Advances in Automatic Text Summarization.
+**Técnica:** Devlin et al. (BERT); Souza et al. (BERTimbau); scikit-learn; F1 em classes desbalanceadas.
 
-**Fontes operacionais:** http://www.comprasnet.gov.br/ · https://pncp.gov.br/ · modelo `neuralmind/bert-base-portuguese-cased`.
+**Operacional:** https://pncp.gov.br/ · `neuralmind/bert-base-portuguese-cased` · lista completa em [`APRESENTACAO-CONTEUDO.md`](APRESENTACAO-CONTEUDO.md) §9.
 
 ---
 
 ## 10. Apêndice técnico
 
-**Pipeline completo:**
+### Pipeline ComprasNet
 
 ```
-Export CSV (ComprasNet DF 2025)
-    → download HTML de detalhe (423 arquivos, delay 0,8 s)
-    → extração de texto e metadados
-    → corpus JSONL (423 registros)
-    → split estratificado 70/15/15
-    → treino LogReg / SVM / BERTimbau
-    → sumarização extrativa (amostra de 18)
+CSV ComprasNet DF 2025
+  → download HTML (423, delay 0,8 s)
+  → licitacoes_corpus.jsonl
+  → split 70/15/15
+  → LogReg / SVM / BERTimbau
 ```
 
-**Hiperparâmetros principais:** TF-IDF com ngramas até 2, max 20.000 features; LogReg `C=1.0`, `class_weight=balanced`; SVM kernel linear; BERTimbau lr 2e-5, batch 16, early stopping patience 2.
+### Pipeline PNCP
 
-**Reprodução:** Python 3.10+, dependências via `pip install -r requirements-dev.txt`; scripts `run_collect.py`, `run_preprocess.py`, `run_train.py`; atalhos `make train-baseline`, `make train-bert`, `make train-svm`, `make train-summarize`.
+```
+PNCP XLS (DF 2025)
+  → run_preprocess_pncp.py
+  → pncp_corpus_df2025.jsonl (19.944)
+  → protocolos pncp / pncp9 / pncp9full / pncp9fb / pncp9fbi
+  → benchmark coortes difíceis
+```
 
-**Entregáveis da disciplina:** repositório público no GitHub com código reprodutível; descrição da coleta (seção 4 deste documento); dados acessíveis via script de download; slides em PDF para apresentação oral de 10 minutos.
+### Reprodução
 
-**Síntese para apresentação:**
+```bash
+pip install -r requirements-dev.txt
+pip install -e ".[bert]"
+python scripts/run_collect.py && python scripts/run_preprocess.py
+python scripts/run_preprocess_pncp.py
+python scripts/run_train.py --model baseline --config configs/classification.yaml
+python scripts/run_train.py --model bertimbau --config configs/classification_pncp.yaml \
+  --corpus data/processed/pncp_corpus_df2025.jsonl
+python scripts/run_benchmark_pncp_dificeis.py
+```
 
-> Coletamos 423 editais do ComprasNet (DF 2025) e treinamos três classificadores no mesmo split. LogReg: validação 0,74, teste 0,74. SVM: validação 0,80, teste 0,65. BERT: validação 0,56, teste 0,40. Escolhemos LogReg porque o teste é o que importa. Complementamos com resumos extrativos para cidadãos — 83% dos prazos e 100% dos valores extraídos na amostra.
+### Síntese para apresentação (10 min)
+
+> Coletamos **423 editais** ComprasNet (DF 2025). LogReg F1 **0,74** no teste venceu SVM (0,65) e BERT (0,40) — corpus pequeno favorece o clássico. Estendemos com **19.944 compras PNCP**: BERT F1 **0,858** no protocolo por órgão. Exploramos 9 setores empíricos, fallback orgânico e info complementar — F1 até 0,97, mas com acoplamento rótulo↔texto que declaramos. A contribuição é explicar **o que a métrica significa** e o cuidado metodológico por trás dela.
 
 ---
 
-*Documento consolidado · junho/2026 · runs ComprasNet 24/06/2026 · extensão PNCP 28–29/06/2026*
+*Documento consolidado · junho/2026 · ComprasNet runs 24/06/2026 · PNCP runs 28–29/06/2026*
