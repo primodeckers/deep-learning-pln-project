@@ -10,7 +10,7 @@
 
 Todo edital de licitação tem um campo **Objeto**: um texto livre, em linguagem jurídico-administrativa, dizendo o que o governo quer comprar ou contratar (de "medicamentos antimetabólitos" a "tubos de PVC" ou "digitalização técnica").
 
-- **Para o controle social** (cidadão, jornalista, órgão de controle), responder *"quanto o DF gastou em Saúde? E em Obras?"* exige ler centenas de descrições uma a uma — inviável na mão.
+- **Para o controle social** (cidadão, jornalista, órgão de controle), saber ***em que áreas* o DF compra** — e quantas licitações caem em Saúde, Obras, etc. — exige ler ou classificar centenas de descrições à mão; inviável sem automação.
 - **Para o pequeno fornecedor**, o jargão ("sistema de registro de preços", "qualificação técnica") afasta exatamente quem o edital deveria alcançar.
 
 O projeto concentra-se em **triagem automática por área de gasto** (classificação).
