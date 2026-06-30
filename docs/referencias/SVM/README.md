@@ -13,6 +13,7 @@ As referências abaixo foram organizadas a partir dos metadados e do texto dos P
 | `Support Vector Machines for Query-focused Summarization trained and.pdf` | Fuentes, Alfonseca e Rodríguez (2007) |
 | `SVM_to_classify_sentiment_ reviews_on_Google_Play_Store.pdf` | Nursikuwagus et al. (2026) |
 | `Text Categorization with SVM Learning with many relevant features.pdf` | Joachims (1998) |
+| `Uso_Aprendizado_maquina_classificacao_organizacao.pdf` | Watanabe e Sousa (2023) |
 | `VICTOR adataset for Brazilian legal documents classification.pdf` | Luz de Araujo et al. (2020) |
 
 ## Referências
@@ -28,3 +29,5 @@ JOACHIMS, Thorsten. Text categorization with Support Vector Machines: Learning w
 LUZ DE ARAUJO, Pedro Henrique; DE CAMPOS, Teófilo Emídio; ATAIDES BRAZ, Fabricio; CORREIA DA SILVA, Nilton. VICTOR: a Dataset for Brazilian Legal Documents Classification. In: CALZOLARI, Nicoletta et al. (ed.). *Proceedings of the Twelfth Language Resources and Evaluation Conference*. Marseille, France: European Language Resources Association, 2020. p. 1449-1458. Disponível em: <https://aclanthology.org/2020.lrec-1.181/>. Acesso em: 29 jun. 2026.
 
 NURSIKUWAGUS, Agus; SUHERMAN; PURWANTO, Heri; HARTONO, Tono. Support Vector Machine to Classify Sentiment Reviews on Google Play Store. *JITK (Jurnal Ilmu Pengetahuan dan Teknologi Komputer)*, v. 11, n. 3, p. 724-732, 2026. DOI: [10.33480/jitk.v11i3.7282](https://doi.org/10.33480/jitk.v11i3.7282). Disponível em: <https://ejournal.nusamandiri.ac.id/index.php/jitk/article/view/7282>. Acesso em: 29 jun. 2026.
+
+WATANABE, Eduardo; SOUSA, Renato Tarciso Barbosa de. Uso do aprendizado de máquina para a classificação automática de documentos de arquivo: experimento inicial em uma organização pública. *Tendências da Pesquisa Brasileira em Ciência da Informação*, v. 16, p. 1-27, 2023. Disponível em: <https://revistas.ancib.org/tpbci/article/view/617>. Acesso em: 30 jun. 2026.
