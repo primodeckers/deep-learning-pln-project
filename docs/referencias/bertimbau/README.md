@@ -9,11 +9,14 @@ As referências abaixo foram organizadas a partir dos metadados e do texto dos P
 | Arquivo | Referência |
 | --- | --- |
 | `Analysis_of_Government_Policy_Sentiment_Regarding_Vacation_during_the_COVID-19_Using_BERT.pdf` | Yulita et al. (2023) |
+| `BERT Devlin.pdf` | Devlin et al. (2019) |
 | `bert-models-brazilian-portuguese-pretraining-evaluation-tokenization.pdf` | Souza, Nogueira e Lotufo (2023) |
 | `HelBERT A BERT-Based_Pretraining_Model_for_PublicProcurement_Tasks_in_Portuguese.pdf` | Lima et al. (2026) |
 | `segmentacao-textual-topicos-portugues-bertimbau.pdf` | Silva et al. (2024) |
 
 ## Referências
+
+DEVLIN, Jacob; CHANG, Ming-Wei; LEE, Kenton; TOUTANOVA, Kristina. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. In: *Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)*. Minneapolis: Association for Computational Linguistics, 2019. p. 4171-4186. DOI: [10.18653/v1/N19-1423](https://doi.org/10.18653/v1/N19-1423). Disponível em: <https://aclanthology.org/N19-1423/>. Versão arXiv: <https://arxiv.org/abs/1810.04805>. Acesso em: 3 jul. 2026.
 
 LIMA, Weslley Emmanuel Martins; DA SILVA, Victor Ribeiro; DA SILVA, Jasson Carvalho; RABÊLO, Ricardo de Andrade Lira; DE PAIVA, Anselmo Cardoso. HelBERT: A BERT-Based Pretraining Model for Public Procurement Tasks in Portuguese. *Journal of the Brazilian Computer Society*, v. 32, n. 1, p. 145-158, 2026. DOI: [10.5753/jbcs.2026.5511](https://doi.org/10.5753/jbcs.2026.5511). Disponível em: <https://journals-sol.sbc.org.br/index.php/jbcs/article/view/5511>. Acesso em: 29 jun. 2026.
 
