@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLN aplicado a Editais de Licitação Pública — DF 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0b1120; --panel:#111a2e; --panel2:#0f1828; --border:#1e2c46;
+  --txt:#e6edf7; --muted:#8aa0bf; --faint:#5d7298;
+  --cyan:#38bdf8; --blue:#3b82f6; --teal:#2dd4bf; --amber:#f59e0b;
+  --red:#f87171; --green:#34d399; --violet:#a78bfa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+
+/* SLIDE CONTAINER */
+#deck{width:100vw;height:100vh;position:relative}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:56px 72px 80px;
+  opacity:0;pointer-events:none;
+  transition:opacity .35s ease;
+}
+.slide.active{opacity:1;pointer-events:all}
+
+/* NAV */
+#nav{
+  position:fixed;bottom:0;left:0;right:0;height:52px;
+  background:rgba(11,17,32,.92);backdrop-filter:blur(8px);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;z-index:100;
+}
+#nav button{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  padding:6px 18px;border-radius:8px;cursor:pointer;font-size:13px;
+  transition:all .2s;
+}
+#nav button:hover{border-color:var(--cyan);color:var(--cyan)}
+#nav button:disabled{opacity:.25;cursor:default}
+#counter{color:var(--faint);font-size:13px;letter-spacing:.5px}
+#progress{
+  position:fixed;bottom:52px;left:0;height:2px;background:var(--cyan);
+  transition:width .35s ease;z-index:101;
+}
+
+/* TYPOGRAPHY */
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.slide-title{font-size:42px;font-weight:800;letter-spacing:-.5px;line-height:1.15;margin-bottom:20px}
+.slide-title span{color:var(--cyan)}
+.slide-sub{font-size:20px;color:var(--muted);margin-bottom:32px;line-height:1.5}
+.label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+
+/* CAPA */
+#s0{justify-content:center;align-items:flex-start}
+#s0 .title-main{font-size:52px;font-weight:900;line-height:1.1;letter-spacing:-.8px;margin-bottom:16px}
+#s0 .title-main em{color:var(--cyan);font-style:normal}
+#s0 .subtitle{font-size:24px;color:var(--muted);margin-bottom:12px}
+#s0 .meta{font-size:15px;color:var(--faint);margin-top:8px;line-height:1.8}
+#s0 .badge-row{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+#s0 .badge{background:var(--panel);border:1px solid var(--border);border-radius:30px;padding:8px 20px;font-size:14px;font-weight:600;color:var(--muted)}
+#s0 .badge b{color:var(--txt)}
+
+/* 2 COLUMNS */
+.cols{display:grid;gap:28px;flex:1}
+.cols.c2{grid-template-columns:1fr 1fr}
+.cols.c3{grid-template-columns:1fr 1fr 1fr}
+.col-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px 26px}
+.col-card h3{font-size:16px;font-weight:700;color:var(--cyan);margin-bottom:14px}
+.col-card p{color:var(--muted);font-size:14.5px;line-height:1.6;margin-bottom:10px}
+.col-card p b{color:var(--txt)}
+.col-card ul{list-style:none}
+.col-card li{color:var(--muted);font-size:14px;padding:5px 0 5px 20px;position:relative;line-height:1.5}
+.col-card li::before{content:'▸';position:absolute;left:0;color:var(--cyan)}
+.col-card li b{color:var(--txt)}
+
+/* HIGHLIGHT BOX */
+.hl-row{display:flex;gap:18px;margin-bottom:24px}
+.hl{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:14px;padding:20px 24px;flex:1;text-align:center}
+.hl .val{font-size:44px;font-weight:900;letter-spacing:-1px}
+.hl .lbl{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.4}
+.hl.c{border-color:var(--cyan)} .hl.c .val{color:var(--cyan)}
+.hl.g{border-color:var(--green)} .hl.g .val{color:var(--green)}
+.hl.v{border-color:var(--violet)} .hl.v .val{color:var(--violet)}
+.hl.a{border-color:var(--amber)} .hl.a .val{color:var(--amber)}
+.hl.r{border-color:var(--red)} .hl.r .val{color:var(--red)}
+
+/* COMPARISON CARD */
+.vs-row{display:grid;grid-template-columns:1fr 60px 1fr;gap:20px;align-items:center;background:linear-gradient(135deg,#0d1d33,#0c1626);border:1px solid var(--border);border-radius:18px;padding:28px 32px}
+.vs-col{text-align:center}
+.vs-col .corpus{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.vs-col .ntrain{font-size:12px;color:var(--faint);margin-top:4px}
+.vs-col .winner{font-size:16px;font-weight:700;margin-top:14px}
+.vs-col .scores{font-size:14px;color:var(--muted);margin-top:8px}
+.vs-col .scores b{color:var(--txt);font-size:18px}
+.vs-col .arrow{font-size:12px;color:var(--cyan);margin-top:8px;letter-spacing:.5px}
+.vs-sep{font-size:38px;font-weight:900;color:var(--faint);text-align:center}
+.badge-c{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-left:6px;background:rgba(45,212,191,.15);color:var(--teal)}
+.badge-b{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-left:6px;background:rgba(167,139,250,.15);color:var(--violet)}
+
+/* QUOTE / TAKEAWAY */
+.takeaway{background:rgba(56,189,248,.07);border-left:3px solid var(--cyan);border-radius:0 12px 12px 0;padding:16px 22px;margin-top:20px;font-size:15px;color:var(--muted);line-height:1.6}
+.takeaway b{color:var(--cyan)}
+
+/* EDITAL EXAMPLE */
+.edital-box{background:#0a1628;border:1px solid var(--border);border-radius:12px;padding:18px 22px;font-family:'Courier New',monospace;font-size:14px;color:#94a3b8;line-height:1.6;margin-bottom:24px}
+.edital-box .label-box{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--border);text-align:left}
+th{color:var(--faint);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+td.best{color:var(--green);font-weight:700}
+td.warn{color:var(--amber)}
+td.bad{color:var(--red)}
+td.dim{color:var(--faint)}
+td.center{text-align:center}
+tr.hl-row-table td{background:rgba(56,189,248,.05)}
+
+/* ARCHITECTURE TABLE */
+.arch-row-notused{opacity:.45}
+
+/* CHART */
+.chart-wrap{position:relative;flex:1;min-height:0}
+.chart-wrap canvas{width:100%!important;height:100%!important}
+
+/* DOIS BLOCOS LADO A LADO COM GRÁFICO */
+.slide-body{flex:1;display:flex;flex-direction:column;min-height:0;gap:20px}
+
+/* FOOTER slide */
+.slide-num{position:fixed;top:20px;right:32px;font-size:11px;color:var(--faint);font-weight:600;letter-spacing:.5px}
+
+/* REFS */
+.refs-col ul{list-style:none}
+.refs-col li{font-size:13px;color:var(--muted);padding:5px 0 5px 0;border-bottom:1px solid var(--border);line-height:1.4}
+.refs-col li b{color:var(--txt)}
+
+/* CLOSING */
+#s_close{justify-content:center;align-items:center;text-align:center}
+#s_close .big{font-size:40px;font-weight:900;line-height:1.3;max-width:800px}
+#s_close .big span{color:var(--cyan)}
+#s_close .obrigado{font-size:22px;color:var(--faint);margin-top:32px}
+#s_close .contrib-row{display:flex;gap:20px;margin-top:40px;justify-content:center}
+#s_close .contrib{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 24px;text-align:left;max-width:280px}
+#s_close .contrib .n{font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:6px}
+#s_close .contrib p{font-size:13px;color:var(--muted)}
+
+/* GRID chart+table side by side */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:22px;flex:1;min-height:0}
+.split .chart-inner{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column}
+.split .chart-inner h4{font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:4px}
+.split .chart-inner .hint{font-size:11px;color:var(--faint);margin-bottom:12px}
+.split .chart-inner .chart-area{flex:1;position:relative;min-height:0}
+
+/* LEAK VISUAL */
+.leak-cmp{display:flex;gap:18px;align-items:stretch}
+.leak-card{flex:1;border-radius:14px;padding:20px;border:1px solid;text-align:center}
+.leak-card .lk-val{font-size:36px;font-weight:900}
+.leak-card .lk-sub{font-size:12px;margin-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.leak-card .lk-desc{font-size:13px;margin-top:10px;line-height:1.5}
+.leak-bad{border-color:var(--red);background:rgba(248,113,113,.06)} .leak-bad .lk-val,.leak-bad .lk-sub{color:var(--red)}
+.leak-good{border-color:var(--green);background:rgba(52,211,153,.06)} .leak-good .lk-val,.leak-good .lk-sub{color:var(--green)}
+.leak-arrow{display:flex;align-items:center;font-size:32px;color:var(--faint);padding:0 4px}
+
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ═══════════════════════════════════════════════════════ CAPA -->
+<section class="slide active" id="s0">
+  <div class="eyebrow">Deep Learning e PLN · Modalidade 2 — PLN no Setor Público · DF / 2025</div>
+  <div class="title-main">PLN aplicado a<br><em>Editais de Licitação Pública</em></div>
+  <div class="subtitle">Classificação automática de editais por área de gasto</div>
+  <div class="badge-row">
+    <div class="badge"><b>423</b> editais ComprasNet</div>
+    <div class="badge"><b>19.944</b> compras PNCP</div>
+    <div class="badge"><b>6</b> macroáreas</div>
+    <div class="badge"><b>3</b> modelos comparados</div>
+  </div>
+  <div class="meta">
+    Elisangela Osorio &nbsp;·&nbsp; Alexandre Ferreira Ponte &nbsp;·&nbsp; Renê Estevam Deckers &nbsp;·&nbsp; Alexandre Hugo Sampaio Netto
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE 1 — Contexto -->
+<section class="slide" id="s1">
+  <div class="eyebrow">Slide 1 — Contexto</div>
+  <div class="slide-title">Qual problema real estamos resolvendo?</div>
+  <div class="slide-body">
+    <div class="edital-box">
+      <div class="label-box">Objeto real — ComprasNet DF/2025 · licitação 90119/2025</div>
+      "Aquisição dos medicamento(s) pertencente(s) ao(s) Grupo: 09.L.01.B — ANTIMETABÓLITOS
+      e Grupo: 09.L.01.X — OUTROS AGENTES ANTINEOPLÁSICOS, em sistema de registro de preços,
+      para atender às necessidades da Secretaria de Saúde DF, conforme especificações e
+      quantitativos constantes no Anexo I do Edital."
+    </div>
+    <div class="cols c3">
+      <div class="col-card">
+        <h3>Para o cidadão</h3>
+        <p>❓ "Isso é Saúde? Administração? Obras?"</p>
+        <p>Ler centenas de editais manualmente para saber <b>em que o DF está gastando</b> é inviável.</p>
+      </div>
+      <div class="col-card">
+        <h3>Para o auditor</h3>
+        <p>❓ "Quantas licitações de Saúde houve este ano?"</p>
+        <p>Sem triagem automática, <b>controle social em escala</b> não existe.</p>
+      </div>
+      <div class="col-card">
+        <h3>Para o fornecedor</h3>
+        <p>❓ "O que preciso ter para participar?"</p>
+        <p>O jargão jurídico afasta exatamente <b>quem o edital deveria alcançar</b>.</p>
+      </div>
+    </div>
+    <div class="takeaway">
+      Objetivo: <b>triagem automática por área de gasto</b> — classificar cada edital para que cidadãos, auditores e fornecedores saibam em que o DF está gastando, sem ler centenas de textos manualmente.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE 2 — Base Teórica -->
+<section class="slide" id="s2">
+  <div class="eyebrow">Slide 2 — Fundamentação</div>
+  <div class="slide-title">Base teórica: <span>técnica e domínio</span></div>
+  <div class="cols c2" style="flex:1">
+    <div class="col-card">
+      <h3>Frente técnica</h3>
+      <ul>
+        <li><b>Devlin et al. (2019) — BERT</b><br>Fine-tuning de Transformers para classificação textual</li>
+        <li><b>Souza et al. (2020) — BERTimbau</b><br>BERT pré-treinado em português brasileiro — escolhemos PT-BR em vez do multilíngue genérico</li>
+        <li><b>Aula 03–04 — "Depende"</b><br>A arquitetura certa depende do volume de dados e do diagnóstico treino vs. teste</li>
+        <li><b>Srivastava et al. (2014) — Dropout</b><br>Regularização usada no fine-tuning do BERTimbau</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h3>Frente de domínio</h3>
+      <ul>
+        <li><b>Souto et al. (2025) — caso Alice (CGU/TCU)</b><br>IA para triagem de licitações em escala nacional — mesmo problema, outra escala</li>
+        <li><b>Ferreira (2019, UnB)</b><br>PLN em licitações do GDF — mesmo domínio</li>
+        <li><b>Watanabe & Sousa (2023)</b><br>Aprendizado de máquina para documentos públicos</li>
+        <li><b>Macedo et al. (2025)</b><br>Governo aberto e transparência nas capitais</li>
+        <li><b>Marco legal</b><br>Lei 14.133/2021 · LAI 12.527/2011 · Lei 15.263/2025</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE 3 — Dados -->
+<section class="slide" id="s3">
+  <div class="eyebrow">Slide 3 — Dados</div>
+  <div class="slide-title">Dados inéditos: coleta ética e <span>label proxy</span></div>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="col-card">
+        <h3>ComprasNet — corpus oficial</h3>
+        <ul>
+          <li><b>423 editais</b> · Distrito Federal · 2025</li>
+          <li>52 órgãos distintos · 0 erros de download</li>
+          <li>PDF tem CAPTCHA → coletamos <b>HTML de detalhe</b></li>
+          <li>Intervalo 0,8 s · User-Agent identificado · <b>sem burlar CAPTCHA</b></li>
+          <li>Hash SHA-256 versionado no repositório</li>
+          <li>Classes: Admin/Outros 176 · Saúde 106 · Segurança 51 · Saneamento 49 · Infra 24 · Educação 17</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h3>PNCP — extensão em escala</h3>
+        <ul>
+          <li><b>19.944 compras</b> · Distrito Federal · 2025</li>
+          <li>Via planilha/API oficial — sem CAPTCHA · reprodutível</li>
+          <li>Objetos mais curtos: mediana ~32 palavras</li>
+          <li>Perfil distinto: inexigibilidade dominante</li>
+          <li><b>~48% sem keyword setorial clara</b> no objeto</li>
+        </ul>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+          <h3 style="margin-bottom:10px">Rótulo (label proxy)</h3>
+          <ul>
+            <li>Órgão comprador → macroárea por palavras-chave</li>
+            <li>Classificador <b>não recebe o órgão</b> — só o texto do objeto</li>
+            <li>Validação manual: <b>30 editais · 4 fichas · ~83% concordância</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE 4 — Metodologia: Vazamento + Protocolo -->
+<section class="slide" id="s4">
+  <div class="eyebrow">Slide 4 — Metodologia</div>
+  <div class="slide-title">Vazamento de label + <span>protocolo experimental</span></div>
+  <div class="slide-body">
+    <div class="leak-cmp">
+      <div class="leak-card leak-bad">
+        <div class="lk-val">~0,88</div>
+        <div class="lk-sub">F1 — HTML completo</div>
+        <div class="lk-desc" style="color:var(--muted)">97% dos textos repetem o nome do órgão. O modelo <b style="color:var(--red)">cola na resposta</b> — não aprende o conteúdo da compra.</div>
+      </div>
+      <div class="leak-arrow">→</div>
+      <div class="leak-card leak-good">
+        <div class="lk-val">0,740</div>
+        <div class="lk-sub">F1 — só o campo Objeto</div>
+        <div class="lk-desc" style="color:var(--muted)">Vazamento cai para ~49–51%. <b style="color:var(--green)">Número honesto</b> — o modelo aprende o que está sendo comprado.</div>
+      </div>
+    </div>
+    <div style="margin-top:20px">
+      <table>
+        <thead>
+          <tr><th>Decisão de protocolo</th><th>Valor</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Entrada</td><td><code>objeto_html</code> — descrição da compra (não HTML completo)</td></tr>
+          <tr><td>Split</td><td>70% treino · 15% validação · 15% teste · estratificado por área · <b>seed 42</b></td></tr>
+          <tr><td>Tamanhos (ComprasNet)</td><td>295 treino · 64 validação · 64 teste</td></tr>
+          <tr><td>Métrica primária</td><td><b>F1 macro (teste)</b> — penaliza quem ignora classes raras</td></tr>
+          <tr><td>Regra de seleção</td><td>Melhor F1 na validação · resultado reportado = <b>teste</b></td></tr>
+          <tr><td>Rastreabilidade</td><td>JSON + MLflow + hash SHA-256 do corpus + commit Git</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE 4b — Arquiteturas -->
+<section class="slide" id="s4b">
+  <div class="eyebrow">Slide 4b — Arquitetura</div>
+  <div class="slide-title">Por que estes 3 modelos? <span>CNN? RNN? Transformer?</span></div>
+  <div class="slide-body">
+    <table>
+      <thead>
+        <tr><th>Modelo</th><th>Família</th><th>Rede neural?</th><th>Status</th><th>Justificativa</th></tr>
+      </thead>
+      <tbody>
+        <tr class="hl-row-table">
+          <td><b>TF-IDF + LogReg</b></td>
+          <td>ML clássico linear</td>
+          <td class="dim">Não</td>
+          <td class="best">✓ Modelo oficial</td>
+          <td>Baseline obrigatório · interpretável · robusto com poucos dados</td>
+        </tr>
+        <tr>
+          <td><b>TF-IDF + SVM linear</b></td>
+          <td>ML clássico (margem máx.)</td>
+          <td class="dim">Não</td>
+          <td class="best">✓ Comparativo</td>
+          <td>Mesmo vetorizador · testa se margem bate regressão logística</td>
+        </tr>
+        <tr class="hl-row-table">
+          <td><b>BERTimbau</b></td>
+          <td>Transformer encoder-only</td>
+          <td style="color:var(--violet);font-weight:700">Sim — DL</td>
+          <td class="best">✓ Deep learning</td>
+          <td>Estado da arte em PLN PT-BR · atenção multi-cabeça · exigência DL do curso</td>
+        </tr>
+        <tr class="arch-row-notused">
+          <td>CNN</td>
+          <td>Visão / grades</td>
+          <td>Sim</td>
+          <td class="dim">✗ Não usado</td>
+          <td>Texto livre ≠ imagem · não é padrão para classificação textual</td>
+        </tr>
+        <tr class="arch-row-notused">
+          <td>RNN / LSTM</td>
+          <td>Sequência recorrente</td>
+          <td>Sim</td>
+          <td class="dim">✗ Não usado</td>
+          <td>Substituído por Transformer no estado da arte · redundante com BERT</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="takeaway" style="margin-top:18px">
+      <b>Hipótese inicial:</b> Transformer vence baseline. &nbsp;|&nbsp;
+      <b style="color:var(--red)">ComprasNet: refutada</b> — pouco treino. &nbsp;|&nbsp;
+      <b style="color:var(--green)">PNCP: confirmada</b> — escala muda o vencedor. &nbsp;|&nbsp;
+      O lema <b>"depende"</b> da aula na prática.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE 5 — Resultados ComprasNet -->
+<section class="slide" id="s5">
+  <div class="eyebrow">Slide 5 — Resultados (entrega oficial)</div>
+  <div class="slide-title">ComprasNet 423 — <span>F1 macro no conjunto de teste</span></div>
+  <div class="slide-body">
+    <div class="split">
+      <div class="chart-inner">
+        <h4>F1 macro — 64 editais de teste nunca vistos</h4>
+        <p class="hint">val → teste revela overfitting: SVM 0,80 → 0,65 · BERT 0,56 → 0,40</p>
+        <div class="chart-area"><canvas id="chS5bar"></canvas></div>
+      </div>
+      <div class="chart-inner">
+        <h4>F1 por classe — LogReg (modelo escolhido)</h4>
+        <p class="hint">Saneamento: vocabulário único · Segurança: Bombeiros vs material clínico</p>
+        <div class="chart-area"><canvas id="chS5class"></canvas></div>
+      </div>
+    </div>
+    <div class="takeaway">
+      <b>Leitura:</b> LogReg manteve 0,743 (val) → <b>0,740 (teste)</b> — generalização. SVM e BERT superajustaram à validação.
+      Com <b>295 exemplos de treino</b>, o clássico linear vence o Transformer.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE 6 — PNCP -->
+<section class="slide" id="s6">
+  <div class="eyebrow">Slide 6 — Extensão em escala</div>
+  <div class="slide-title">PNCP: <span>e com ~20 mil compras?</span></div>
+  <div class="slide-body">
+    <div class="vs-row" style="margin-bottom:20px">
+      <div class="vs-col">
+        <div class="corpus">ComprasNet — 423 editais</div>
+        <div class="ntrain">~295 de treino</div>
+        <div class="winner">Clássico vence<span class="badge-c">LogReg</span></div>
+        <div class="scores">LogReg <b>0,740</b> &nbsp;›&nbsp; SVM 0,652 &nbsp;›&nbsp; BERT <b>0,400</b></div>
+        <div class="arrow">▲ poucos dados → baseline ganha</div>
+      </div>
+      <div class="vs-sep">⇄</div>
+      <div class="vs-col">
+        <div class="corpus">PNCP — 19.944 compras</div>
+        <div class="ntrain">~13.960 de treino · protocolo honesto</div>
+        <div class="winner">Transformer vence<span class="badge-b">BERTimbau</span></div>
+        <div class="scores">BERT <b>0,858</b> &nbsp;›&nbsp; SVM 0,783 &nbsp;›&nbsp; LogReg 0,756</div>
+        <div class="arrow">▲ escala → BERT aprende de verdade</div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Protocolo PNCP</th><th>LogReg</th><th>SVM</th><th>BERTimbau</th><th>Nota</th></tr>
+      </thead>
+      <tbody>
+        <tr class="hl-row-table">
+          <td><b>pncp</b> — honesto, 6 macroáreas</td>
+          <td>0,756</td><td>0,783</td><td class="best">0,858</td>
+          <td>Referência principal</td>
+        </tr>
+        <tr>
+          <td>pncp9 — 9 setores exploratórios</td>
+          <td>0,857</td><td>0,877</td><td class="warn">0,969*</td>
+          <td>Acoplamento rótulo↔texto</td>
+        </tr>
+        <tr>
+          <td>pncp9full — 19,9k</td>
+          <td>0,816</td><td>0,862</td><td class="warn">0,970*</td>
+          <td>Reprodução de keyword</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="takeaway">
+      *F1 ~0,97 nos protocolos de 9 setores reflete reprodução das regras de keyword — <b>declarado, não escondido</b>.
+      O protocolo honesto de referência é <b>pncp → BERT 0,858</b>.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE 7 — Discussão -->
+<section class="slide" id="s7">
+  <div class="eyebrow">Slide 7 — Discussão</div>
+  <div class="slide-title">Limites e vieses: <span>declarados, não escondidos</span></div>
+  <div class="cols c2" style="flex:1">
+    <div class="col-card">
+      <h3>Limitações do corpus</h3>
+      <ul>
+        <li><b>Label proxy (~83% concordância):</b> Bombeiros que compram material clínico recebem label "Segurança" — confusão estrutural Segurança↔Saúde</li>
+        <li><b>Classes raras no ComprasNet:</b> Educação com 2 exemplos no teste e Infraestrutura com 4 — F1 estatisticamente instável</li>
+        <li><b>Corpus pequeno e desbalanceado:</b> Educação 17 casos vs Admin/Outros 176</li>
+        <li><b>PNCP ≠ ComprasNet:</b> textos curtos, inexigibilidade dominante — ~48% sem keyword setorial</li>
+        <li><b>Escopo:</b> só DF/2025 — generalização para outros estados não testada</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h3>Transparência metodológica</h3>
+      <ul>
+        <li><b>Vazamento residual de ~49–51%:</b> termos de domínio legítimos aparecem no objeto — F1 honesto, mas não "puro"</li>
+        <li><b>Runs negativos documentados:</b> BERT 0,40 faz parte do resultado — erro faz parte do aprendizado científico</li>
+        <li><b>Protocolos pncp9* com ressalva:</b> F1 ~0,97 reflete acoplamento rótulo↔texto, não generalização</li>
+        <li>O classificador <b>não substitui</b> análise jurídica</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE 8 — Conclusão + Próximos -->
+<section class="slide" id="s8">
+  <div class="eyebrow">Slide 8 — Conclusão</div>
+  <div class="slide-title">Três contribuições + <span>próximos passos</span></div>
+  <div class="slide-body">
+    <div class="cols c3" style="margin-bottom:18px">
+      <div class="col-card" style="border-color:var(--cyan)">
+        <h3>1. Pipeline inédito e reprodutível</h3>
+        <p>Coleta ética sem CAPTCHA · corpus versionado com hash · rastreamento via MLflow + JSON · repositório público</p>
+      </div>
+      <div class="col-card" style="border-color:var(--violet)">
+        <h3>2. Evidência empírica com rigor</h3>
+        <p>Com 423 editais: <b>LogReg F1 0,74 &gt; BERT 0,40</b><br>Com ~20 mil: <b>BERT F1 0,858 &gt; LogReg 0,756</b><br>O <b>"depende"</b> da aula na prática</p>
+      </div>
+      <div class="col-card" style="border-color:var(--green)">
+        <h3>3. Ferramenta de transparência</h3>
+        <p>Dado um edital, a área de gasto é prevista automaticamente · conecta o modelo a controle social real</p>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Próximo passo</th><th>Por quê</th><th>Impacto esperado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Expandir corpus 2021–2024 (~2k–2,5k editais)</td><td>Classes raras ficam estáveis</td><td>BERT viável no ComprasNet</td></tr>
+        <tr><td>Cruzar área predita × valor homologado × modalidade</td><td>Transformar em ferramenta de política pública</td><td>"Onde o DF realmente gasta?"</td></tr>
+        <tr><td>Avaliar BERT nas ~853 compras escondidas</td><td>LogReg já marcou ~0,65 nessa coorte</td><td>Validação externa do modelo</td></tr>
+        <tr><td>Generalizar para outros estados via PNCP</td><td>API disponível para todo o Brasil</td><td>Escala nacional</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ SLIDE FECHAMENTO -->
+<section class="slide" id="s_close">
+  <div class="big">
+    A contribuição não é<br>a <span>melhor</span> métrica.<br>É a mais <span>honesta</span>.
+  </div>
+  <div class="contrib-row">
+    <div class="contrib">
+      <div class="n">ComprasNet · entrega oficial</div>
+      <p>LogReg F1 <b style="color:var(--green)">0,740</b> &nbsp;›&nbsp; SVM 0,652 &nbsp;›&nbsp; BERT <span style="color:var(--red)">0,400</span></p>
+    </div>
+    <div class="contrib">
+      <div class="n">PNCP · protocolo honesto</div>
+      <p>BERT F1 <b style="color:var(--green)">0,858</b> &nbsp;›&nbsp; SVM 0,783 &nbsp;›&nbsp; LogReg 0,756</p>
+    </div>
+    <div class="contrib">
+      <div class="n">Concordância humana</div>
+      <p>Label proxy validado por 4 integrantes · <b style="color:var(--cyan)">~83%</b> de concordância</p>
+    </div>
+  </div>
+  <div class="obrigado">Obrigado.</div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- NAV BAR -->
+<div id="nav">
+  <button id="btnPrev" onclick="go(-1)" disabled>← Anterior</button>
+  <span id="counter">1 / 11</span>
+  <button id="btnNext" onclick="go(1)">Próximo →</button>
+</div>
+<div id="progress"></div>
+
+<script>
+// ── Slide navigation ──────────────────────────────────────────
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let cur = 0;
+const slideIds = ['s0','s1','s2','s3','s4','s4b','s5','s6','s7','s8','s_close'];
+const labels = ['Capa','1 — Contexto','2 — Base Teórica','3 — Dados','4 — Vazamento','4b — Arquitetura','5 — ResultadosComprasNet','6 — PNCP','7 — Discussão','8 — Conclusão','Fechamento'];
+
+function go(dir){
+  slides[cur].classList.remove('active');
+  cur = Math.max(0, Math.min(total-1, cur+dir));
+  slides[cur].classList.add('active');
+  document.getElementById('btnPrev').disabled = (cur===0);
+  document.getElementById('btnNext').disabled = (cur===total-1);
+  document.getElementById('counter').textContent = (cur+1)+' / '+total+' · '+labels[cur];
+  document.getElementById('progress').style.width = ((cur/(total-1))*100)+'%';
+  initChart(slideIds[cur]);
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') go(-1);
+});
+
+// init
+document.getElementById('counter').textContent = '1 / '+total+' · '+labels[0];
+document.getElementById('progress').style.width = '0%';
+
+// ── Charts (lazy init per slide) ─────────────────────────────
+Chart.defaults.color = '#8aa0bf';
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+Chart.defaults.font.size = 12;
+const GRID = 'rgba(30,44,70,.7)';
+const C = {cyan:'#38bdf8', teal:'#2dd4bf', violet:'#a78bfa', amber:'#f59e0b', blue:'#3b82f6', green:'#34d399', red:'#f87171'};
+const f1Ax = {min:0,max:1,grid:{color:GRID},ticks:{stepSize:.2}};
+const legTop = {legend:{position:'top',labels:{boxWidth:11,padding:12,usePointStyle:true}}};
+const charts = {};
+
+function initChart(id){
+  if(charts[id]) return; // already built
+
+  if(id==='s5'){
+    charts['s5bar'] = new Chart(document.getElementById('chS5bar'),{
+      type:'bar',
+      data:{
+        labels:['TF-IDF + LogReg','TF-IDF + SVM','BERTimbau'],
+        datasets:[
+          {label:'F1 validação', data:[0.743,0.797,0.559], backgroundColor:'rgba(56,189,248,.25)', borderColor:C.cyan, borderWidth:1.5, borderRadius:4},
+          {label:'F1 teste',     data:[0.740,0.652,0.400], backgroundColor:[C.teal,C.blue,C.violet], borderRadius:4}
+        ]
+      },
+      options:{
+        plugins:{...legTop, tooltip:{callbacks:{label:c=>'F1 '+c.dataset.label.split(' ')[1]+': '+c.parsed.y.toFixed(3)}}},
+        scales:{y:f1Ax, x:{grid:{display:false}}}
+      }
+    });
+
+    charts['s5class'] = new Chart(document.getElementById('chS5class'),{
+      type:'bar',
+      data:{
+        labels:['Saneamento','Saúde','Admin/Outros','Educação','Infra/Obras','Segurança'],
+        datasets:[
+          {label:'LogReg', data:[1.00,0.90,0.81,0.67,0.60,0.46], backgroundColor:C.teal, borderRadius:4},
+          {label:'SVM',    data:[1.00,0.90,0.80,0.00,0.75,0.46], backgroundColor:C.blue, borderRadius:4},
+          {label:'BERT',   data:[0.80,0.88,0.73,0.00,0.00,0.00], backgroundColor:C.violet, borderRadius:4}
+        ]
+      },
+      options:{
+        plugins:{...legTop},
+        scales:{y:f1Ax, x:{grid:{display:false}, ticks:{maxRotation:20}}}
+      }
+    });
+    charts['s5'] = true;
+  }
+}
+</script>
+</body>
+</html>

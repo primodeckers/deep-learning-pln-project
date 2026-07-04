@@ -11,9 +11,9 @@
 Todo edital de licitação tem um campo **Objeto**: um texto livre, em linguagem jurídico-administrativa, dizendo o que o governo quer comprar ou contratar (de "medicamentos antimetabólitos" a "tubos de PVC" ou "digitalização técnica").
 
 - **Para o controle social** (cidadão, jornalista, órgão de controle), saber ***em que áreas* o DF compra** — e quantas licitações caem em Saúde, Obras, etc. — exige ler ou classificar centenas de descrições à mão; inviável sem automação.
-- **Para o pequeno fornecedor**, o jargão ("sistema de registro de preços", "qualificação técnica") afasta exatamente quem o edital deveria alcançar.
+- **Para o pequeno fornecedor**, a pergunta é prática: *“O que preciso ter para participar?”* — mas o edital responde em jargão (“sistema de registro de preços”, “qualificação técnica”, “declaração de responsabilidade”). Quem tem padaria, oficina ou MEI muitas vezes **não entende** e desiste. A ironia: a lei quer **mais concorrência** e inclusão de micro e pequenas empresas; a **linguagem** do edital afasta exatamente esse público.
 
-O projeto concentra-se em **triagem automática por área de gasto** (classificação).
+O projeto concentra-se em **triagem automática por área de gasto** (classificação) — primeiro passo para achar o edital certo; linguagem mais clara seria um próximo passo (sumarização).
 
 ---
 

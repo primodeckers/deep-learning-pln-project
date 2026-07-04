@@ -126,15 +126,16 @@ O **protocolo é idêntico** pros três modelos: split **70% treino, 15% valida�
 
 **Hipótese inicial:** Transformer vence baseline. **Resultado ComprasNet:** **não confirmado** — pouco treino. **Resultado PNCP (~20 mil):** **confirmado** — escala muda o vencedor. Isso amarra direto ao lema **'depende'** da aula."
 
-#### Tabela para o slide 4b (família de arquitetura)
+#### Tabela para o slide 4b — **fonte única:** [`TRABALHO-CONSOLIDADO.md`](TRABALHO-CONSOLIDADO.md) §5.3
 
-| Modelo | Fase | Família | É rede neural? | Por que incluímos |
-|--------|------|---------|----------------|-------------------|
-| TF-IDF + **LogReg** | 1 | ML clássico (linear) | Não | Baseline obrigatório; interpretável; robusto com poucos dados |
-| TF-IDF + **SVM linear** | 3 | ML clássico (margem max.) | Não | Mesmos features; testa se margem bate regressão logística |
-| **BERTimbau** | 2 | **Transformer** (encoder) | Sim (DL) | Estado da arte em PLN; pré-treino PT-BR; exigência DL do curso |
-| CNN | — | Visão / grades | Sim | **Não usamos** — texto livre, não imagem |
-| RNN / LSTM | — | Sequência recorrente | Sim | **Não usamos** — substituído por Transformer no experimento |
+| Fase | Modelo | Sigla → significado | Família | Rede neural? | CNN/RNN? |
+|:----:|--------|---------------------|---------|:------------:|----------|
+| 1 | TF-IDF + **LogReg** | **TF-IDF** = peso das palavras · **LogReg** = *Logistic Regression* (Regressão Logística) | ML clássico | **Não** | Não |
+| 2 | **BERTimbau** | **BERT** = *Bidirectional Encoder Representations from Transformers* · checkpoint PT-BR neuralmind | **Transformer** (DL) | **Sim** | Nem CNN nem RNN |
+| 3 | TF-IDF + **SVM** | **SVM** = *Support Vector Machine* (Máquina de Vetores de Suporte) | ML clássico | **Não** | Não |
+| — | CNN / RNN | *Convolutional* / *Recurrent* NN | — | — | **Não usamos** |
+
+**Resposta oral 15 s:** LogReg e SVM = clássico, **sem rede neural**. BERTimbau = **Transformer**. 423 editais → LogReg **0,74**; ~20 mil PNCP → BERT **0,86**.
 
 ---
 
@@ -236,6 +237,12 @@ Repositório público, dados via código, slides em PDF — conforme entregávei
 - [ ] Limitações e vazamento mencionados oralmente
 - [ ] Cronômetro: ensaio completo ≤ 10 min
 - [ ] Impacto aplicado (transparência / triagem de gasto) explícito no fechamento
+
+---
+
+## Perguntas da banca
+
+Siglas, arquitetura e F1 por fase — [`TRABALHO-CONSOLIDADO.md`](TRABALHO-CONSOLIDADO.md) **§5.3** (Fases 1–3 + síntese no final).
 
 ---
 
