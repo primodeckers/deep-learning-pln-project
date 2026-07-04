@@ -2,7 +2,9 @@
 
 JSONs e figuras **oficiais** do grupo ficam aqui no Git. Runs locais de teste podem ser apagados.
 
-## Runs de referência (relatório / slides)
+**Escopo:** só classificação. Não há runs de sumarização no repositório.
+
+## Runs de referência — ComprasNet 423 (entrega oficial)
 
 Retreino completo **2026-06-24** — mesmo `seed=42`, `objeto_html`, corpus `sha256=46c6e761…`.
 
@@ -14,13 +16,21 @@ Retreino completo **2026-06-24** — mesmo `seed=42`, `objeto_html`, corpus `sha
 
 Matrizes: `reports/figures/<run_id>_confusion.png`
 
-**Decisão:** LogReg vence no F1 macro teste → modelo principal do relatório. Ver [`docs/METRICAS-E-DECISOES.md`](../docs/METRICAS-E-DECISOES.md).
+**Decisão (ComprasNet):** LogReg vence no F1 macro teste → modelo principal da entrega oficial. Ver [`docs/METRICAS-E-DECISOES.md`](../docs/METRICAS-E-DECISOES.md).
 
 Documentação: [`FASE1`](../docs/FASE1-CLASSIFICACAO.md) · [`FASE2`](../docs/FASE2-CLASSIFICACAO.md) · [`FASE3`](../docs/FASE3-CLASSIFICACAO.md)
 
-### Runs PNCP (extensão)
+### Runs PNCP (extensão em escala)
 
-Runs `classification_pncp*` e `classification_pncp9*` — ver [`docs/METRICAS-E-DECISOES.md`](../docs/METRICAS-E-DECISOES.md) §10.
+| Prefixo | Protocolo | Nota |
+|---------|-----------|------|
+| `classification_pncp_*` | `pncp` — 6 áreas por órgão | Honesto em escala — BERT F1 **0,858** |
+| `classification_pncp9_*` | `pncp9` | Só keyword no objeto |
+| `classification_pncp9full_*` | `pncp9full` | + Indeterminado |
+| `classification_pncp9fb_*` | `pncp9fb` | Fallback órgão |
+| `classification_pncp9fbi_*` | `pncp9fbi` | Fallback + info complementar |
+
+Regras: [`docs/REGRAS-E-PROTOCOLOS.md`](../docs/REGRAS-E-PROTOCOLOS.md) · métricas: [`docs/METRICAS-E-DECISOES.md`](../docs/METRICAS-E-DECISOES.md) · relatório: [`docs/TRABALHO-CONSOLIDADO.md`](../docs/TRABALHO-CONSOLIDADO.md).
 
 ### Runs históricos (não usar como referência)
 

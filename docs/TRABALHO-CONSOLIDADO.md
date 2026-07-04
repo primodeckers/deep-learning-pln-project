@@ -4,9 +4,9 @@
 
 **Integrantes:** Elisangela Osorio · Alexandre Ferreira Ponte · Renê Estevam Deckers · Alexandre Hugo Sampaio Netto
 
-**Documentação complementar:** `[README.md](README.md)` · `[PROJECT-REQUIREMENTS.md](PROJECT-REQUIREMENTS.md)` · `[REGRAS-E-PROTOCOLOS.md](REGRAS-E-PROTOCOLOS.md)` · `[METRICAS-E-DECISOES.md](METRICAS-E-DECISOES.md)` · `[MODEL-CARD.md](MODEL-CARD.md)` · `[APRESENTACAO-CONTEUDO.md](APRESENTACAO-CONTEUDO.md)` · `[roteiro_10min.md](roteiro_10min.md)`
+**Documentação complementar:** [`README.md`](../README.md) · [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md) · [`REGRAS-E-PROTOCOLOS.md`](REGRAS-E-PROTOCOLOS.md) · [`METRICAS-E-DECISOES.md`](METRICAS-E-DECISOES.md) · [`MODEL-CARD.md`](MODEL-CARD.md) · [`APRESENTACAO-CONTEUDO.md`](APRESENTACAO-CONTEUDO.md) · [`roteiro_10min.md`](roteiro_10min.md)
 
-Este documento segue a **Estrutura Recomendada do Trabalho** e atende aos **Critérios de Avaliação** definidos em `[PROJECT-REQUIREMENTS.md](PROJECT-REQUIREMENTS.md)`:
+Este documento segue a **Estrutura Recomendada do Trabalho** e atende aos **Critérios de Avaliação** definidos em [`PROJECT-REQUIREMENTS.md`](PROJECT-REQUIREMENTS.md):
 
 
 | Critério                 | Onde está no documento                     |
@@ -30,7 +30,7 @@ Editais de licitação pública descrevem, em linguagem jurídica e técnica, o 
 
 **Para o pequeno fornecedor**, a pergunta é outra: *“O que preciso ter para participar?”* O edital responde em jargão (“sistema de registro de preços”, “qualificação técnica”). Quem tem padaria, oficina ou MEI muitas vezes **não entende e desiste**. A política pública quer **mais concorrência** e inclusão de micro e pequenas empresas; a **linguagem** do edital afasta exatamente esse público (Rosado & Dias, 2024).
 
-**Problema investigado:** dado o campo **Objeto** de um edital ou compra pública, **classificar automaticamente a macroárea ou setor de gasto** (Saúde, Saneamento, Segurança, Educação, Infraestrutura/Obras, Administração/Outros) para apoiar triagem e transparência pública. (Linguagem mais clara / resumo cidadão fica como próximo passo — esta entrega é **classificação**.)
+**Problema investigado:** dado o campo **Objeto** de um edital ou compra pública, **classificar automaticamente a macroárea ou setor de gasto** (Saúde, Saneamento, Segurança, Educação, Infraestrutura/Obras, Administração/Outros) para apoiar triagem e transparência pública. Esta entrega é **somente classificação** — sumarização cidadã **não faz parte** do escopo.
 
 **Delimitação:** o projeto **não estima valores em reais** nesta entrega; concentra-se em **rotulagem temática** a partir de texto. O campo *valor homologado* existe nos dados e aparece como cruzamento futuro (§8).
 
@@ -76,7 +76,7 @@ As referências (§9) são usadas **de forma substantiva** — não apenas lista
 | ------------------------------------------------- | ----------------------------------------------------------- |
 | F1 **macro no teste** como métrica primária       | Classes desbalanceadas; acurácia sozinha engana             |
 | Baseline **TF-IDF + LogReg** antes do Transformer | Watanabe & Sousa (2023); boas práticas da disciplina        |
-| Entrada `**objeto_html**`, não HTML completo      | Controle de **vazamento de label** (§5.1)                   |
+| Entrada **objeto_html**, não HTML completo        | Controle de **vazamento de label** (§5.1)                   |
 | Comparar **clássico linear vs Transformer**       | Devlin; Souza; exigência de DL + comparação justa           |
 | **Não usar CNN nem RNN/LSTM**                     | Problema = texto livre; Transformer cobre DL moderno (§5.3) |
 
@@ -96,9 +96,9 @@ As referências (§9) são usadas **de forma substantiva** — não apenas lista
 | Corpus                                          | `licitacoes_corpus.jsonl` — **423 registros**                                                                                                                                                                       |
 | Material / Serviço                              | 320 / 103                                                                                                                                                                                                           |
 | **Entrada oficial**                             | `objeto_html` — só a descrição do objeto                                                                                                                                                                            |
-| Tamanho `**objeto_html**` (palavras)            | mediana **~33** · média **~31** · máx. **80** · **0%** acima de 512 palavras                                                                                                                                        |
-| Tamanho `**objeto_html**` (caracteres)          | mediana **~225** · média **~216** · máx. **~518**                                                                                                                                                                   |
-| Tamanho `**texto**` (HTML completo, referência) | mediana **~239 palavras** / **~1.600 caracteres** · média **~461 palavras** / **~3.400 caracteres** · máx. **~5.524 palavras** / **~41.300 caracteres** · **27%** dos editais com > 512 palavras (truncamento BERT) |
+| Tamanho **objeto_html** (palavras)              | mediana **~33** · média **~31** · máx. **80** · **0%** acima de 512 palavras                                                                                                                                        |
+| Tamanho **objeto_html** (caracteres)            | mediana **~225** · média **~216** · máx. **~518**                                                                                                                                                                   |
+| Tamanho **texto** (HTML completo, referência)   | mediana **~239 palavras** / **~1.600 caracteres** · média **~461 palavras** / **~3.400 caracteres** · máx. **~5.524 palavras** / **~41.300 caracteres** · **27%** dos editais com > 512 palavras (truncamento BERT) |
 | Modalidade                                      | Pregão (278) · Dispensa (134)                                                                                                                                                                                       |
 
 
@@ -171,7 +171,7 @@ O nome do órgão **não entra** como coluna, campo extra ou concatenação expl
 
 **Resumo para a banca:** no protocolo honesto (`pncp` / ComprasNet), o **label vem do órgão** (proxy validado ~83%) e o **modelo só vê o objeto**. Nos `pncp9*`, o label vem de **keyword no objeto** (9 setores acima) — por isso F1 alto exige ressalva (§6.4).
 
-**Validação humana (ComprasNet):** 30 editais, 4 fichas por integrante → concordância média **≈83,2%** (`[VALIDACAO-LABELS/VALIDACAO-LABELS.md](VALIDACAO-LABELS/VALIDACAO-LABELS.md)`).
+**Validação humana (ComprasNet):** 30 editais, 4 fichas por integrante → concordância média **≈83,2%** ([`VALIDACAO-LABELS/VALIDACAO-LABELS.md`](VALIDACAO-LABELS/VALIDACAO-LABELS.md)).
 
 ### 4.4 Limitações dos dados
 
@@ -200,7 +200,7 @@ No ComprasNet, o HTML completo (`texto`) repete o órgão em **≈97%** dos caso
 
 **Exemplo:** edital do **Bombeiros** comprando **material clínico**. O **proxy** classifica como **Segurança** (porque o comprador é Bombeiros) — pode estar errado, mas é a resposta que usamos no treino. **Vazamento** seria outra coisa: o modelo ler *“Corpo de Bombeiros…”* no texto e acertar **sem olhar o que está sendo comprado** — nota alta, aprendizado falso.
 
-**Resumo:** ter proxy **não é** vazamento. Vazamento é quando a **mesma pista** que define a área **aparece de novo** no texto que o modelo enxerga. Detalhes: `[VAZAMENTO-DE-LABEL.md](VAZAMENTO-DE-LABEL.md)`.
+**Resumo:** ter proxy **não é** vazamento. Vazamento é quando a **mesma pista** que define a área **aparece de novo** no texto que o modelo enxerga. Detalhes: [`VAZAMENTO-DE-LABEL.md`](VAZAMENTO-DE-LABEL.md).
 
 `**limpar_objeto()**` tira do texto do objeto os trechos repetitivos de formulário (como “Objeto:”, “Pregão Eletrônico -”) e o nome do órgão quando ele aparece copiado ali, deixando só a descrição do que está sendo comprado para o modelo não “colar” na área pelo nome da secretaria — gera o campo `**objeto_html_limpo**`, usado nos protocolos PNCP (`src/preprocess/clean_objeto.py`).
 
@@ -412,7 +412,7 @@ Benchmark de coortes difíceis: `scripts/run_benchmark_pncp_dificeis.py`.
 
 ### 5.5 Reprodutibilidade
 
-Cada treino gera `experiments/<run_id>.json` (métricas, hash do corpus, commit Git) + MLflow local. Matrizes de confusão em `reports/figures/`. Instruções completas: `[README.md](README.md)` e §10.
+Cada treino gera `experiments/<run_id>.json` (métricas, hash do corpus, commit Git) + MLflow local. Matrizes de confusão em `reports/figures/`. Instruções completas: [`README.md`](../README.md) e §10.
 
 ---
 
@@ -526,7 +526,7 @@ O modelo não é fim em si: cruzamos predições e labels com **distribuição t
 
 **Insight 2 — gasto concentrado:** Saúde concentra **26,5%** dos editais e **≈R$ 268 milhões** em valor homologado somado (mediana **≈R$ 482 mil** por edital) — poucos editais de Infraestrutura podem ter soma alta por contratos grandes; a **área predita** ajuda a orientar onde aprofundar a fiscalização.
 
-**Insight 3 — objetos vagos (PNCP):** **~48%** das compras não têm keyword setorial no objeto; **~853** compras “escondidas” (órgão setorial, texto burocrático) exigem info complementar ou revisão humana — taxonomia com `Indeterminado` e fallback orgânico são necessários em produção.
+**Insight 3 — objetos vagos (PNCP):** **~48%** das compras não têm keyword setorial no objeto; **~853** compras “escondidas” (órgão setorial, texto burocrático) exigem info complementar ou revisão humana — taxonomia com `Indeterminado` e **fallback órgão** (`pncp9fb`) são necessários em produção.
 
 **Insight 4 — escala muda a ferramenta:** para **triagem em massa** (~20 mil compras DF/2025), BERT (F1 **0,858**) supera LogReg (**0,756**); para **corpus pequeno e entrega oficial** (423 editais), LogReg (**0,74**) é mais estável que BERT (**0,40**).
 
@@ -603,7 +603,7 @@ O projeto percorreu o ciclo completo de PLN aplicado ao setor público: problema
 4. SOUZA, F.; NOGUEIRA, R.; LOTUFO, R. BERTimbau: Pretrained BERT Models for Brazilian Portuguese. **BRACIS**, 2020.
 5. SRIVASTAVA, N. et al. Dropout: A Simple Way to Prevent Neural Networks from Overfitting. **JMLR**, v. 15, p. 1929-1958, 2014.
 
-**Operacional:** [https://pncp.gov.br/](https://pncp.gov.br/) · `neuralmind/bert-base-portuguese-cased` · PDFs em `[docs/referencias/](referencias/)`.
+**Operacional:** [https://pncp.gov.br/](https://pncp.gov.br/) · `neuralmind/bert-base-portuguese-cased` · PDFs em [`referencias/`](referencias/).
 
 ---
 
@@ -651,12 +651,12 @@ Slides e roteiro alinhados à estrutura sugerida da disciplina:
 
 | Slide | Conteúdo                                | Documento                                                                                       |
 | ----- | --------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| 1     | Contexto                                | `[APRESENTACAO-CONTEUDO.md](APRESENTACAO-CONTEUDO.md)` · `[roteiro_10min.md](roteiro_10min.md)` |
+| 1     | Contexto                                | [`APRESENTACAO-CONTEUDO.md`](APRESENTACAO-CONTEUDO.md) · [`roteiro_10min.md`](roteiro_10min.md) |
 | 2     | Base teórica (5+5)                      | idem                                                                                            |
 | 3     | Dados                                   | idem                                                                                            |
 | 4     | Metodologia + vazamento                 | idem                                                                                            |
 | 4b    | Arquitetura (CNN/RNN/Transformer)       | idem                                                                                            |
-| 5–6   | Resultados ComprasNet + PNCP            | idem                                                                                            |
+| 5–6   | Resultados ComprasNet + PNCP            | idem · [`ROTEIRO-FAMILIA-PROTOCOLOS-PNCP.md`](ROTEIRO-FAMILIA-PROTOCOLOS-PNCP.md) |
 | 7–8   | Discussão · Conclusão · Próximos passos | idem                                                                                            |
 
 
@@ -664,7 +664,7 @@ PDF final dos slides: entregável da disciplina (repositório + apresentação e
 
 ### Síntese oral (10 min)
 
-> Coletamos **423 editais** ComprasNet (DF 2025). LogReg F1 **0,74** no teste venceu SVM (0,65) e BERT (0,40) — corpus pequeno favorece o clássico. Estendemos com **19.944 compras PNCP**: BERT F1 **0,858** no protocolo por órgão. Exploramos 9 setores empíricos, fallback orgânico e info complementar — F1 até 0,97, mas com acoplamento rótulo↔texto que declaramos. A contribuição é explicar **o que a métrica significa** e o cuidado metodológico por trás dela.
+> Coletamos **423 editais** ComprasNet (DF 2025). LogReg F1 **0,74** no teste venceu SVM (0,65) e BERT (0,40) — corpus pequeno favorece o clássico. Estendemos com **19.944 compras PNCP**: BERT F1 **0,858** no protocolo por órgão. Exploramos 9 setores empíricos, **fallback órgão** e info complementar — F1 até 0,97, mas com acoplamento rótulo↔texto que declaramos. A contribuição é explicar **o que a métrica significa** e o cuidado metodológico por trás dela.
 
 ---
 

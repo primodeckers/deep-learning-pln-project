@@ -2,7 +2,9 @@
 
 **Regra:** notebooks **não treinam**. Treino = `scripts/run_train.py` + docs `FASE*-*.md`.
 
-## Mapa de fases (classificação)
+**Escopo do projeto:** classificação por área de gasto (ComprasNet + PNCP). Sumarização fora do escopo.
+
+## Mapa de fases (classificação ComprasNet)
 
 | Fase | Tarefa | Treino | Documento |
 |------|--------|--------|-----------|

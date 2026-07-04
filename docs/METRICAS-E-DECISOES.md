@@ -1,6 +1,8 @@
 # Métricas e decisões de avaliação
 
-Anotações do grupo sobre o que medimos, como ler os números e por que o relatório usa o LogReg da Fase 1 como modelo principal.
+Anotações do grupo sobre o que medimos, como ler os números e por que o relatório usa o LogReg da Fase 1 como modelo principal no **ComprasNet** (entrega oficial). No PNCP em escala (`pncp`), o BERT supera o LogReg — ver [`MODEL-CARD.md`](MODEL-CARD.md).
+
+**Escopo:** só classificação. Sumarização fora do projeto.
 
 > Números consolidados: [`MODEL-CARD.md`](MODEL-CARD.md)  
 > Validação vs teste (as três fases): [`COMPARATIVO-FASES.md`](COMPARATIVO-FASES.md)  

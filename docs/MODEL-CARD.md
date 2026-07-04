@@ -2,6 +2,8 @@
 
 Resumo de performance e limitações. Runs em `experiments/`.
 
+**Escopo:** classificação por área de gasto apenas. Sumarização fora do projeto.
+
 ## Escopo
 
 | Corpus | Registros | Papel no relatório |

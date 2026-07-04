@@ -198,16 +198,18 @@ Exigiria anotação manual ou modelo auxiliar de alto custo. A validação manua
 
 ---
 
-## 8. Uso por tarefa (o que tirar / o que manter)
+## 8. Uso por campo na classificação
 
 
-| Campo                         | Classificação                             | Sumarização cidadã                |
-| ----------------------------- | ----------------------------------------- | --------------------------------- |
-| `orgao_csv`                   | ❌ nunca como feature                      | ✅ contexto no extrativo           |
-| `texto`                       | ❌ evitar (vazamento)                      | ✅ texto completo                  |
-| `objeto_html`                 | ✅ **entrada oficial**                     | referência fraca (ROUGE)          |
-| `objeto_html_limpo`           | ⚗️ experimento (`text_field` alternativo) | mesma limpeza do resumo extrativo |
-| Cabeçalho “Pregão Eletrônico” | removido em `objeto_html_limpo`           | `limpar_objeto()` no extrativo    |
+| Campo                         | Classificação                             |
+| ----------------------------- | ----------------------------------------- |
+| `orgao_csv`                   | ❌ nunca como feature (só gera o label)    |
+| `texto`                       | ❌ evitar (vazamento grave)                |
+| `objeto_html`                 | ✅ **entrada oficial** (ComprasNet)        |
+| `objeto_html_limpo`           | ⚗️ experimento / padrão PNCP (`text_field`) |
+| Cabeçalho “Pregão Eletrônico” | removido em `objeto_html_limpo`           |
+
+Sumarização **fora do escopo** do projeto.
 
 
 ---

@@ -1,6 +1,6 @@
 # Referências bibliográficas - SVM
 
-Este diretório reúne artigos relacionados a SVM, classificação de textos, análise de sentimentos, sumarização e classificação de documentos jurídicos.
+Este diretório reúne artigos relacionados a SVM, classificação de textos e documentos jurídicos — base da Fase 3 (TF-IDF + SVM). O projeto foca em classificação (sumarização fora do escopo).
 
 As referências abaixo foram organizadas a partir dos metadados e do texto dos PDFs, complementados por fontes bibliográficas oficiais como Crossref, ACL Anthology e Springer quando disponíveis.
 

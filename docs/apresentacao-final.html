@@ -155,6 +155,27 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
 .split .chart-inner .hint{font-size:11px;color:var(--faint);margin-bottom:12px}
 .split .chart-inner .chart-area{flex:1;position:relative;min-height:0}
 
+/* PROTOCOLO — SPLIT VISUAL */
+.proto{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 20px 16px}
+.proto-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:16px}
+.proto-head .t{font-size:13px;font-weight:700;color:var(--cyan)}
+.proto-head .d{font-size:12px;color:var(--faint)}
+.proto-bar{display:flex;gap:6px}
+.ps{border-radius:8px;padding:9px 10px;text-align:center;border:1px solid}
+.ps b{font-size:17px;display:block}
+.ps span{font-size:11px;display:block;margin-top:3px;color:var(--muted);line-height:1.35}
+.ps.tr{flex:70;background:rgba(56,189,248,.10);border-color:var(--cyan);color:var(--cyan)}
+.ps.va{flex:22;background:rgba(245,158,11,.08);border-color:var(--amber);color:var(--amber)}
+.ps.te{flex:22;background:rgba(52,211,153,.08);border-color:var(--green);color:var(--green)}
+
+/* PRINT / PDF EXPORT */
+@media print{
+  html,body{overflow:visible;height:auto}
+  #deck{width:auto;height:auto}
+  .slide{position:relative;inset:auto;opacity:1;pointer-events:all;page-break-after:always;height:100vh}
+  #nav,#progress{display:none}
+}
+
 /* LEAK VISUAL */
 .leak-cmp{display:flex;gap:18px;align-items:stretch}
 .leak-card{flex:1;border-radius:14px;padding:20px;border:1px solid;text-align:center}
@@ -224,26 +245,33 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
 <!-- ═══════════════════════════════════════════════════ SLIDE 2 — Base Teórica -->
 <section class="slide" id="s2">
   <div class="eyebrow">Slide 2 — Fundamentação</div>
-  <div class="slide-title">Base teórica: <span>técnica e domínio</span></div>
-  <div class="cols c2" style="flex:1">
-    <div class="col-card">
-      <h3>Frente técnica</h3>
-      <ul>
-        <li><b>Devlin et al. (2019) — BERT</b><br>Fine-tuning de Transformers para classificação textual</li>
-        <li><b>Souza et al. (2020) — BERTimbau</b><br>BERT pré-treinado em português brasileiro — escolhemos PT-BR em vez do multilíngue genérico</li>
-        <li><b>Aula 03–04 — "Depende"</b><br>A arquitetura certa depende do volume de dados e do diagnóstico treino vs. teste</li>
-        <li><b>Srivastava et al. (2014) — Dropout</b><br>Regularização usada no fine-tuning do BERTimbau</li>
-      </ul>
+  <div class="slide-title">Base teórica: <span>5 de técnica + 5 de domínio</span></div>
+  <div class="slide-body">
+    <div class="cols c2" style="flex:1">
+      <div class="col-card">
+        <h3>Frente técnica (5 artigos)</h3>
+        <ul>
+          <li><b>Devlin et al. (2019) — BERT</b><br>Fine-tuning de Transformers para classificação textual</li>
+          <li><b>Souza et al. (2020) — BERTimbau</b><br>BERT em português BR — checkpoint PT-BR em vez do multilíngue genérico</li>
+          <li><b>Pedregosa et al. (2011) — scikit-learn</b><br>TF-IDF, LogReg e SVM das Fases 1 e 3</li>
+          <li><b>Goodfellow et al. (2016) — Deep Learning</b><br>Modelagem de sequências — por que RNN/LSTM ficou de fora</li>
+          <li><b>Srivastava et al. (2014) — Dropout</b><br>Regularização no fine-tuning · lente para o overfitting observado</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h3>Frente de domínio (5 artigos)</h3>
+        <ul>
+          <li><b>Souto et al. (2025) — caso Alice (CGU/TCU)</b><br>IA para triagem de licitações em escala nacional — valida o problema</li>
+          <li><b>Ferreira (2019, UnB)</b><br>PLN em licitações do GDF — mesmo domínio</li>
+          <li><b>Watanabe & Sousa (2023)</b><br>Classificação de documentos públicos — baseline clássico antes de rede profunda</li>
+          <li><b>Macedo et al. (2025)</b><br>Governo aberto e transparência nas capitais</li>
+          <li><b>Rosado & Dias (2024)</b><br>Jargão jurídico como barreira — justifica o foco no campo Objeto</li>
+          <li><b>Marco legal</b> — Lei 14.133/2021 · LAI 12.527/2011 · Lei 15.263/2025</li>
+        </ul>
+      </div>
     </div>
-    <div class="col-card">
-      <h3>Frente de domínio</h3>
-      <ul>
-        <li><b>Souto et al. (2025) — caso Alice (CGU/TCU)</b><br>IA para triagem de licitações em escala nacional — mesmo problema, outra escala</li>
-        <li><b>Ferreira (2019, UnB)</b><br>PLN em licitações do GDF — mesmo domínio</li>
-        <li><b>Watanabe & Sousa (2023)</b><br>Aprendizado de máquina para documentos públicos</li>
-        <li><b>Macedo et al. (2025)</b><br>Governo aberto e transparência nas capitais</li>
-        <li><b>Marco legal</b><br>Lei 14.133/2021 · LAI 12.527/2011 · Lei 15.263/2025</li>
-      </ul>
+    <div class="takeaway">
+      Uso <b>substantivo</b>: cada referência sustenta uma decisão do projeto. E o lema da <b>aula 03–04 — "depende"</b>: a arquitetura certa depende do volume de dados e do diagnóstico treino × teste — hipótese testada nos dois corpora.
     </div>
   </div>
 </section>
@@ -262,8 +290,16 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
           <li>PDF tem CAPTCHA → coletamos <b>HTML de detalhe</b></li>
           <li>Intervalo 0,8 s · User-Agent identificado · <b>sem burlar CAPTCHA</b></li>
           <li>Hash SHA-256 versionado no repositório</li>
-          <li>Classes: Admin/Outros 176 · Saúde 106 · Segurança 51 · Saneamento 49 · Infra 24 · Educação 17</li>
+          <li>Classes: Admin/Outros 163 · Saúde 112 · Segurança 58 · Saneamento 49 · Infra 24 · Educação 17</li>
         </ul>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+          <h3 style="margin-bottom:10px">Rótulo (label proxy)</h3>
+          <ul>
+            <li>Órgão comprador → macroárea por palavras-chave</li>
+            <li>Classificador <b>não recebe o órgão</b> — só o texto do objeto</li>
+            <li>Validação manual: <b>30 editais · 4 fichas · ~83% concordância</b></li>
+          </ul>
+        </div>
       </div>
       <div class="col-card">
         <h3>PNCP — extensão em escala</h3>
@@ -274,14 +310,6 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
           <li>Perfil distinto: inexigibilidade dominante</li>
           <li><b>~48% sem keyword setorial clara</b> no objeto</li>
         </ul>
-        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
-          <h3 style="margin-bottom:10px">Rótulo (label proxy)</h3>
-          <ul>
-            <li>Órgão comprador → macroárea por palavras-chave</li>
-            <li>Classificador <b>não recebe o órgão</b> — só o texto do objeto</li>
-            <li>Validação manual: <b>30 editais · 4 fichas · ~83% concordância</b></li>
-          </ul>
-        </div>
       </div>
     </div>
   </div>
@@ -305,20 +333,37 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
         <div class="lk-desc" style="color:var(--muted)">Vazamento cai para ~49–51%. <b style="color:var(--green)">Número honesto</b> — o modelo aprende o que está sendo comprado.</div>
       </div>
     </div>
-    <div style="margin-top:20px">
-      <table>
-        <thead>
-          <tr><th>Decisão de protocolo</th><th>Valor</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Entrada</td><td><code>objeto_html</code> — descrição da compra (não HTML completo)</td></tr>
-          <tr><td>Split</td><td>70% treino · 15% validação · 15% teste · estratificado por área · <b>seed 42</b></td></tr>
-          <tr><td>Tamanhos (ComprasNet)</td><td>295 treino · 64 validação · 64 teste</td></tr>
-          <tr><td>Métrica primária</td><td><b>F1 macro (teste)</b> — penaliza quem ignora classes raras</td></tr>
-          <tr><td>Regra de seleção</td><td>Melhor F1 na validação · resultado reportado = <b>teste</b></td></tr>
-          <tr><td>Rastreabilidade</td><td>JSON + MLflow + hash SHA-256 do corpus + commit Git</td></tr>
-        </tbody>
-      </table>
+    <div class="proto" style="margin-top:18px">
+      <div class="proto-head">
+        <span class="t">Protocolo: como o experimento funciona</span>
+        <span class="d">423 editais · divisão sorteada uma única vez (<b>seed 42</b>) · estratificada — cada fatia mantém a proporção das 6 áreas · igual para os 3 modelos</span>
+      </div>
+      <div class="proto-bar">
+        <div class="ps tr"><b>295 · treino (70%)</b><span>o modelo aprende aqui</span></div>
+        <div class="ps va"><b>64 · validação (15%)</b><span>ajustes e escolha do melhor modelo</span></div>
+        <div class="ps te"><b>64 · teste (15%)</b><span>nota final — editais nunca vistos</span></div>
+      </div>
+    </div>
+    <div class="cols c2" style="margin-top:16px;flex:initial">
+      <div class="col-card" style="padding:16px 20px">
+        <h3>Métrica: por que F1 macro, não acurácia?</h3>
+        <ul>
+          <li>F1 por área = equilíbrio entre <b>precisão</b> ("quando digo Saúde, é Saúde?") e <b>recall</b> ("quando é Saúde, eu encontro?")</li>
+          <li><b>Macro</b> = média das 6 áreas, cada uma pesando igual — Educação (17 editais) vale o mesmo que Admin (163)</li>
+          <li>Chutar sempre a classe grande dá acurácia razoável e F1 péssimo — a métrica <b>bloqueia esse truque</b></li>
+        </ul>
+      </div>
+      <div class="col-card" style="padding:16px 20px">
+        <h3>Regra do jogo: contra o autoengano</h3>
+        <ul>
+          <li>Desenvolvimento e ajuste olham <b>só a validação</b>; o número reportado é sempre o <b>teste</b></li>
+          <li>Mesmo split, mesma seed e mesma entrada (<code>objeto_html</code>) para os 3 modelos → <b>comparação justa</b></li>
+          <li>Cada treino grava JSON + MLflow + hash do corpus + commit Git → <b>rastreável e reprodutível</b></li>
+        </ul>
+      </div>
+    </div>
+    <div class="takeaway" style="margin-top:14px;font-size:13px;padding:10px 20px">
+      <b>Proxy ≠ vazamento:</b> o label proxy é como definimos a resposta (órgão → área, validado ~83%); vazamento é quando essa <b>mesma pista</b> reaparece no texto que o modelo lê. Por isso a entrada é só o objeto — e medimos o que ainda vaza.
     </div>
   </div>
 </section>
@@ -370,7 +415,10 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
         </tr>
       </tbody>
     </table>
-    <div class="takeaway" style="margin-top:18px">
+    <div class="takeaway" style="margin-top:14px;font-size:13px;padding:10px 20px">
+      <b>Config:</b> TF-IDF uni+bigramas · 20k features · LogReg <code>C=1.0</code>, <code>class_weight=balanced</code> &nbsp;|&nbsp; SVM linear (mesmo TF-IDF) &nbsp;|&nbsp; BERTimbau <code>max_len=512</code> · batch 16 · lr 2e-5 · 4 épocas + early stopping · fp16 (RTX 4090)
+    </div>
+    <div class="takeaway" style="margin-top:10px">
       <b>Hipótese inicial:</b> Transformer vence baseline. &nbsp;|&nbsp;
       <b style="color:var(--red)">ComprasNet: refutada</b> — pouco treino. &nbsp;|&nbsp;
       <b style="color:var(--green)">PNCP: confirmada</b> — escala muda o vencedor. &nbsp;|&nbsp;
@@ -399,6 +447,7 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
     <div class="takeaway">
       <b>Leitura:</b> LogReg manteve 0,743 (val) → <b>0,740 (teste)</b> — generalização. SVM e BERT superajustaram à validação.
       Com <b>295 exemplos de treino</b>, o clássico linear vence o Transformer.
+      <b>Accuracy engana:</b> LogReg e SVM empatam em accuracy (0,797), mas o F1 macro difere (0,740 vs 0,652) — por isso a métrica primária é <b>F1 macro no teste</b>.
     </div>
   </div>
 </section>
@@ -454,6 +503,35 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════════ SLIDE 6b — Impacto aplicado -->
+<section class="slide" id="s6b">
+  <div class="eyebrow">Slide 6b — Impacto aplicado</div>
+  <div class="slide-title">Além da técnica: <span>o que o modelo revela sobre o DF</span></div>
+  <div class="slide-body">
+    <div class="cols c2" style="flex:1">
+      <div class="col-card" style="border-color:var(--cyan)">
+        <h3>1 · Triagem que substitui leitura manual</h3>
+        <p>Com F1 <b>0,74</b>, o classificador permite <b>priorizar leitura humana</b> por macroárea sem ler os 423 editais um a um — útil para jornalismo de dados e controle social.</p>
+      </div>
+      <div class="col-card" style="border-color:var(--green)">
+        <h3>2 · Onde o dinheiro está</h3>
+        <p>Saúde concentra <b>26,5%</b> dos editais e <b>≈R$ 268 milhões</b> em valor homologado (mediana ≈R$ 482 mil/edital). A <b>área predita</b> orienta onde aprofundar a fiscalização.</p>
+      </div>
+      <div class="col-card" style="border-color:var(--amber)">
+        <h3>3 · Compras "escondidas"</h3>
+        <p><b>~48%</b> das compras PNCP não têm keyword setorial no objeto; <b>~853</b> têm órgão setorial e texto vago — exigem info complementar ou revisão humana. Em produção, classe <b>Indeterminado</b> e fallback são necessários.</p>
+      </div>
+      <div class="col-card" style="border-color:var(--violet)">
+        <h3>4 · A escala escolhe a ferramenta</h3>
+        <p>Triagem em massa (~20 mil compras): <b>BERT 0,858</b>. Corpus pequeno e auditável (423 editais): <b>LogReg 0,74</b>. A recomendação <b>depende do cenário de uso</b>.</p>
+      </div>
+    </div>
+    <div class="takeaway">
+      O modelo <b>não é fim em si</b>: cruzar área predita × valor homologado × modalidade responde <b>"em que o DF está gastando?"</b> — de métrica a ferramenta de política pública.
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════════════════════════════════ SLIDE 7 — Discussão -->
 <section class="slide" id="s7">
   <div class="eyebrow">Slide 7 — Discussão</div>
@@ -489,7 +567,7 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
     <div class="cols c3" style="margin-bottom:18px">
       <div class="col-card" style="border-color:var(--cyan)">
         <h3>1. Pipeline inédito e reprodutível</h3>
-        <p>Coleta ética sem CAPTCHA · corpus versionado com hash · rastreamento via MLflow + JSON · repositório público</p>
+        <p>Coleta ética sem CAPTCHA · corpus com hash SHA-256 · split com seed 42 · MLflow + JSON por run · repositório público no GitHub com instruções de execução</p>
       </div>
       <div class="col-card" style="border-color:var(--violet)">
         <h3>2. Evidência empírica com rigor</h3>
@@ -541,7 +619,8 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
 <!-- NAV BAR -->
 <div id="nav">
   <button id="btnPrev" onclick="go(-1)" disabled>← Anterior</button>
-  <span id="counter">1 / 11</span>
+  <span id="counter">1 / 12</span>
+  <span id="timer" style="font-size:13px;color:var(--faint);letter-spacing:.5px" title="Clique para pausar/retomar · clique duplo para zerar">⏱ 00:00 / 15:00</span>
   <button id="btnNext" onclick="go(1)">Próximo →</button>
 </div>
 <div id="progress"></div>
@@ -551,19 +630,82 @@ tr.hl-row-table td{background:rgba(56,189,248,.05)}
 const slides = Array.from(document.querySelectorAll('.slide'));
 const total = slides.length;
 let cur = 0;
-const slideIds = ['s0','s1','s2','s3','s4','s4b','s5','s6','s7','s8','s_close'];
-const labels = ['Capa','1 — Contexto','2 — Base Teórica','3 — Dados','4 — Vazamento','4b — Arquitetura','5 — ResultadosComprasNet','6 — PNCP','7 — Discussão','8 — Conclusão','Fechamento'];
+const slideIds = ['s0','s1','s2','s3','s4','s4b','s5','s6','s6b','s7','s8','s_close'];
+const labels = ['Capa','1 — Contexto','2 — Base Teórica','3 — Dados','4 — Vazamento','4b — Arquitetura','5 — Resultados ComprasNet','6 — PNCP','6b — Impacto','7 — Discussão','8 — Conclusão','Fechamento'];
+// alvo cumulativo (em segundos) para terminar cada slide — total 15:00
+const TOTAL_SEC = 15 * 60; // 900
+const targets = [20,90,150,240,345,420,540,660,720,810,870,900];
+
+// ── Timer do apresentador (inicia no primeiro avanço) ─────────
+let t0 = null, timerInt = null, pausedAt = null, elapsedPaused = 0;
+function fmt(s){const m=Math.floor(s/60);return String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function elapsedSec(){
+  if(!t0) return 0;
+  if(pausedAt) return elapsedPaused;
+  return Math.floor((Date.now()-t0)/1000) + elapsedPaused;
+}
+function tickTimer(){
+  const el = document.getElementById('timer');
+  const s = elapsedSec();
+  el.textContent = '⏱ '+fmt(s)+' / 15:00'+(pausedAt?' ⏸':'');
+  // âmbar a partir de 12:00 · vermelho a partir de 14:00 (estouro em 15:00)
+  el.style.color = s>=TOTAL_SEC ? 'var(--red)' : (s>=840 ? 'var(--red)' : (s>=720 ? 'var(--amber)' : 'var(--faint)'));
+}
+function startTimer(){
+  if(t0 || pausedAt) return;
+  t0 = Date.now();
+  timerInt = setInterval(tickTimer, 250);
+  tickTimer();
+}
+function togglePause(){
+  const el = document.getElementById('timer');
+  if(!t0 && !pausedAt){ startTimer(); return; }
+  if(pausedAt){
+    // retomar
+    t0 = Date.now();
+    pausedAt = null;
+    timerInt = setInterval(tickTimer, 250);
+  } else {
+    // pausar
+    elapsedPaused = elapsedSec();
+    pausedAt = Date.now();
+    clearInterval(timerInt);
+    timerInt = null;
+  }
+  tickTimer();
+}
+function resetTimer(){
+  clearInterval(timerInt);
+  timerInt = null;
+  t0 = null;
+  pausedAt = null;
+  elapsedPaused = 0;
+  const el = document.getElementById('timer');
+  el.textContent = '⏱ 00:00 / 15:00';
+  el.style.color = 'var(--faint)';
+}
+document.getElementById('timer').style.cursor = 'pointer';
+document.getElementById('timer').addEventListener('click', togglePause);
+document.getElementById('timer').addEventListener('dblclick', e=>{ e.preventDefault(); resetTimer(); });
 
 function go(dir){
+  startTimer();
   slides[cur].classList.remove('active');
   cur = Math.max(0, Math.min(total-1, cur+dir));
   slides[cur].classList.add('active');
   document.getElementById('btnPrev').disabled = (cur===0);
   document.getElementById('btnNext').disabled = (cur===total-1);
-  document.getElementById('counter').textContent = (cur+1)+' / '+total+' · '+labels[cur];
+  document.getElementById('counter').textContent = (cur+1)+' / '+total+' · '+labels[cur]+' · alvo '+fmt(targets[cur]);
   document.getElementById('progress').style.width = ((cur/(total-1))*100)+'%';
+  if(t0) tickTimer();
   initChart(slideIds[cur]);
 }
+
+// ── Exportar PDF: prepara todos os gráficos antes de imprimir ──
+window.addEventListener('beforeprint',()=>{
+  initChart('s5');
+  Object.values(charts).forEach(c=>{ if(c && c.resize) c.resize(); });
+});
 
 document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') go(1);
@@ -571,7 +713,7 @@ document.addEventListener('keydown',e=>{
 });
 
 // init
-document.getElementById('counter').textContent = '1 / '+total+' · '+labels[0];
+document.getElementById('counter').textContent = '1 / '+total+' · '+labels[0]+' · alvo '+fmt(targets[0]);
 document.getElementById('progress').style.width = '0%';
 
 // ── Charts (lazy init per slide) ─────────────────────────────

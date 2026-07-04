@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Executivo · Classificação de Editais (DF 2025)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0b1120; --panel:#111a2e; --panel2:#0f1828; --border:#1e2c46;
+    --txt:#e6edf7; --muted:#8aa0bf; --faint:#5d7298;
+    --cyan:#38bdf8; --blue:#3b82f6; --teal:#2dd4bf; --amber:#f59e0b;
+    --red:#f87171; --green:#34d399; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.5;padding:32px 28px 60px}
+  .wrap{max-width:1240px;margin:0 auto}
+  header.top{border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:28px}
+  .eyebrow{color:var(--cyan);font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
+  h1{font-size:28px;font-weight:700;margin:6px 0 4px;letter-spacing:-.3px}
+  .sub{color:var(--muted);font-size:14.5px}
+  .team{color:var(--faint);font-size:12.5px;margin-top:8px}
+
+  .section-title{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);margin:36px 0 16px;display:flex;align-items:center;gap:10px}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  /* KPIs */
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+  .kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:14px;padding:16px 16px 14px;position:relative;overflow:hidden}
+  .kpi::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--cyan)}
+  .kpi.k2::before{background:var(--teal)} .kpi.k3::before{background:var(--violet)}
+  .kpi.k4::before{background:var(--green)} .kpi.k5::before{background:var(--amber)} .kpi.k6::before{background:var(--blue)}
+  .kpi .val{font-size:27px;font-weight:800;letter-spacing:-.5px}
+  .kpi .lbl{color:var(--muted);font-size:11.5px;margin-top:3px;line-height:1.35}
+
+  /* headline finding */
+  .finding{background:linear-gradient(135deg,#0d1d33,#0c1626);border:1px solid var(--border);border-radius:16px;padding:24px 26px;margin-top:4px;display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center}
+  .finding .col{text-align:center}
+  .finding .corpus{color:var(--muted);font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+  .finding .ntrain{color:var(--faint);font-size:12px;margin-top:2px}
+  .finding .winner{font-size:15px;font-weight:700;margin-top:12px}
+  .finding .scores{font-size:13px;color:var(--muted);margin-top:6px}
+  .finding .scores b{color:var(--txt)}
+  .finding .vs{font-size:34px;font-weight:800;color:var(--faint)}
+  .finding .arrow{font-size:12px;color:var(--cyan);margin-top:6px;letter-spacing:.5px}
+  .badge-win{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;margin-left:6px}
+  .badge-classic{background:rgba(45,212,191,.15);color:var(--teal)}
+  .badge-bert{background:rgba(167,139,250,.15);color:var(--violet)}
+  .takeaway{text-align:center;color:var(--muted);font-size:13.5px;margin-top:16px}
+  .takeaway b{color:var(--cyan)}
+
+  /* charts grid */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 18px 14px}
+  .card h3{font-size:14.5px;font-weight:700;margin-bottom:3px}
+  .card p.hint{color:var(--faint);font-size:11.5px;margin-bottom:12px}
+  .chart-box{position:relative;height:260px}
+  .chart-box.tall{height:300px}
+
+  /* analysis */
+  .analysis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .ana{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+  .ana h4{font-size:14px;font-weight:700;margin-bottom:8px;color:var(--cyan)}
+  .ana p{color:var(--muted);font-size:13px;margin-bottom:8px}
+  .ana p b{color:var(--txt)}
+  .ana ul{list-style:none;margin-top:4px}
+  .ana li{color:var(--muted);font-size:12.8px;padding:4px 0 4px 18px;position:relative}
+  .ana li::before{content:'▸';position:absolute;left:0;color:var(--cyan)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.8px}
+  th,td{text-align:right;padding:7px 8px;border-bottom:1px solid var(--border)}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--faint);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+  td.best{color:var(--green);font-weight:700}
+  tr.struck td{text-decoration:line-through;color:var(--faint);opacity:.6}
+  tr.struck td.best{color:var(--faint);font-weight:400}
+  .full{grid-column:1/-1}
+  .card .cap{font-size:13px;font-weight:700;margin-bottom:2px}
+  .card .cap small{display:block;color:var(--faint);font-size:11px;font-weight:400;margin-top:2px}
+  td.win{color:var(--green);font-weight:700}
+  td.verd{color:var(--muted);font-size:12px}
+  tr.official td{background:rgba(56,189,248,.06)}
+  .corpora-wrap{display:grid;grid-template-columns:1.05fr 1.35fr;gap:26px;align-items:center}
+  .insights{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ins{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--muted);line-height:1.45}
+  .ins b{color:var(--txt)}
+  .ins-tag{display:block;color:var(--cyan);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+  @media(max-width:980px){.corpora-wrap{grid-template-columns:1fr}.insights{grid-template-columns:1fr}}
+
+  footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--border);color:var(--faint);font-size:11.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  @media(max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}.grid,.analysis{grid-template-columns:1fr}.finding{grid-template-columns:1fr}.finding .vs{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">Deep Learning &amp; PLN · PLN no Setor Público</div>
+    <h1>Classificação de Editais por Área de Gasto — DF 2025</h1>
+    <div class="sub">Triagem temática automática de licitações públicas · ComprasNet &amp; PNCP</div>
+    <div class="team">Elisangela Osorio · Alexandre Ferreira Ponte · Renê Estevam Deckers · Alexandre Hugo Sampaio Netto</div>
+  </header>
+
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi k1"><div class="val">423</div><div class="lbl">editais ComprasNet (corpus oficial)</div></div>
+    <div class="kpi k2"><div class="val">19.944</div><div class="lbl">compras PNCP (extensão em escala)</div></div>
+    <div class="kpi k3"><div class="val">6</div><div class="lbl">macroáreas de gasto classificadas</div></div>
+    <div class="kpi k4"><div class="val">0,74</div><div class="lbl">F1 macro — LogReg, ComprasNet (teste)</div></div>
+    <div class="kpi k5"><div class="val">0,858</div><div class="lbl">F1 macro — BERTimbau, PNCP (teste)</div></div>
+    <div class="kpi k6"><div class="val">83,2%</div><div class="lbl">concordância da validação humana</div></div>
+  </div>
+
+  <!-- HEADLINE FINDING -->
+  <div class="section-title">Achado central — &ldquo;depende do volume e do protocolo&rdquo;</div>
+  <div class="finding">
+    <div class="col">
+      <div class="corpus">ComprasNet</div>
+      <div class="ntrain">~295 exemplos de treino</div>
+      <div class="winner">Clássico vence<span class="badge-win badge-classic">LogReg</span></div>
+      <div class="scores">LogReg <b>0,74</b> &nbsp;›&nbsp; SVM 0,65 &nbsp;›&nbsp; BERT <b>0,40</b></div>
+      <div class="arrow">▲ poucos dados → TF-IDF + LogReg</div>
+    </div>
+    <div class="col"><div class="vs">⇄</div></div>
+    <div class="col">
+      <div class="corpus">PNCP</div>
+      <div class="ntrain">~14.000 exemplos de treino</div>
+      <div class="winner">Transformer vence<span class="badge-win badge-bert">BERTimbau</span></div>
+      <div class="scores">BERT <b>0,858</b> &nbsp;›&nbsp; SVM 0,783 &nbsp;›&nbsp; LogReg 0,756</div>
+      <div class="arrow">▲ escala → contexto semântico ganha</div>
+    </div>
+  </div>
+  <div class="takeaway">A hipótese de que o BERTimbau superaria o baseline <b>não se confirmou com 423 editais</b>, mas <b>se confirmou no PNCP em escala</b> — o veredito sobre deep learning depende do tamanho do corpus.</div>
+
+  <!-- CHARTS -->
+  <div class="section-title">Comparativo de modelos</div>
+  <div class="grid">
+    <div class="card">
+      <h3>ComprasNet 423 — F1 macro (teste)</h3>
+      <p class="hint">Corpus pequeno (~295 treino) · BERT colapsa em classes raras</p>
+      <div class="chart-box"><canvas id="chComprasnet"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>PNCP — protocolo honesto por órgão (teste)</h3>
+      <p class="hint">~14k treino · BERT supera os baselines</p>
+      <div class="chart-box"><canvas id="chPncp"></canvas></div>
+    </div>
+    <div class="card full">
+      <h3>Vazamento de label — escolha da entrada</h3>
+      <p class="hint">O HTML completo repete o órgão (origem do rótulo) e infla o F1</p>
+      <div class="chart-box tall"><canvas id="chLeak"></canvas></div>
+    </div>
+  </div>
+
+  <!-- F1 por classe: ComprasNet x PNCP -->
+  <div class="section-title">F1 por classe — ComprasNet × PNCP (teste)</div>
+  <div class="card full">
+    <p class="hint" style="margin-bottom:12px">Melhor modelo de cada corpus nas mesmas 6 macroáreas: <b style="color:var(--teal)">ComprasNet = LogReg</b> (~295 treino) vs <b style="color:var(--violet)">PNCP = BERTimbau</b> (~14k treino). A escala do PNCP <b style="color:var(--txt)">estabiliza as classes raras</b> onde o corpus pequeno oscilava.</p>
+    <div class="chart-box" style="height:400px"><canvas id="chClassCompare"></canvas></div>
+    <div class="insights" style="grid-template-columns:1fr 1fr 1fr;margin-top:14px">
+      <div class="ins"><span class="ins-tag">Segurança</span><b>0,46 → 0,83</b> — a classe mais frágil do ComprasNet (n=9) salta com volume (n=175 no PNCP).</div>
+      <div class="ins"><span class="ins-tag">Infra/Obras</span><b>0,60 → 0,89</b> — de 4 para 50 exemplos de teste, o sinal deixa de ser ruído.</div>
+      <div class="ins"><span class="ins-tag">Saneamento</span><b>1,00 → 0,79</b> — o "1,00" do ComprasNet vinha de só 7 casos; no PNCP o F1 fica mais realista.</div>
+    </div>
+  </div>
+
+  <!-- Detailed comparison tables -->
+  <div class="grid" style="margin-top:18px">
+    <div class="card">
+      <div class="cap">ComprasNet 423 <small>~295 treino · 6 macroáreas · objeto_html (honesto)</small></div>
+      <table style="margin-top:10px">
+        <thead>
+          <tr><th>Fase</th><th>Modelo</th><th>F1 val</th><th>F1 teste</th><th>Acc. teste</th><th>Veredito</th></tr>
+        </thead>
+        <tbody>
+          <tr class="official"><td>1</td><td><b>TF-IDF + LogReg</b></td><td>0,743</td><td class="win">0,740</td><td>0,797</td><td class="verd">Modelo oficial — estável val≈teste</td></tr>
+          <tr><td>3</td><td>TF-IDF + SVM</td><td>0,797</td><td>0,652</td><td>0,797</td><td class="verd">Overfit (val alta, teste cai)</td></tr>
+          <tr><td>2</td><td>BERTimbau</td><td>0,559</td><td>0,400</td><td>0,688</td><td class="verd">Colapsa em classes raras</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="cap">PNCP · pncp <small>~20 mil compras · 6 macroáreas por órgão · honesto em escala</small></div>
+      <table style="margin-top:10px">
+        <thead>
+          <tr><th>Modelo</th><th>F1 val</th><th>F1 teste</th><th>Acc. teste</th><th>Veredito</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>TF-IDF + LogReg</td><td>0,768</td><td>0,756</td><td>0,926</td><td class="verd">Forte, mas atrás do BERT</td></tr>
+          <tr><td>TF-IDF + SVM</td><td>0,813</td><td>0,783</td><td>0,939</td><td class="verd">Melhor que LogReg; atrás do BERT</td></tr>
+          <tr class="official"><td><b>BERTimbau</b></td><td>0,860</td><td class="win">0,858</td><td>0,960</td><td class="verd">Vencedor em escala</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PNCP protocols -->
+  <div class="section-title">Composição dos corpora</div>
+  <div class="card full">
+    <div class="corpora-wrap">
+      <div>
+        <h3>ComprasNet × PNCP — nº de registros</h3>
+        <p class="hint">PNCP é ~47× maior, mas com textos curtos e burocráticos</p>
+        <div class="chart-box" style="height:200px"><canvas id="chCorpus"></canvas></div>
+      </div>
+      <div class="insights">
+        <div class="ins"><span class="ins-tag">Volume</span><b>~47× maior</b> — 19.944 compras PNCP vs 423 editais ComprasNet. É a escala que faz o BERT superar o baseline.</div>
+        <div class="ins"><span class="ins-tag">Tamanho do texto</span><b>~7× mais curto</b> — o <i>objeto_compra</i> do PNCP tem mediana ~32 palavras, contra ~239 no HTML do ComprasNet: menos contexto por exemplo.</div>
+        <div class="ins"><span class="ins-tag">Perfil de modalidade</span><b>Inexigibilidade domina o PNCP (~39%)</b>, enquanto o ComprasNet é majoritariamente Pregão (278) — dois perfis de contratação distintos.</div>
+        <div class="ins"><span class="ins-tag">Sinal lexical</span><b>~48% das compras PNCP não têm keyword setorial</b> no objeto; info complementar aparece em só ~53% das linhas — daí a classe Indeterminado e o fallback órgão.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA TABLE -->
+  <div class="section-title">Resultados consolidados</div>
+  <div class="card full">
+    <table>
+      <thead>
+        <tr><th>Corpus / Protocolo</th><th>n treino</th><th>LogReg</th><th>SVM</th><th>BERTimbau</th><th>Vencedor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ComprasNet 423 (objeto_html)</td><td>~295</td><td class="best">0,740</td><td>0,652</td><td>0,400</td><td>LogReg</td></tr>
+        <tr><td>PNCP — pncp (honesto, 6 áreas)</td><td>~14.000</td><td>0,756</td><td>0,783</td><td class="best">0,858</td><td>BERT</td></tr>
+        <tr class="struck"><td>PNCP — pncp9 (filtrado ~10,3k)</td><td>~7.200</td><td>0,857</td><td>0,877</td><td class="best">0,969</td><td>BERT*</td></tr>
+        <tr class="struck"><td>PNCP — pncp9full (19,9k)</td><td>~14.000</td><td>0,816</td><td>0,862</td><td class="best">0,970</td><td>BERT*</td></tr>
+        <tr class="struck"><td>PNCP — pncp9fbi (+ info compl.)</td><td>~14.000</td><td>0,788</td><td>0,829</td><td class="best">0,955</td><td>BERT*</td></tr>
+      </tbody>
+    </table>
+    <p class="hint" style="margin-top:10px">* F1 ~0,95–0,97 nos protocolos de 9 setores refletem reprodução das regras de keyword e acoplamento rótulo↔texto (em pncp9fbi). O protocolo honesto de referência é <b style="color:var(--cyan)">pncp = 0,858</b>.</p>
+  </div>
+
+  <!-- ANALYSIS FOR CLASS -->
+  <div class="section-title">Análise</div>
+  <div class="analysis">
+    <div class="ana">
+      <h4>1. O problema e por que importa</h4>
+      <p>Editais de licitação descrevem, em linguagem jurídica, o que o governo compra. Ler centenas manualmente para responder <b>&ldquo;em que áreas o governo gasta?&rdquo;</b> é inviável.</p>
+      <p>Coletamos <b>dados inéditos</b> (sem bases prontas de Kaggle): 423 editais do ComprasNet DF/2025, via HTML de detalhe — o PDF exigia CAPTCHA, que <b>não foi contornado por ética</b>.</p>
+    </div>
+    <div class="ana">
+      <h4>2. A lição metodológica (o gancho)</h4>
+      <p>A pergunta &ldquo;deep learning vence sempre?&rdquo; tem resposta: <b>depende</b>.</p>
+      <ul>
+        <li>Com ~295 exemplos, TF-IDF + LogReg (0,74) supera BERTimbau (0,40).</li>
+        <li>Com ~14k exemplos, BERTimbau (0,858) inverte o resultado.</li>
+        <li>O SVM superou na validação mas overfitou (64 exemplos) — val ≠ teste importa.</li>
+      </ul>
+    </div>
+    <div class="ana">
+      <h4>3. Transparência &gt; métrica bonita</h4>
+      <p><b>Vazamento de label:</b> usar o HTML completo inflava o F1 para ~0,88, porque o texto repete o nome do órgão (origem do rótulo). Trocamos para <b>objeto_html</b> → F1 honesto ~0,74.</p>
+      <p><b>Label proxy:</b> o rótulo vem do órgão por keyword, validado por humanos com <b>83,2%</b> de concordância — não é anotação manual perfeita, e declaramos isso.</p>
+    </div>
+    <div class="ana">
+      <h4>4. Limitações e próximos passos</h4>
+      <ul>
+        <li>Corpus pequeno: Educação tem só 2 exemplos no teste → F1 instável.</li>
+        <li>~48% das compras PNCP são lexicalmente vagas → classe Indeterminado e fallback órgão.</li>
+        <li>F1 ~0,97 nos protocolos de 9 setores = reprodução de regras, não generalização.</li>
+        <li><b>Próximos:</b> anos 2021–2024; info complementar condicional; anotação manual parcial.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ana full" style="margin-top:18px;border-color:var(--cyan);border-width:1px">
+    <h4>Síntese</h4>
+    <p style="color:var(--txt);font-size:13.5px">Coletamos <b>423 editais</b> do ComprasNet (DF 2025). O <b>LogReg (F1 0,74)</b> venceu SVM (0,65) e BERT (0,40) — corpus pequeno favorece o clássico. Estendemos para <b>19.944 compras do PNCP</b>: o <b>BERT (F1 0,858)</b> venceu no protocolo honesto por órgão. A contribuição não é só a métrica, é <b style="color:var(--cyan)">explicar o que ela significa</b> — vazamento documentado, label proxy validado, val vs teste separados.</p>
+  </div>
+
+  <footer>
+    <span>Documento consolidado · junho/2026 · ComprasNet runs 24/06 · PNCP runs 28–29/06</span>
+    <span>Métrica primária: F1 macro no teste · split 70/15/15 estratificado · seed 42</span>
+  </footer>
+
+</div>
+
+<script>
+Chart.defaults.color = '#8aa0bf';
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+Chart.defaults.font.size = 12;
+const GRID = 'rgba(30,44,70,.7)';
+const C = {cyan:'#38bdf8', teal:'#2dd4bf', violet:'#a78bfa', amber:'#f59e0b', blue:'#3b82f6', green:'#34d399', red:'#f87171'};
+
+const f1Axis = {min:0, max:1, grid:{color:GRID}, ticks:{stepSize:0.2}};
+const legendTop = {legend:{position:'top', labels:{boxWidth:12, padding:14, usePointStyle:true}}};
+
+// 1. ComprasNet F1
+new Chart(chComprasnet, {
+  type:'bar',
+  data:{labels:['LogReg','SVM','BERTimbau'],
+    datasets:[{label:'F1 macro (teste)', data:[0.740,0.652,0.400],
+      backgroundColor:[C.teal,C.blue,C.violet], borderRadius:6, barThickness:54}]},
+  options:{plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:c=>'F1 '+c.parsed.y.toFixed(3)}}},
+    scales:{y:f1Axis, x:{grid:{display:false}}}}
+});
+
+// 2. PNCP honesto
+new Chart(chPncp, {
+  type:'bar',
+  data:{labels:['LogReg','SVM','BERTimbau'],
+    datasets:[{label:'F1 macro (teste)', data:[0.756,0.783,0.858],
+      backgroundColor:[C.teal,C.blue,C.violet], borderRadius:6, barThickness:54}]},
+  options:{plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:c=>'F1 '+c.parsed.y.toFixed(3)}}},
+    scales:{y:f1Axis, x:{grid:{display:false}}}}
+});
+
+// 3. Vazamento de label
+new Chart(chLeak, {
+  data:{labels:[['texto','(HTML completo)'],['objeto_html','(oficial)'],'objeto_html_limpo'],
+    datasets:[
+      {type:'bar', label:'F1 macro (teste)', data:[0.88,0.74,0.73], backgroundColor:[C.red,C.green,C.teal], borderRadius:6, yAxisID:'y', order:2},
+      {type:'line', label:'Vazamento lexical', data:[0.97,0.49,0.47], borderColor:C.amber, backgroundColor:C.amber, tension:.3, yAxisID:'y1', pointRadius:5, order:1}
+    ]},
+  options:{plugins:legendTop,
+    scales:{
+      y:{...f1Axis, position:'left', title:{display:true,text:'F1 macro'}},
+      y1:{min:0,max:1,position:'right',grid:{display:false},ticks:{callback:v=>(v*100)+'%'},title:{display:true,text:'vazamento'}},
+      x:{grid:{display:false},ticks:{font:{size:10.5}}}
+    }}
+});
+
+// 5. F1 por classe — ComprasNet x PNCP
+new Chart(chClassCompare, {
+  type:'bar',
+  data:{labels:['Saúde','Saneamento','Segurança','Educação','Infra/Obras','Admin/Outros'],
+    datasets:[
+      {label:'ComprasNet · LogReg (n=17/7/9/2/4/25)', data:[0.90,1.00,0.46,0.67,0.60,0.81], backgroundColor:C.teal, borderRadius:4},
+      {label:'PNCP · BERTimbau (n=214/43/175/39/50/2471)', data:[0.936,0.789,0.829,0.727,0.891,0.977], backgroundColor:C.violet, borderRadius:4}
+    ]},
+  options:{responsive:true, maintainAspectRatio:false, categoryPercentage:0.7, barPercentage:0.85,
+    plugins:{legend:{position:'top',labels:{boxWidth:12,padding:16,usePointStyle:true,font:{size:12.5}}},
+      tooltip:{callbacks:{label:c=>c.dataset.label.split(' ·')[0]+': F1 '+c.parsed.y.toFixed(3)}}},
+    scales:{y:{...f1Axis,ticks:{stepSize:0.2}}, x:{grid:{display:false},ticks:{maxRotation:0,minRotation:0,font:{size:12.5}}}}}
+});
+
+// 6. Corpus composition
+new Chart(chCorpus, {
+  type:'bar',
+  data:{labels:['ComprasNet','PNCP'],
+    datasets:[{label:'nº de registros', data:[423,19944],
+      backgroundColor:[C.cyan,C.violet], borderRadius:6, barThickness:70}]},
+  options:{indexAxis:'y', plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:c=>c.parsed.x.toLocaleString('pt-BR')+' registros'}}},
+    scales:{x:{type:'logarithmic', grid:{color:GRID}, title:{display:true,text:'registros (escala log)'}}, y:{grid:{display:false}}}}
+});
+</script>
+</body>
+</html>

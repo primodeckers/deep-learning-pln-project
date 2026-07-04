@@ -15,7 +15,7 @@ Roteiro do grupo — do problema à apresentação. Vai sendo atualizado conform
 | **Título provisório** | Classificação de editais por área de gasto (ComprasNet DF 2025) |
 | **Modalidade** | PLN no Setor Público |
 | **Formato** | Grupo de 4 pessoas |
-| **Status** | Classificação: Fases 1–3 rodadas (LogReg · BERT · SVM). PNCP DF/2025 em andamento. |
+| **Status** | Classificação apenas (Fases 1–3 + PNCP). Sumarização fora do escopo. ComprasNet: LogReg F1 0,74. PNCP `pncp`: BERT F1 0,86. |
 | **Última atualização** | 2026-06-24 |
 
 ### Escopo do projeto
