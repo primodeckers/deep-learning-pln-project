@@ -1,0 +1,167 @@
+================================================================================
+ENTREGA — PROJETO FINAL DEEP LEARNING E PLN
+Modalidade 2: PLN no Setor Público
+================================================================================
+
+TÍTULO
+------
+Classificação automática de editais e compras públicas por área de gasto
+(ComprasNet + PNCP, Distrito Federal, 2025)
+
+
+INTEGRANTES
+-----------
+1. Elisangela Osorio
+   GitHub: https://github.com/ElisangelaOsorio
+
+2. Alexandre Ferreira Ponte
+   GitHub: https://github.com/pontealexandre
+
+3. Renê Estevam Deckers
+   GitHub: https://github.com/primodeckers
+
+4. Alexandre Hugo Sampaio Netto
+   GitHub: https://github.com/xnetto2
+
+
+REPOSITÓRIO REMOTO (código-fonte)
+---------------------------------
+URL pública (GitHub):
+
+  https://github.com/primodeckers/deep-learning-pln-project
+
+Clone:
+
+  git clone https://github.com/primodeckers/deep-learning-pln-project.git
+
+
+O QUE O PROJETO FAZ
+-------------------
+Classificação textual (PLN) do campo Objeto de editais/compras em macroáreas
+de gasto (Saúde, Saneamento, Segurança, Educação, Infraestrutura/Obras,
+Administração/Outros).
+
+Dois corpora:
+  - ComprasNet HTML: 423 editais (entrega oficial)
+    Melhor modelo: TF-IDF + LogReg (F1 macro teste 0,74)
+  - PNCP DF/2025: 19.944 compras (extensão em escala)
+    Melhor modelo: BERTimbau (F1 macro teste 0,86 no protocolo pncp)
+
+Escopo: somente classificação. Sumarização não faz parte desta entrega.
+Dados inéditos coletados pelo grupo (sem bases prontas / Kaggle).
+
+
+ESTRUTURA DO CÓDIGO (repositório)
+--------------------------------
+deep-learning-pln-project/
+├── README.md                 # Setup, pipeline, status e links da documentação
+├── ENTREGA-PORTAL.txt        # Este arquivo (resumo para o portal do aluno)
+├── LICENSE
+├── Makefile                  # Atalhos: lint, test, treino, MLflow
+├── pyproject.toml            # Dependências e ferramentas (ruff, mypy, pytest)
+├── requirements.txt          # Instalação mínima
+├── requirements-dev.txt      # Ambiente de desenvolvimento
+├── requirements-bert.txt     # PyTorch + Transformers (BERTimbau)
+├── configs/                  # Hiperparâmetros YAML (classification*.yaml, pncp*)
+├── src/                      # Código reutilizável
+│   ├── collect/              # Coleta HTML ComprasNet
+│   ├── preprocess/           # Labels, limpeza, dataset, corpus PNCP
+│   ├── models/               # TF-IDF+LogReg, TF-IDF+SVM, BERTimbau
+│   ├── train/                # Orquestração de treino
+│   ├── evaluate/             # Métricas e figuras
+│   └── utils/                # Rastreamento de experimentos
+├── scripts/                  # Pontos de entrada (CLI)
+│   ├── run_collect.py
+│   ├── run_preprocess.py
+│   ├── run_preprocess_pncp.py
+│   ├── run_train.py
+│   ├── run_benchmark_pncp_dificeis.py
+│   └── check_cuda.py
+├── tests/                    # Testes automatizados (pytest)
+├── notebooks/                # EDA e demo (não treinam modelos)
+│   ├── 01_eda.ipynb
+│   ├── 02_demo_classificacao.ipynb
+│   └── 03_eda_pncp.ipynb
+├── docs/                     # Documentação e relatório
+│   ├── TRABALHO-CONSOLIDADO.md   # Relatório narrativo completo
+│   ├── REGRAS-E-PROTOCOLOS.md
+│   ├── METRICAS-E-DECISOES.md
+│   ├── MODEL-CARD.md
+│   ├── VAZAMENTO-DE-LABEL.md
+│   ├── FASE1-CLASSIFICACAO.md / FASE2 / FASE3
+│   ├── roteiro_10min.md
+│   ├── APRESENTACAO-CONTEUDO.md
+│   └── apresentacao-final.html   # Slides da apresentação
+├── experiments/              # Runs oficiais (JSON versionados)
+├── reports/                  # Figuras (matrizes de confusão)
+├── data/                     # Dados brutos e processados (ver data/raw/README.md)
+└── models/                   # Checkpoints locais (não versionados no Git)
+
+
+COMO REPRODUZIR (resumo)
+------------------------
+Python 3.10+
+
+  python -m venv .venv
+  source .venv/Scripts/activate          # Git Bash (Windows)
+  pip install -r requirements-dev.txt
+  pip install -e ".[bert]"               # opcional, para BERTimbau
+
+ComprasNet (entrega oficial):
+
+  python scripts/run_collect.py
+  python scripts/run_preprocess.py
+  python scripts/run_train.py --model baseline
+
+PNCP (extensão):
+
+  python scripts/run_preprocess_pncp.py
+  python scripts/run_train.py --model bertimbau \
+    --config configs/classification_pncp.yaml \
+    --corpus data/processed/pncp_corpus_df2025.jsonl
+
+Testes:
+
+  pytest
+
+Instruções completas: README.md na raiz do repositório.
+
+
+DOCUMENTAÇÃO PRINCIPAL NO REPOSITÓRIO
+-------------------------------------
+- Relatório consolidado:    docs/TRABALHO-CONSOLIDADO.md
+- Requisitos da disciplina: docs/PROJECT-REQUIREMENTS.md
+- Model card / métricas:    docs/MODEL-CARD.md , docs/METRICAS-E-DECISOES.md
+- Roteiro apresentação:     docs/roteiro_10min.md
+- Índice de docs:           docs/README.md
+
+
+MODELOS COMPARADOS
+------------------
+1) TF-IDF + Regressão Logística  (ML clássico — modelo principal no ComprasNet)
+2) TF-IDF + SVM linear           (ML clássico — comparativo)
+3) BERTimbau (Transformer)       (deep learning — melhor no PNCP em escala)
+
+Não utilizamos CNN nem RNN/LSTM; o experimento de deep learning é o Transformer.
+
+
+ENTREGÁVEIS DA DISCIPLINA (onde estão)
+--------------------------------------
+1) Repositório público no GitHub ........ https://github.com/primodeckers/deep-learning-pln-project
+2) Scripts de coleta, preprocess e treino  scripts/ e src/
+3) Descrição da coleta .................. docs/DATA-COLLECTION-DECISIONS.md
+4) Dados acessíveis via código .......... scripts/run_collect.py e run_preprocess*.py
+5) Apresentação (slides) ................ docs/apresentacao-final.html
+                                         (conteúdo em docs/APRESENTACAO-CONTEUDO.md)
+
+
+BRANCH DE REFERÊNCIA
+--------------------
+Branch: main
+Repositório sempre atualizado em:
+  https://github.com/primodeckers/deep-learning-pln-project
+
+
+================================================================================
+Fim do arquivo de entrega para o portal do aluno.
+================================================================================
